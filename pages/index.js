@@ -1,65 +1,54 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import React, { useEffect, useRef } from "react";
+import Hls from "hls.js";
 
-export default function Home() {
+export default function VideoPlayer() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/e8ed9c5a-8859-49cc-becf-b6e4836ff990/hls/Walking Around Taipei - Taiwan's Capital City [4K60].m3u8`;
+    const video = videoRef.current;
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      console.log("natively supported");
+      // If HLS is natively supported, let the browser do the work!
+      video.src = "hlsUrl";
+      video.addEventListener("loadedmetadata", function () {
+        video.play();
+      });
+    } else if (Hls.isSupported()) {
+      console.log("not natively supported");
+      // If the browser supports MSE, use hls.js to play the video
+      var hls = new Hls({
+        // This configuration is required to insure that only the
+        // viewer can access the content by sending a session cookie
+        // to api.video service
+        xhrSetup: function (xhr, url) {
+          xhr.withCredentials = true;
+          // xhr.setRequestHeader(
+          //   "Access-Control-Allow-Headers",
+          //   "Content-Type, Accept, X-Requested-With"
+          // );
+          // xhr.setRequestHeader(
+          //   "Access-Control-Allow-Origin",
+          //   "http:localhost:3000"
+          // );
+          // xhr.setRequestHeader("Access-Control-Allow-Credentials", "true");
+        },
+      });
+      hls.loadSource(hlsUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        video.play();
+      });
+    } else {
+      alert("Please use a modern browser to play the video");
+    }
+  }, []);
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
+    <div>
+      <div>thing1</div>
+      <video ref={videoRef} />
+      <div>thing2</div>
     </div>
-  )
+  );
 }
