@@ -5,7 +5,7 @@ export default function VideoPlayer() {
   const videoRef = useRef(null);
 
   useEffect(() => {
-    const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/e8ed9c5a-8859-49cc-becf-b6e4836ff990/hls/Walking Around Taipei - Taiwan's Capital City [4K60].m3u8`;
+    const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
     const video = videoRef.current;
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       console.log("natively supported");
