@@ -23,8 +23,6 @@ export default function VideoPlayer() {
   var baseContext;
   var secondaryContext;
 
-  var count = 0;
-
   useEffect(() => {
     // Fetch Video URL
     const hlsUrl =
@@ -188,35 +186,55 @@ export default function VideoPlayer() {
   }
 
   function zoomIn(word) {
+    var scale = 1;
+    var originx = 0;
+    var originy = 0;
+
     console.log("zoom in to " + word.text);
     setPlaying(false);
     const width = word.boundingBox[2].x - word.boundingBox[0].x;
     const height = word.boundingBox[2].y - word.boundingBox[0].y;
-    const zoomRatio = width > height ? 0.3 / width : 0.5 / height;
 
-    const scalechange = zoomRatio - 1;
-    const offsetX = -(
-      ((word.boundingBox[2].x + word.boundingBox[0].x) / 2) *
-      videoWidth *
-      scalechange
-    );
-    const offsetY = -(
-      ((word.boundingBox[2].y + word.boundingBox[0].y) / 2) *
-      videoHeight *
-      scalechange
-    );
+    const centerx =
+      word.boundingBox[0].x < 0.5
+        ? word.boundingBox[0].x * videoWidth
+        : word.boundingBox[2].x * videoWidth;
+    const centery =
+      word.boundingBox[0].y < 0.5
+        ? word.boundingBox[0].y * videoHeight
+        : word.boundingBox[2].y * videoHeight;
 
-    console.log(offsetX, offsetY);
+    // Compute zoom factor.
+    const zoom = width > height ? 0.3 / width : 0.5 / height;
+
+    // Translate so the visible origin is at the context's origin.
+    baseContext.translate(originx, originy);
+
+    // Compute the new visible origin. Originally the word is at a
+    // distance word/scale from the corner, we want the point under
+    // the word to remain in the same place after the zoom, but this
+    // is at word/new_scale away from the corner. Therefore we need to
+    // shift the origin (coordinates of the corner) to account for this.
+    originx -= centerx / (scale * zoom) - centerx / scale;
+    originy -= centery / (scale * zoom) - centery / scale;
+
+    console.log(originx, originy);
+
     baseContext.save();
-    // Zoom transition to fit thing
-    // baseContext.scale(zoomRatio, zoomRatio);
-    // baseContext.translate(translateX, translateY);
+    // Scale it (centered around the origin due to the trasnslate above).
+    baseContext.scale(zoom, zoom);
+    // Offset the visible origin to it's proper position.
+    baseContext.translate(-originx, -originy);
+
+    // Update scale and others.
+    scale *= zoom;
+
     baseContext.drawImage(
       videoRef.current,
-      offsetX,
-      offsetY,
-      videoRef.current.width * zoomRatio,
-      videoRef.current.height * zoomRatio
+      0,
+      0,
+      videoRef.current.width,
+      videoRef.current.height
     );
 
     // console.log(word);
