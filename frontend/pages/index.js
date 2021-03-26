@@ -16,12 +16,12 @@ export default function VideoPlayer() {
   const secondayCanvas = useRef(null);
 
   const [playing, setPlaying] = useState(false);
+  const [cursorPoint, setCursorPoint] = useState(false);
 
   var offsetX;
   var offsetY;
   var baseContext;
   var secondaryContext;
-  var cursorPoint = false;
 
   var count = 0;
 
@@ -92,6 +92,14 @@ export default function VideoPlayer() {
     secondaryContext.fillStyle = "blue";
   }, []);
 
+  useEffect(() => {
+    if (playing) {
+      videoRef.current.play();
+    } else {
+      videoRef.current.pause();
+    }
+  }, [playing]);
+
   // Draw canvas
   const updateCanvas = () => {
     const video = videoRef.current;
@@ -143,14 +151,14 @@ export default function VideoPlayer() {
             secondaryContext.canvas.height
           );
           secondaryContext.fillText(word.text, mouseX, mouseY);
-          cursorPoint = true;
+          setCursorPoint(true);
         }
       );
     }
-    console.log(cursorPoint, collision);
+
+    // console.log(cursorPoint, collision);
     if (cursorPoint && !collision) {
-      console.log("set cursr to not point");
-      cursorPoint = false;
+      setCursorPoint(false);
       secondaryContext.clearRect(
         0,
         0,
@@ -174,9 +182,44 @@ export default function VideoPlayer() {
       videoHeight,
       annotations[millis],
       (word) => {
-        console.log("click on ", word);
+        zoomIn(word);
       }
     );
+  }
+
+  function zoomIn(word) {
+    console.log("zoom in to " + word.text);
+    setPlaying(false);
+    const width = word.boundingBox[2].x - word.boundingBox[0].x;
+    const height = word.boundingBox[2].y - word.boundingBox[0].y;
+    const zoomRatio = width > height ? 0.3 / width : 0.5 / height;
+
+    const scalechange = zoomRatio - 1;
+    const offsetX = -(
+      ((word.boundingBox[2].x + word.boundingBox[0].x) / 2) *
+      videoWidth *
+      scalechange
+    );
+    const offsetY = -(
+      ((word.boundingBox[2].y + word.boundingBox[0].y) / 2) *
+      videoHeight *
+      scalechange
+    );
+
+    console.log(offsetX, offsetY);
+    baseContext.save();
+    // Zoom transition to fit thing
+    // baseContext.scale(zoomRatio, zoomRatio);
+    // baseContext.translate(translateX, translateY);
+    baseContext.drawImage(
+      videoRef.current,
+      offsetX,
+      offsetY,
+      videoRef.current.width * zoomRatio,
+      videoRef.current.height * zoomRatio
+    );
+
+    // console.log(word);
   }
 
   return (
