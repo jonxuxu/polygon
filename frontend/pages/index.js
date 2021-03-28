@@ -221,23 +221,26 @@ export default function VideoPlayer() {
     console.log(originx, originy);
 
     baseContext.save();
-    // Scale it (centered around the origin due to the trasnslate above).
-    baseContext.scale(zoom, zoom);
-    // Offset the visible origin to it's proper position.
-    baseContext.translate(-originx, -originy);
 
-    // Update scale and others.
-    scale *= zoom;
+    // Ease animation for 100 frames
+    for (const frame = 0; frame < 100; frame++) {
+      getEase(currentProgress, params.xFrom, distance, steps, 3);
+      // Scale it (centered around the origin due to the trasnslate above).
+      baseContext.scale(zoom, zoom);
+      // Offset the visible origin to it's proper position.
+      baseContext.translate(-originx, -originy);
 
-    baseContext.drawImage(
-      videoRef.current,
-      0,
-      0,
-      videoRef.current.width,
-      videoRef.current.height
-    );
+      // Update scale and others.
+      // scale *= zoom;
 
-    // console.log(word);
+      baseContext.drawImage(
+        videoRef.current,
+        0,
+        0,
+        videoRef.current.width,
+        videoRef.current.height
+      );
+    }
   }
 
   return (
