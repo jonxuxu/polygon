@@ -4,6 +4,7 @@ import axios from "axios";
 import annotations from "../annotationsTemp.json";
 import styled from "styled-components";
 import { wordCollider } from "../utils/collisions";
+import { getEase } from "../utils/transitions";
 
 const videoWidth = 1200;
 const videoHeight = 676;
@@ -17,6 +18,7 @@ export default function VideoPlayer() {
 
   const [playing, setPlaying] = useState(false);
   const [cursorPoint, setCursorPoint] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
 
   var offsetX;
   var offsetY;
@@ -67,6 +69,9 @@ export default function VideoPlayer() {
       },
       false
     );
+
+    // Connect video to progress bar
+    video.addEventListener("timeupdate", updateProgressBar, false);
 
     // Fetch annotations
     // const annotationUrl =
@@ -186,12 +191,9 @@ export default function VideoPlayer() {
   }
 
   function zoomIn(word) {
-    var scale = 1;
-    var originx = 0;
-    var originy = 0;
-
     console.log("zoom in to " + word.text);
     setPlaying(false);
+
     const width = word.boundingBox[2].x - word.boundingBox[0].x;
     const height = word.boundingBox[2].y - word.boundingBox[0].y;
 
@@ -208,27 +210,74 @@ export default function VideoPlayer() {
     const zoom = width > height ? 0.3 / width : 0.5 / height;
 
     // Translate so the visible origin is at the context's origin.
-    baseContext.translate(originx, originy);
+    baseContext.translate(0, 0);
 
     // Compute the new visible origin. Originally the word is at a
     // distance word/scale from the corner, we want the point under
     // the word to remain in the same place after the zoom, but this
     // is at word/new_scale away from the corner. Therefore we need to
     // shift the origin (coordinates of the corner) to account for this.
-    originx -= centerx / (scale * zoom) - centerx / scale;
-    originy -= centery / (scale * zoom) - centery / scale;
+    const scale = 1;
+    const endx = -(centerx / (scale * zoom) - centerx / scale);
+    const endy = -(centery / (scale * zoom) - centery / scale);
 
-    console.log(originx, originy);
+    const params = {
+      startZoom: 1,
+      endZoom: zoom,
+      startX: 0,
+      endX: endx,
+      startY: 0,
+      endY: endy,
+      progress: 0,
+    };
 
-    baseContext.save();
+    // baseContext.scale(zoom, zoom);
+    // baseContext.translate(-originx, -originy);
+    // baseContext.drawImage(
+    //   videoRef.current,
+    //   0,
+    //   0,
+    //   videoRef.current.width,
+    //   videoRef.current.height
+    // );
+    zoomAnimate(params);
+  }
 
+  function zoomAnimate(params) {
     // Ease animation for 100 frames
-    for (const frame = 0; frame < 100; frame++) {
-      getEase(currentProgress, params.xFrom, distance, steps, 3);
+    if (params.progress < 100) {
+      let zoomProgress = params.progress;
+      let xProgress = params.progress;
+      let yProgress = params.progress;
+      const frameZoom = getEase(
+        zoomProgress,
+        params.startZoom,
+        params.endZoom - params.startZoom,
+        100,
+        3
+      );
+      const frameOriginX = getEase(
+        xProgress,
+        params.startX,
+        params.endX - params.startX,
+        100,
+        3
+      );
+      const frameOriginY = getEase(
+        yProgress,
+        params.startY,
+        params.endY - params.startY,
+        100,
+        3
+      );
+
+      // console.log(params.progress, frameZoom, frameOriginX, frameOriginY);
+
+      baseContext.save();
       // Scale it (centered around the origin due to the trasnslate above).
-      baseContext.scale(zoom, zoom);
+      baseContext.scale(frameZoom, frameZoom);
       // Offset the visible origin to it's proper position.
-      baseContext.translate(-originx, -originy);
+      baseContext.translate(-frameOriginX, -frameOriginY);
 
       // Update scale and others.
       // scale *= zoom;
@@ -240,11 +289,24 @@ export default function VideoPlayer() {
         videoRef.current.width,
         videoRef.current.height
       );
+      baseContext.restore();
+
+      params.progress += 1;
+      requestAnimationFrame(zoomAnimate.bind(null, params));
     }
+  }
+
+  function updateProgressBar() {
+    var percentage = Math.floor(
+      (100 / videoRef.current.duration) * videoRef.current.currentTime
+    );
+
+    setVideoProgress(percentage);
   }
 
   return (
     <div>
+      {/* Video controls */}
       {playing ? (
         <button
           onClick={() => {
@@ -257,6 +319,7 @@ export default function VideoPlayer() {
       ) : (
         <button
           onClick={() => {
+            console.log("POGGERS");
             videoRef.current.play();
             setPlaying(true);
           }}
@@ -264,6 +327,22 @@ export default function VideoPlayer() {
           play
         </button>
       )}
+      <progress
+        id="progress-bar"
+        min="0"
+        max="100"
+        style={{ width: 200 }}
+        value={videoProgress}
+        onClick={(e) => {
+          const currentTargetRect = e.currentTarget.getBoundingClientRect();
+          const left = e.pageX - currentTargetRect.left;
+          const percentage = left / 200;
+          const vidTime = videoRef.current.duration * percentage;
+          videoRef.current.currentTime = vidTime;
+        }}
+      >
+        {videoProgress}% played
+      </progress>
 
       <video
         ref={videoRef}
