@@ -1,0 +1,15 @@
+{
+  "name": "annotate-vid",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/functions-framework": "^1.7.1",
+    "@google-cloud/storage": "^5.8.1",
+    "@google-cloud/video-intelligence": "^3.3.0",
+    "@google-cloud/video-transcoder": "^1.3.0"
+  },
+  "scripts": {
+    "start": "functions-framework --target=processVid"
+  }
+}
