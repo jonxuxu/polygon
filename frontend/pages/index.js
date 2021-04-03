@@ -5,6 +5,7 @@ import annotations from "../annotationsTemp.json";
 import styled from "styled-components";
 import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
+import { roundRect } from "../utils/shapes";
 
 const videoWidth = 1200;
 const videoHeight = 676;
@@ -17,6 +18,8 @@ export default function VideoPlayer() {
   const secondayCanvas = useRef(null);
 
   const [playing, setPlaying] = useState(false);
+  const [zoomedIn, setZoomedIn] = useState(false);
+
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
 
@@ -24,6 +27,8 @@ export default function VideoPlayer() {
   var offsetY;
   var baseContext;
   var secondaryContext;
+
+  var focusText = null;
 
   useEffect(() => {
     // Fetch Video URL
@@ -37,26 +42,27 @@ export default function VideoPlayer() {
       video.src = hlsUrl;
     } else if (Hls.isSupported()) {
       console.log("not natively supported");
+      video.src = hlsUrl;
       // If the browser supports MSE, use hls.js to play the video
-      var hls = new Hls({
-        // This configuration is required to insure that only the
-        // viewer can access the content by sending a session cookie
-        // to api.video service
-        xhrSetup: function (xhr, url) {
-          xhr.withCredentials = true;
-          // xhr.setRequestHeader(
-          //   "Access-Control-Allow-Headers",
-          //   "Content-Type, Accept, X-Requested-With"
-          // );
-          // xhr.setRequestHeader(
-          //   "Access-Control-Allow-Origin",
-          //   "http:localhost:3000"
-          // );
-          // xhr.setRequestHeader("Access-Control-Allow-Credentials", "true");
-        },
-      });
-      hls.loadSource(hlsUrl);
-      hls.attachMedia(video);
+      // var hls = new Hls({
+      //   // This configuration is required to insure that only the
+      //   // viewer can access the content by sending a session cookie
+      //   // to api.video service
+      //   xhrSetup: function (xhr, url) {
+      //     xhr.withCredentials = true;
+      //     // xhr.setRequestHeader(
+      //     //   "Access-Control-Allow-Headers",
+      //     //   "Content-Type, Accept, X-Requested-With"
+      //     // );
+      //     // xhr.setRequestHeader(
+      //     //   "Access-Control-Allow-Origin",
+      //     //   "http:localhost:3000"
+      //     // );
+      //     // xhr.setRequestHeader("Access-Control-Allow-Credentials", "true");
+      //   },
+      // });
+      // hls.loadSource(hlsUrl);
+      // hls.attachMedia(video);
     } else {
       alert("Please use a modern browser to play the video");
     }
@@ -93,11 +99,26 @@ export default function VideoPlayer() {
     baseContext = baseCanvas.current.getContext("2d");
     secondaryContext = secondayCanvas.current.getContext("2d");
     secondaryContext.fillStyle = "blue";
+    secondaryContext.strokeStyle = "blue";
   }, []);
 
   useEffect(() => {
     if (playing) {
+      console.log("playing");
+      console.log(secondaryContext);
+      if (secondaryContext) {
+        console.log("secondary context is HERER");
+        secondaryContext.restore();
+        secondaryContext.clearRect(
+          0,
+          0,
+          videoRef.current.width,
+          videoRef.current.height
+        );
+      }
+
       videoRef.current.play();
+      setZoomedIn(false);
     } else {
       videoRef.current.pause();
     }
@@ -110,21 +131,25 @@ export default function VideoPlayer() {
       return;
     }
 
+    // Draw the current frame of the video
     baseContext.drawImage(video, 0, 0, video.width, video.height);
-    const millis = Math.floor(video.currentTime * 10) * 100;
-    if (annotations[millis]) {
-      annotations[millis].forEach((word) => {
-        baseContext.strokeStyle = "red";
-        const vidX = word.boundingBox[0].x * video.width;
-        const vidY = word.boundingBox[0].y * video.height;
-        const width =
-          (word.boundingBox[2].x - word.boundingBox[0].x) * video.width;
-        const height =
-          (word.boundingBox[2].y - word.boundingBox[0].y) * video.height;
-        baseContext.strokeRect(vidX, vidY, width, height);
-      });
-    }
 
+    // If not zoomed in, draw rectangles over all the signs the user can click on
+    if (!zoomedIn) {
+      const millis = Math.floor(video.currentTime * 10) * 100;
+      if (annotations[millis]) {
+        annotations[millis].forEach((word) => {
+          baseContext.strokeStyle = "red";
+          const vidX = word.boundingBox[0].x * video.width;
+          const vidY = word.boundingBox[0].y * video.height;
+          const width =
+            (word.boundingBox[2].x - word.boundingBox[0].x) * video.width;
+          const height =
+            (word.boundingBox[2].y - word.boundingBox[0].y) * video.height;
+          baseContext.strokeRect(vidX, vidY, width, height);
+        });
+      }
+    }
     requestAnimationFrame(updateCanvas);
   };
 
@@ -139,35 +164,39 @@ export default function VideoPlayer() {
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
 
     var collision = false;
-    if (annotations[millis]) {
-      collision = wordCollider(
-        mouseX,
-        mouseY,
-        videoWidth,
-        videoHeight,
-        annotations[millis],
-        (word) => {
-          secondaryContext.clearRect(
-            0,
-            0,
-            secondaryContext.canvas.width,
-            secondaryContext.canvas.height
-          );
-          secondaryContext.fillText(word.text, mouseX, mouseY);
-          setCursorPoint(true);
-        }
-      );
+    if (!zoomedIn) {
+      if (annotations[millis]) {
+        collision = wordCollider(
+          mouseX,
+          mouseY,
+          videoWidth,
+          videoHeight,
+          annotations[millis],
+          (word) => {
+            // secondaryContext.clearRect(
+            //   0,
+            //   0,
+            //   secondaryContext.canvas.width,
+            //   secondaryContext.canvas.height
+            // );
+            // secondaryContext.fillText(word.text, mouseX, mouseY);
+            setCursorPoint(true);
+          }
+        );
+      }
     }
 
     // console.log(cursorPoint, collision);
-    if (cursorPoint && !collision) {
-      setCursorPoint(false);
-      secondaryContext.clearRect(
-        0,
-        0,
-        secondaryContext.canvas.width,
-        secondaryContext.canvas.height
-      );
+    if (!zoomedIn) {
+      if (cursorPoint && !collision) {
+        setCursorPoint(false);
+        secondaryContext.clearRect(
+          0,
+          0,
+          secondaryContext.canvas.width,
+          secondaryContext.canvas.height
+        );
+      }
     }
   }
 
@@ -178,19 +207,53 @@ export default function VideoPlayer() {
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-    wordCollider(
-      mouseX,
-      mouseY,
-      videoWidth,
-      videoHeight,
-      annotations[millis],
-      (word) => {
-        zoomIn(word);
-      }
-    );
+    if (!zoomedIn) {
+      wordCollider(
+        mouseX,
+        mouseY,
+        videoWidth,
+        videoHeight,
+        annotations[millis],
+        (word) => {
+          zoomIn(word);
+        }
+      );
+    }
   }
 
-  function zoomIn(word) {
+  const drawTranslation = async (ctx, word, zoom, endx, endy) => {
+    const text = word.text;
+    const res = await axios.get("/api/translate", {
+      params: { text: text, target: "en" },
+    });
+    const translation = res.data.translation;
+
+    ctx.font = `36px Arial`;
+    const width = ctx.measureText(text).width + 30; // 30 padding in rect
+    const height = 15 + 36 + 15 + 18 + 15;
+    const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
+    // const translateStartX = word.boundingBox[0].x * videoWidth * zoom - endx;
+    // const translateEndX = word.boundingBox[2].x * videoWidth * zoom - endx;
+    // const translateStartY = word.boundingBox[0].y * videoWidth * zoom - endy;
+    const translateStartX = word.boundingBox[0].x * videoWidth;
+    const translateEndX = word.boundingBox[2].x * videoWidth;
+    const translateStartY = word.boundingBox[0].y * videoWidth;
+    const rectX = isLeft ? translateStartX - width - 30 : translateEndX + 30;
+    const rectY = translateStartY;
+
+    ctx.strokeStyle = "blue";
+    ctx.fillStyle = "rgba(255, 255, 255, .7)";
+    roundRect(ctx, rectX, rectY, width, height, 10, true);
+
+    ctx.fillStyle = "blue";
+    ctx.fillText(text, rectX + 15, rectY + 15);
+
+    ctx.font = `18px Arial`;
+    ctx.fillStyle = "black";
+    ctx.fillText(translation.translatedText, rectX + 15, rectY + 15 + 48 + 15);
+  };
+
+  const zoomIn = (word) => {
     console.log("zoom in to " + word.text);
     setPlaying(false);
 
@@ -229,21 +292,21 @@ export default function VideoPlayer() {
       startY: 0,
       endY: endy,
       progress: 0,
+      callback: () => {
+        setZoomedIn(true);
+        focusText = word.text;
+        console.log("focus word set to ", word.text);
+        // secondaryContext.restore();
+        secondaryContext.scale(zoom, zoom);
+        secondaryContext.translate(-endx, -endy);
+        drawTranslation(secondaryContext, word, zoom, endx, endy);
+      },
     };
 
-    // baseContext.scale(zoom, zoom);
-    // baseContext.translate(-originx, -originy);
-    // baseContext.drawImage(
-    //   videoRef.current,
-    //   0,
-    //   0,
-    //   videoRef.current.width,
-    //   videoRef.current.height
-    // );
     zoomAnimate(params);
-  }
+  };
 
-  function zoomAnimate(params) {
+  const zoomAnimate = (params) => {
     // Ease animation for 100 frames
     if (params.progress < 100) {
       let zoomProgress = params.progress;
@@ -293,8 +356,10 @@ export default function VideoPlayer() {
 
       params.progress += 1;
       requestAnimationFrame(zoomAnimate.bind(null, params));
+    } else {
+      params.callback();
     }
-  }
+  };
 
   function updateProgressBar() {
     var percentage = Math.floor(
@@ -319,7 +384,6 @@ export default function VideoPlayer() {
       ) : (
         <button
           onClick={() => {
-            console.log("POGGERS");
             videoRef.current.play();
             setPlaying(true);
           }}
@@ -339,6 +403,7 @@ export default function VideoPlayer() {
           const percentage = left / 200;
           const vidTime = videoRef.current.duration * percentage;
           videoRef.current.currentTime = vidTime;
+          setPlaying(true);
         }}
       >
         {videoProgress}% played
