@@ -237,7 +237,7 @@ export default function VideoPlayer() {
     // const translateStartY = word.boundingBox[0].y * videoWidth * zoom - endy;
     const translateStartX = word.boundingBox[0].x * videoWidth;
     const translateEndX = word.boundingBox[2].x * videoWidth;
-    const translateStartY = word.boundingBox[0].y * videoWidth;
+    const translateStartY = word.boundingBox[0].y * videoHeight;
     const rectX = isLeft ? translateStartX - width - 30 : translateEndX + 30;
     const rectY = translateStartY;
 
