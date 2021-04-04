@@ -3,14 +3,23 @@ import Hls from "hls.js";
 import axios from "axios";
 import annotations from "../annotationsTemp.json";
 import styled from "styled-components";
-import { wordCollider } from "../utils/collisions";
+import { wordCollider, boundsCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { roundRect } from "../utils/shapes";
+import Head from "next/head";
 
+// Video player dimensions
 const videoWidth = 1200;
 const videoHeight = 676;
+var offsetX;
+var offsetY;
 
-// console.log(annotations);
+// Canvas contexts
+var baseContext;
+var secondaryContext;
+
+// Zoom variables
+var speakBounds;
 
 export default function VideoPlayer() {
   const videoRef = useRef(null);
@@ -23,14 +32,12 @@ export default function VideoPlayer() {
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
 
-  var offsetX;
-  var offsetY;
-  var baseContext;
-  var secondaryContext;
-
   var focusText = null;
 
   useEffect(() => {
+    // Loads font
+    document.fonts.load('900 48px "Font Awesome 5 Free"');
+
     // Fetch Video URL
     const hlsUrl =
       "https://storage.googleapis.com/video-world-source/test-walk.mp4";
@@ -105,9 +112,7 @@ export default function VideoPlayer() {
   useEffect(() => {
     if (playing) {
       console.log("playing");
-      console.log(secondaryContext);
       if (secondaryContext) {
-        console.log("secondary context is HERER");
         secondaryContext.restore();
         secondaryContext.clearRect(
           0,
@@ -207,7 +212,11 @@ export default function VideoPlayer() {
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-    if (!zoomedIn) {
+    if (zoomedIn && speakBounds) {
+      boundsCollider(mouseX, mouseY, speakBounds, () => {
+        console.log("speaker clicked!!");
+      });
+    } else {
       wordCollider(
         mouseX,
         mouseY,
@@ -228,16 +237,13 @@ export default function VideoPlayer() {
     });
     const translation = res.data.translation;
 
-    ctx.font = `36px Arial`;
-    const width = ctx.measureText(text).width + 30; // 30 padding in rect
+    ctx.font = `30px Arial`;
+    const width = ctx.measureText(text).width + 60; // 30 padding in rect
     const height = 15 + 36 + 15 + 18 + 15;
     const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
-    // const translateStartX = word.boundingBox[0].x * videoWidth * zoom - endx;
-    // const translateEndX = word.boundingBox[2].x * videoWidth * zoom - endx;
-    // const translateStartY = word.boundingBox[0].y * videoWidth * zoom - endy;
-    const translateStartX = word.boundingBox[0].x * videoWidth;
-    const translateEndX = word.boundingBox[2].x * videoWidth;
-    const translateStartY = word.boundingBox[0].y * videoHeight;
+    const translateStartX = (word.boundingBox[0].x * videoWidth - endx) * zoom;
+    const translateEndX = (word.boundingBox[2].x * videoWidth - endx) * zoom;
+    const translateStartY = (word.boundingBox[0].y * videoHeight - endy) * zoom;
     const rectX = isLeft ? translateStartX - width - 30 : translateEndX + 30;
     const rectY = translateStartY;
 
@@ -246,11 +252,27 @@ export default function VideoPlayer() {
     roundRect(ctx, rectX, rectY, width, height, 10, true);
 
     ctx.fillStyle = "blue";
-    ctx.fillText(text, rectX + 15, rectY + 15);
+    ctx.fillText(text, rectX + 15, rectY + 15 + 36);
 
     ctx.font = `18px Arial`;
     ctx.fillStyle = "black";
     ctx.fillText(translation.translatedText, rectX + 15, rectY + 15 + 48 + 15);
+
+    ctx.fillStyle = "red";
+    ctx.fillRect(rectX + width - 30, rectY + 32, 16, 16);
+
+    ctx.fillStyle = "blue";
+    ctx.font = '900 14px "Font Awesome 5 Free"';
+    ctx.fillText("\uF028", rectX + width - 30, rectY + 15 + 30);
+
+    const speak_x_start = rectX + width - 30;
+    const speak_x_end = speak_x_start + 16;
+    const speak_y_start = rectY + 32;
+    const speak_y_end = speak_y_start + 16;
+    speakBounds = [
+      { x: speak_x_start, y: speak_y_start },
+      { x: speak_x_end, y: speak_y_end },
+    ];
   };
 
   const zoomIn = (word) => {
@@ -297,8 +319,8 @@ export default function VideoPlayer() {
         focusText = word.text;
         console.log("focus word set to ", word.text);
         // secondaryContext.restore();
-        secondaryContext.scale(zoom, zoom);
-        secondaryContext.translate(-endx, -endy);
+        // secondaryContext.scale(zoom, zoom);
+        // secondaryContext.translate(-endx, -endy);
         drawTranslation(secondaryContext, word, zoom, endx, endy);
       },
     };
@@ -371,6 +393,13 @@ export default function VideoPlayer() {
 
   return (
     <div>
+      <Head>
+        <title>My page title</title>
+        <link
+          rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
+        />
+      </Head>
       {/* Video controls */}
       {playing ? (
         <button
