@@ -19,7 +19,8 @@ var baseContext;
 var secondaryContext;
 
 // Zoom variables
-var speakBounds;
+var speakBounds = null;
+var zoomedIn = false;
 
 export default function VideoPlayer() {
   const videoRef = useRef(null);
@@ -27,7 +28,6 @@ export default function VideoPlayer() {
   const secondayCanvas = useRef(null);
 
   const [playing, setPlaying] = useState(false);
-  const [zoomedIn, setZoomedIn] = useState(false);
 
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
@@ -123,7 +123,7 @@ export default function VideoPlayer() {
       }
 
       videoRef.current.play();
-      setZoomedIn(false);
+      zoomedIn = false;
     } else {
       videoRef.current.pause();
     }
@@ -212,7 +212,9 @@ export default function VideoPlayer() {
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-    if (zoomedIn && speakBounds) {
+    console.log(zoomedIn);
+    if (zoomedIn && speakBounds !== null) {
+      console.log("zoomed in and speak bounds");
       boundsCollider(mouseX, mouseY, speakBounds, () => {
         console.log("speaker clicked!!");
       });
@@ -273,6 +275,7 @@ export default function VideoPlayer() {
       { x: speak_x_start, y: speak_y_start },
       { x: speak_x_end, y: speak_y_end },
     ];
+    console.log("set speak bounds to ", speakBounds);
   };
 
   const zoomIn = (word) => {
@@ -315,7 +318,7 @@ export default function VideoPlayer() {
       endY: endy,
       progress: 0,
       callback: () => {
-        setZoomedIn(true);
+        zoomedIn = true;
         focusText = word.text;
         console.log("focus word set to ", word.text);
         // secondaryContext.restore();
