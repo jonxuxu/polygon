@@ -21,9 +21,12 @@ var secondaryContext;
 // Zoom variables
 var speakBounds = null;
 var zoomedIn = false;
+var translationText = null;
+var focusText = null;
 
 export default function VideoPlayer() {
   const videoRef = useRef(null);
+  const voiceRef = useRef(null);
   const baseCanvas = useRef(null);
   const secondayCanvas = useRef(null);
 
@@ -31,8 +34,6 @@ export default function VideoPlayer() {
 
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
-
-  var focusText = null;
 
   useEffect(() => {
     // Loads font
@@ -215,8 +216,21 @@ export default function VideoPlayer() {
     console.log(zoomedIn);
     if (zoomedIn && speakBounds !== null) {
       console.log("zoomed in and speak bounds");
-      boundsCollider(mouseX, mouseY, speakBounds, () => {
+      // Play text if user clicks on speaker
+      boundsCollider(mouseX, mouseY, speakBounds, async () => {
         console.log("speaker clicked!!");
+        const res = await axios.get("/api/speak", {
+          params: {
+            text: focusText,
+            language: translationText.detectedSourceLanguage,
+          },
+        });
+        const audioData = res.data.audio;
+        const blob = new Blob(audioData.audioContent, { type: "audio/ogg" });
+        // console.log(audioData);
+        voiceRef.current.pause();
+        voiceRef.current.src = window.URL.createObjectURL(blob);
+        voiceRef.current.play();
       });
     } else {
       wordCollider(
@@ -237,7 +251,7 @@ export default function VideoPlayer() {
     const res = await axios.get("/api/translate", {
       params: { text: text, target: "en" },
     });
-    const translation = res.data.translation;
+    translationText = res.data.translation;
 
     ctx.font = `30px Arial`;
     const width = ctx.measureText(text).width + 60; // 30 padding in rect
@@ -258,7 +272,11 @@ export default function VideoPlayer() {
 
     ctx.font = `18px Arial`;
     ctx.fillStyle = "black";
-    ctx.fillText(translation.translatedText, rectX + 15, rectY + 15 + 48 + 15);
+    ctx.fillText(
+      translationText.translatedText,
+      rectX + 15,
+      rectY + 15 + 48 + 15
+    );
 
     ctx.fillStyle = "red";
     ctx.fillRect(rectX + width - 30, rectY + 32, 16, 16);
@@ -275,7 +293,6 @@ export default function VideoPlayer() {
       { x: speak_x_start, y: speak_y_start },
       { x: speak_x_end, y: speak_y_end },
     ];
-    console.log("set speak bounds to ", speakBounds);
   };
 
   const zoomIn = (word) => {
@@ -319,8 +336,8 @@ export default function VideoPlayer() {
       progress: 0,
       callback: () => {
         zoomedIn = true;
-        focusText = word.text;
         console.log("focus word set to ", word.text);
+        focusText = word.text;
         // secondaryContext.restore();
         // secondaryContext.scale(zoom, zoom);
         // secondaryContext.translate(-endx, -endy);
@@ -440,6 +457,7 @@ export default function VideoPlayer() {
       >
         {videoProgress}% played
       </progress>
+      <audio ref={voiceRef} />
 
       <video
         ref={videoRef}
