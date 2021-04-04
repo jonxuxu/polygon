@@ -226,10 +226,13 @@ export default function VideoPlayer() {
           },
         });
         const audioData = res.data.audio;
-        const blob = new Blob(audioData.audioContent, { type: "audio/ogg" });
-        // console.log(audioData);
+        console.log(audioData);
+        const blob = new Blob(audioData.audioContent.data, {
+          type: "audio/ogg",
+        });
+        console.log(blob);
         voiceRef.current.pause();
-        voiceRef.current.src = window.URL.createObjectURL(blob);
+        voiceRef.current.src = URL.createObjectURL(blob);
         voiceRef.current.play();
       });
     } else {
