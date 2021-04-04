@@ -10,7 +10,6 @@ const translate = new Translate({
 
 export default async (req, res) => {
   let result = await translate.translate(req.query.text, req.query.target);
-  console.log(result[1].data.translations[0]);
 
   res.status(200).json({ translation: result[1].data.translations[0] });
 };

@@ -24,6 +24,7 @@ var secondaryContext;
 var zoomedIn = false;
 var translationText = null;
 var focusText = null;
+var speakText = null;
 var speakBounds = null;
 var copyBounds = null;
 
@@ -216,26 +217,26 @@ export default function VideoPlayer() {
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-    console.log(zoomedIn);
     if (zoomedIn) {
       // Play text if user clicks on speaker
       if (speakBounds !== null) {
         boundsCollider(mouseX, mouseY, speakBounds, async () => {
           console.log("speaker clicked!!");
-          const res = await axios.get("/api/speak", {
-            params: {
-              text: focusText,
-              language: translationText.detectedSourceLanguage,
-            },
-          });
-          const audioData = res.data.audio;
-          console.log(audioData);
-          const blob = new Blob(audioData.audioContent.data, {
-            type: "audio/ogg",
-          });
-          console.log(blob);
-          voiceRef.current.pause();
-          voiceRef.current.src = URL.createObjectURL(blob);
+          if (speakText !== focusText) {
+            const res = await axios.get("/api/speak", {
+              params: {
+                text: focusText,
+                language: translationText.detectedSourceLanguage,
+              },
+            });
+            const audioData = res.data.audio;
+            const audioArr = new Uint8Array(audioData.audioContent.data);
+            const blob = new Blob([audioArr], {
+              type: "audio/ogg",
+            });
+            voiceRef.current.src = URL.createObjectURL(blob);
+          }
+          speakText = focusText;
           voiceRef.current.play();
         });
       }
@@ -291,9 +292,9 @@ export default function VideoPlayer() {
       rectY + 15 + 48 + 15
     );
 
-    ctx.fillStyle = "red";
-    ctx.fillRect(rectX + width - 30, rectY + 22, 16, 16);
-    ctx.fillRect(rectX + width - 30, rectY + 22 + 20, 16, 16);
+    // ctx.fillStyle = "red";
+    // ctx.fillRect(rectX + width - 30, rectY + 22, 16, 16);
+    // ctx.fillRect(rectX + width - 30, rectY + 22 + 20, 16, 16);
 
     ctx.fillStyle = "black";
     ctx.font = '900 14px "Font Awesome 5 Free"';
