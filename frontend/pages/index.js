@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import axios from "axios";
-import annotations from "../annotationsTemp.json";
 import styled from "styled-components";
+import Head from "next/head";
+
+import annotations from "../annotationsTemp.json";
 import { wordCollider, boundsCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { roundRect } from "../utils/shapes";
-import Head from "next/head";
+import { copyToClipboard } from "../utils/text";
 
 // Video player dimensions
 const videoWidth = 1200;
@@ -19,10 +21,11 @@ var baseContext;
 var secondaryContext;
 
 // Zoom variables
-var speakBounds = null;
 var zoomedIn = false;
 var translationText = null;
 var focusText = null;
+var speakBounds = null;
+var copyBounds = null;
 
 export default function VideoPlayer() {
   const videoRef = useRef(null);
@@ -214,27 +217,34 @@ export default function VideoPlayer() {
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
     console.log(zoomedIn);
-    if (zoomedIn && speakBounds !== null) {
-      console.log("zoomed in and speak bounds");
+    if (zoomedIn) {
       // Play text if user clicks on speaker
-      boundsCollider(mouseX, mouseY, speakBounds, async () => {
-        console.log("speaker clicked!!");
-        const res = await axios.get("/api/speak", {
-          params: {
-            text: focusText,
-            language: translationText.detectedSourceLanguage,
-          },
+      if (speakBounds !== null) {
+        boundsCollider(mouseX, mouseY, speakBounds, async () => {
+          console.log("speaker clicked!!");
+          const res = await axios.get("/api/speak", {
+            params: {
+              text: focusText,
+              language: translationText.detectedSourceLanguage,
+            },
+          });
+          const audioData = res.data.audio;
+          console.log(audioData);
+          const blob = new Blob(audioData.audioContent.data, {
+            type: "audio/ogg",
+          });
+          console.log(blob);
+          voiceRef.current.pause();
+          voiceRef.current.src = URL.createObjectURL(blob);
+          voiceRef.current.play();
         });
-        const audioData = res.data.audio;
-        console.log(audioData);
-        const blob = new Blob(audioData.audioContent.data, {
-          type: "audio/ogg",
+      }
+      if (copyBounds !== null) {
+        boundsCollider(mouseX, mouseY, copyBounds, async () => {
+          console.log("copy clicked!!");
+          copyToClipboard(focusText);
         });
-        console.log(blob);
-        voiceRef.current.pause();
-        voiceRef.current.src = URL.createObjectURL(blob);
-        voiceRef.current.play();
-      });
+      }
     } else {
       wordCollider(
         mouseX,
@@ -282,19 +292,25 @@ export default function VideoPlayer() {
     );
 
     ctx.fillStyle = "red";
-    ctx.fillRect(rectX + width - 30, rectY + 32, 16, 16);
+    ctx.fillRect(rectX + width - 30, rectY + 22, 16, 16);
+    ctx.fillRect(rectX + width - 30, rectY + 22 + 20, 16, 16);
 
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = "black";
     ctx.font = '900 14px "Font Awesome 5 Free"';
-    ctx.fillText("\uF028", rectX + width - 30, rectY + 15 + 30);
+    ctx.fillText("\uF028", rectX + width - 30, rectY + 15 + 20);
+    ctx.fillText("\uf0c5", rectX + width - 30, rectY + 15 + 20 + 20);
 
     const speak_x_start = rectX + width - 30;
     const speak_x_end = speak_x_start + 16;
-    const speak_y_start = rectY + 32;
+    const speak_y_start = rectY + 22;
     const speak_y_end = speak_y_start + 16;
     speakBounds = [
       { x: speak_x_start, y: speak_y_start },
       { x: speak_x_end, y: speak_y_end },
+    ];
+    copyBounds = [
+      { x: speak_x_start, y: speak_y_start + 20 },
+      { x: speak_x_end, y: speak_y_end + 20 },
     ];
   };
 
