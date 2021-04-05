@@ -5,10 +5,12 @@ import styled from "styled-components";
 import Head from "next/head";
 
 import annotations from "../annotationsTemp.json";
+import transcriptions from "../transcriptionsTemp.json";
 import { wordCollider, boundsCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { roundRect } from "../utils/shapes";
 import { copyToClipboard } from "../utils/text";
+import { speak } from "../utils/sounds";
 
 // Video player dimensions
 const videoWidth = 1200;
@@ -24,7 +26,6 @@ var secondaryContext;
 var zoomedIn = false;
 var translationText = null;
 var focusText = null;
-var speakText = null;
 var speakBounds = null;
 var copyBounds = null;
 
@@ -45,7 +46,7 @@ export default function VideoPlayer() {
 
     // Fetch Video URL
     const hlsUrl =
-      "https://storage.googleapis.com/video-world-source/test-walk.mp4";
+      "https://storage.googleapis.com/video-world-source/test-speech.mp4";
     // const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
     const video = videoRef.current;
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
@@ -221,28 +222,11 @@ export default function VideoPlayer() {
       // Play text if user clicks on speaker
       if (speakBounds !== null) {
         boundsCollider(mouseX, mouseY, speakBounds, async () => {
-          console.log("speaker clicked!!");
-          if (speakText !== focusText) {
-            const res = await axios.get("/api/speak", {
-              params: {
-                text: focusText,
-                language: translationText.detectedSourceLanguage,
-              },
-            });
-            const audioData = res.data.audio;
-            const audioArr = new Uint8Array(audioData.audioContent.data);
-            const blob = new Blob([audioArr], {
-              type: "audio/ogg",
-            });
-            voiceRef.current.src = URL.createObjectURL(blob);
-          }
-          speakText = focusText;
-          voiceRef.current.play();
+          speak(voiceRef, focusText, translationText.detectedSourceLanguage);
         });
       }
       if (copyBounds !== null) {
         boundsCollider(mouseX, mouseY, copyBounds, async () => {
-          console.log("copy clicked!!");
           copyToClipboard(focusText);
         });
       }
@@ -267,8 +251,13 @@ export default function VideoPlayer() {
     });
     translationText = res.data.translation;
 
+    ctx.font = `18px Arial`;
+    var width = ctx.measureText(translationText.translatedText).width + 60; // 30 padding in rect
     ctx.font = `30px Arial`;
-    const width = ctx.measureText(text).width + 60; // 30 padding in rect
+    if (ctx.measureText(text).width + 60 > width) {
+      width = ctx.measureText(text).width + 60;
+    }
+
     const height = 15 + 36 + 15 + 18 + 15;
     const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
     const translateStartX = (word.boundingBox[0].x * videoWidth - endx) * zoom;
@@ -431,6 +420,20 @@ export default function VideoPlayer() {
     setVideoProgress(percentage);
   }
 
+  const captionChars = [];
+  for (var i = 0; i < transcriptions["0"].text.length; i++) {
+    const word = transcriptions["0"].text.charAt(i);
+    captionChars.push(
+      <Caption
+        onClick={() => {
+          speak(voiceRef, word, "zh");
+        }}
+      >
+        {word}
+      </Caption>
+    );
+  }
+
   return (
     <div>
       <Head>
@@ -485,13 +488,16 @@ export default function VideoPlayer() {
         height={videoHeight}
         style={{ display: "none" }}
       />
-      <div style={{ position: "relative" }}>
+      <div
+        style={{ position: "relative", width: videoWidth, height: videoHeight }}
+      >
         <canvas
           ref={baseCanvas}
           width={videoWidth}
           height={videoHeight}
           style={{ position: "absolute", left: 0, top: 0, zIndex: 0 }}
         />
+
         <MouseCanvas
           ref={secondayCanvas}
           width={videoWidth}
@@ -499,6 +505,19 @@ export default function VideoPlayer() {
           pointer={cursorPoint}
           style={{ position: "absolute", left: 0, top: 0, zIndex: 1 }}
         />
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            bottom: 40,
+            left: 0,
+            width: videoWidth,
+            zIndex: 2,
+          }}
+        >
+          {captionChars}
+        </div>
       </div>
     </div>
   );
@@ -506,4 +525,16 @@ export default function VideoPlayer() {
 
 const MouseCanvas = styled.canvas`
   cursor: ${(props) => (props.pointer ? "pointer" : "default")};
+`;
+
+const Caption = styled.span`
+  color: white;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+  font-size: 30px;
+  margin: 0px 1px;
+  cursor: pointer;
+  &:hover {
+    color: #ee3699;
+  }
 `;
