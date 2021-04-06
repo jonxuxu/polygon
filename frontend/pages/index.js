@@ -3,6 +3,8 @@ import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
 import Head from "next/head";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 
 import annotations from "../annotationsTemp.json";
 import transcriptions from "../transcriptionsTemp.json";
@@ -10,8 +12,7 @@ import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
+import Controls from "../components/controls";
 
 // Video player dimensions
 const videoWidth = 1200;
@@ -245,7 +246,6 @@ export default function VideoPlayer() {
     setTranslationBox(true);
 
     const width = translationRef.current.offsetWidth;
-    console.log("box width: ", width);
     const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
     const translateStartX = (word.boundingBox[0].x * videoWidth - endx) * zoom;
     const translateEndX = (word.boundingBox[2].x * videoWidth - endx) * zoom;
@@ -387,45 +387,9 @@ export default function VideoPlayer() {
   return (
     <div>
       <Head>
-        <title>My page title</title>
+        <title>Video World</title>
       </Head>
       {/* Video controls */}
-      {playing ? (
-        <button
-          onClick={() => {
-            videoRef.current.pause();
-            setPlaying(false);
-          }}
-        >
-          pause
-        </button>
-      ) : (
-        <button
-          onClick={() => {
-            videoRef.current.play();
-            setPlaying(true);
-          }}
-        >
-          play
-        </button>
-      )}
-      <progress
-        id="progress-bar"
-        min="0"
-        max="100"
-        style={{ width: 200 }}
-        value={videoProgress}
-        onClick={(e) => {
-          const currentTargetRect = e.currentTarget.getBoundingClientRect();
-          const left = e.pageX - currentTargetRect.left;
-          const percentage = left / 200;
-          const vidTime = videoRef.current.duration * percentage;
-          videoRef.current.currentTime = vidTime;
-          setPlaying(true);
-        }}
-      >
-        {videoProgress}% played
-      </progress>
       <audio ref={voiceRef} />
 
       <video
@@ -443,7 +407,6 @@ export default function VideoPlayer() {
           height={videoHeight}
           style={{ position: "absolute", left: 0, top: 0, zIndex: 0 }}
         />
-
         <MouseCanvas
           ref={secondayCanvas}
           width={videoWidth}
@@ -508,6 +471,12 @@ export default function VideoPlayer() {
             </div>
           </div>
         </InfoBox>
+        <Controls
+          videoRef={videoRef}
+          setPlaying={setPlaying}
+          playing={playing}
+          progress={videoProgress}
+        />
       </div>
     </div>
   );

@@ -1,1 +1,23 @@
-@import url("https://use.fontawesome.com/releases/v5.0.9/css/all.css");
+body {
+  margin: 0;
+}
+
+/* background: */
+progress::-webkit-progress-bar {
+  background-color: white;
+  width: 100%;
+}
+progress {
+  background-color: white;
+}
+
+/* value: */
+progress::-webkit-progress-value {
+  background-color: #ee3699 !important;
+}
+progress::-moz-progress-bar {
+  background-color: #ee3699 !important;
+}
+progress {
+  color: #ee3699;
+}
