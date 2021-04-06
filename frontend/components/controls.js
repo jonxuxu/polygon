@@ -5,9 +5,18 @@ import {
   faPause,
   faForward,
   faBackward,
+  faExpand,
+  faCompress,
 } from "@fortawesome/free-solid-svg-icons";
 
-const VideoControls = ({ videoRef, setPlaying, playing, progress }) => {
+const VideoControls = ({
+  videoRef,
+  setPlaying,
+  playing,
+  progress,
+  setFullScreen,
+  fullScreen,
+}) => {
   const controlRef = useRef(null);
 
   return (
@@ -21,7 +30,6 @@ const VideoControls = ({ videoRef, setPlaying, playing, progress }) => {
         style={{
           width: "100%",
           height: 5,
-          width: "100%",
           cursor: "pointer",
           position: "relative",
           top: 1,
@@ -39,59 +47,42 @@ const VideoControls = ({ videoRef, setPlaying, playing, progress }) => {
       <div
         style={{
           display: "flex",
+          justifyContent: "space-between",
           color: "white",
-          width: "100%",
           padding: "5px 25px",
-          zIndex: 3,
           backgroundColor: "rgba(40, 40, 40, 0.6)",
         }}
       >
-        <FontAwesomeIcon icon={faBackward} style={{ cursor: "pointer" }} />
-        <div
-          onClick={() => {
-            setPlaying(!playing);
-          }}
-          style={{ cursor: "pointer", marginLeft: 20, marginRight: 15 }}
-        >
-          {playing ? (
-            <FontAwesomeIcon icon={faPause} />
-          ) : (
-            <FontAwesomeIcon icon={faPlay} />
+        <div style={{ display: "flex" }}>
+          <FontAwesomeIcon icon={faBackward} style={{ cursor: "pointer" }} />
+          <FontAwesomeIcon
+            icon={playing ? faPause : faPlay}
+            onClick={() => {
+              setPlaying(!playing);
+            }}
+            style={{ cursor: "pointer", marginLeft: 20, marginRight: 15 }}
+          />
+          <FontAwesomeIcon icon={faForward} style={{ cursor: "pointer" }} />
+          {videoRef.current && videoRef.current.duration && (
+            <span style={{ marginLeft: 20 }}>
+              {`${new Date(videoRef.current.currentTime * 1000)
+                .toISOString()
+                .substr(11, 8)} / ${new Date(videoRef.current.duration * 1000)
+                .toISOString()
+                .substr(11, 8)}`}
+            </span>
           )}
         </div>
-        <FontAwesomeIcon icon={faForward} style={{ cursor: "pointer" }} />
-        {videoRef.current && (
-          <span style={{ marginLeft: 20 }}>
-            {`${new Date(videoRef.current.currentTime * 1000)
-              .toISOString()
-              .substr(11, 8)} / ${new Date(videoRef.current.duration * 1000)
-              .toISOString()
-              .substr(11, 8)}`}
-          </span>
-        )}
+        <FontAwesomeIcon
+          icon={fullScreen ? faCompress : faExpand}
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            setFullScreen(!fullScreen);
+          }}
+        />
       </div>
     </div>
   );
 };
-
-{
-  /* <progress
-id="progress-bar"
-min="0"
-max="100"
-style={{ width: 200 }}
-value={videoProgress}
-onClick={(e) => {
-  const currentTargetRect = e.currentTarget.getBoundingClientRect();
-  const left = e.pageX - currentTargetRect.left;
-  const percentage = left / 200;
-  const vidTime = videoRef.current.duration * percentage;
-  videoRef.current.currentTime = vidTime;
-  setPlaying(true);
-}}
->
-{videoProgress}% played
-</progress> */
-}
 
 export default VideoControls;

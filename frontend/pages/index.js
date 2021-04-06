@@ -8,15 +8,16 @@ import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 
 import annotations from "../annotationsTemp.json";
 import transcriptions from "../transcriptionsTemp.json";
+
 import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
+import { exitFullScreen, enterFullScreen } from "../utils/video";
+
 import Controls from "../components/controls";
 
 // Video player dimensions
-const videoWidth = 1200;
-const videoHeight = 676;
 var offsetX;
 var offsetY;
 
@@ -29,6 +30,9 @@ var zoomedIn = false;
 var focusText = null;
 
 export default function VideoPlayer() {
+  const [videoWidth, setVideoWidth] = useState(1200);
+  const [videoHeight, setVideoHeight] = useState(676);
+
   const videoRef = useRef(null);
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
@@ -36,6 +40,7 @@ export default function VideoPlayer() {
   const secondayCanvas = useRef(null);
 
   const [playing, setPlaying] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
 
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
@@ -124,16 +129,6 @@ export default function VideoPlayer() {
   useEffect(() => {
     if (playing) {
       console.log("playing");
-      // if (secondaryContext) {
-      //   secondaryContext.restore();
-      //   secondaryContext.clearRect(
-      //     0,
-      //     0,
-      //     videoRef.current.width,
-      //     videoRef.current.height
-      //   );
-      // }
-
       videoRef.current.play();
       setTranslationBox(false);
       zoomedIn = false;
@@ -141,6 +136,18 @@ export default function VideoPlayer() {
       videoRef.current.pause();
     }
   }, [playing]);
+
+  useEffect(() => {
+    if (fullScreen) {
+      enterFullScreen();
+      setVideoWidth(screen.width);
+      setVideoHeight(screen.height);
+    } else {
+      exitFullScreen();
+      setVideoWidth(1200);
+      setVideoHeight(676);
+    }
+  }, [fullScreen]);
 
   // Draw canvas
   const updateCanvas = () => {
@@ -476,6 +483,8 @@ export default function VideoPlayer() {
           setPlaying={setPlaying}
           playing={playing}
           progress={videoProgress}
+          setFullScreen={setFullScreen}
+          fullScreen={fullScreen}
         />
       </div>
     </div>
