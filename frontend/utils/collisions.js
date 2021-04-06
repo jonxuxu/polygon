@@ -6,6 +6,8 @@ export const wordCollider = (
   words,
   callback
 ) => {
+  if (words === null || words === undefined) return false;
+
   var collision = false;
   for (var i = 0; i < words.length; i++) {
     const word = words[i];

@@ -6,11 +6,12 @@ import Head from "next/head";
 
 import annotations from "../annotationsTemp.json";
 import transcriptions from "../transcriptionsTemp.json";
-import { wordCollider, boundsCollider } from "../utils/collisions";
+import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
-import { roundRect } from "../utils/shapes";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 
 // Video player dimensions
 const videoWidth = 1200;
@@ -24,14 +25,12 @@ var secondaryContext;
 
 // Zoom variables
 var zoomedIn = false;
-var translationText = null;
 var focusText = null;
-var speakBounds = null;
-var copyBounds = null;
 
 export default function VideoPlayer() {
   const videoRef = useRef(null);
   const voiceRef = useRef(null);
+  const translationRef = useRef(null);
   const baseCanvas = useRef(null);
   const secondayCanvas = useRef(null);
 
@@ -39,6 +38,14 @@ export default function VideoPlayer() {
 
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
+
+  const [translationBox, setTranslationBox] = useState(false);
+  const [translationPos, setTranslationPos] = useState([0, 0]);
+  const [translationText, setTranslationText] = useState({
+    translatedText: null,
+    original: null,
+    detectedSourceLanguage: null,
+  });
 
   useEffect(() => {
     // Loads font
@@ -111,24 +118,23 @@ export default function VideoPlayer() {
     // Set global vars for easy access
     baseContext = baseCanvas.current.getContext("2d");
     secondaryContext = secondayCanvas.current.getContext("2d");
-    secondaryContext.fillStyle = "blue";
-    secondaryContext.strokeStyle = "blue";
   }, []);
 
   useEffect(() => {
     if (playing) {
       console.log("playing");
-      if (secondaryContext) {
-        secondaryContext.restore();
-        secondaryContext.clearRect(
-          0,
-          0,
-          videoRef.current.width,
-          videoRef.current.height
-        );
-      }
+      // if (secondaryContext) {
+      //   secondaryContext.restore();
+      //   secondaryContext.clearRect(
+      //     0,
+      //     0,
+      //     videoRef.current.width,
+      //     videoRef.current.height
+      //   );
+      // }
 
       videoRef.current.play();
+      setTranslationBox(false);
       zoomedIn = false;
     } else {
       videoRef.current.pause();
@@ -184,13 +190,6 @@ export default function VideoPlayer() {
           videoHeight,
           annotations[millis],
           (word) => {
-            // secondaryContext.clearRect(
-            //   0,
-            //   0,
-            //   secondaryContext.canvas.width,
-            //   secondaryContext.canvas.height
-            // );
-            // secondaryContext.fillText(word.text, mouseX, mouseY);
             setCursorPoint(true);
           }
         );
@@ -218,18 +217,9 @@ export default function VideoPlayer() {
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
+    // console.log(mouseX, mouseY);
     if (zoomedIn) {
-      // Play text if user clicks on speaker
-      if (speakBounds !== null) {
-        boundsCollider(mouseX, mouseY, speakBounds, async () => {
-          speak(voiceRef, focusText, translationText.detectedSourceLanguage);
-        });
-      }
-      if (copyBounds !== null) {
-        boundsCollider(mouseX, mouseY, copyBounds, async () => {
-          copyToClipboard(focusText);
-        });
-      }
+      console.log("clicked when zoomin");
     } else {
       wordCollider(
         mouseX,
@@ -244,21 +234,18 @@ export default function VideoPlayer() {
     }
   }
 
-  const drawTranslation = async (ctx, word, zoom, endx, endy) => {
+  const drawTranslation = async (word, zoom, endx, endy) => {
     const text = word.text;
     const res = await axios.get("/api/translate", {
       params: { text: text, target: "en" },
     });
-    translationText = res.data.translation;
 
-    ctx.font = `18px Arial`;
-    var width = ctx.measureText(translationText.translatedText).width + 60; // 30 padding in rect
-    ctx.font = `30px Arial`;
-    if (ctx.measureText(text).width + 60 > width) {
-      width = ctx.measureText(text).width + 60;
-    }
+    setTranslationText({ ...res.data.translation, original: word.text });
 
-    const height = 15 + 36 + 15 + 18 + 15;
+    setTranslationBox(true);
+
+    const width = translationRef.current.offsetWidth;
+    console.log("box width: ", width);
     const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
     const translateStartX = (word.boundingBox[0].x * videoWidth - endx) * zoom;
     const translateEndX = (word.boundingBox[2].x * videoWidth - endx) * zoom;
@@ -266,42 +253,7 @@ export default function VideoPlayer() {
     const rectX = isLeft ? translateStartX - width - 30 : translateEndX + 30;
     const rectY = translateStartY;
 
-    ctx.strokeStyle = "blue";
-    ctx.fillStyle = "rgba(255, 255, 255, .7)";
-    roundRect(ctx, rectX, rectY, width, height, 10, true);
-
-    ctx.fillStyle = "blue";
-    ctx.fillText(text, rectX + 15, rectY + 15 + 36);
-
-    ctx.font = `18px Arial`;
-    ctx.fillStyle = "black";
-    ctx.fillText(
-      translationText.translatedText,
-      rectX + 15,
-      rectY + 15 + 48 + 15
-    );
-
-    // ctx.fillStyle = "red";
-    // ctx.fillRect(rectX + width - 30, rectY + 22, 16, 16);
-    // ctx.fillRect(rectX + width - 30, rectY + 22 + 20, 16, 16);
-
-    ctx.fillStyle = "black";
-    ctx.font = '900 14px "Font Awesome 5 Free"';
-    ctx.fillText("\uF028", rectX + width - 30, rectY + 15 + 20);
-    ctx.fillText("\uf0c5", rectX + width - 30, rectY + 15 + 20 + 20);
-
-    const speak_x_start = rectX + width - 30;
-    const speak_x_end = speak_x_start + 16;
-    const speak_y_start = rectY + 22;
-    const speak_y_end = speak_y_start + 16;
-    speakBounds = [
-      { x: speak_x_start, y: speak_y_start },
-      { x: speak_x_end, y: speak_y_end },
-    ];
-    copyBounds = [
-      { x: speak_x_start, y: speak_y_start + 20 },
-      { x: speak_x_end, y: speak_y_end + 20 },
-    ];
+    setTranslationPos([rectX, rectY]);
   };
 
   const zoomIn = (word) => {
@@ -347,10 +299,7 @@ export default function VideoPlayer() {
         zoomedIn = true;
         console.log("focus word set to ", word.text);
         focusText = word.text;
-        // secondaryContext.restore();
-        // secondaryContext.scale(zoom, zoom);
-        // secondaryContext.translate(-endx, -endy);
-        drawTranslation(secondaryContext, word, zoom, endx, endy);
+        drawTranslation(word, zoom, endx, endy);
       },
     };
 
@@ -425,6 +374,7 @@ export default function VideoPlayer() {
     const word = transcriptions["0"].text.charAt(i);
     captionChars.push(
       <Caption
+        key={i}
         onClick={() => {
           speak(voiceRef, word, "zh");
         }}
@@ -438,10 +388,6 @@ export default function VideoPlayer() {
     <div>
       <Head>
         <title>My page title</title>
-        <link
-          rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"
-        />
       </Head>
       {/* Video controls */}
       {playing ? (
@@ -518,6 +464,50 @@ export default function VideoPlayer() {
         >
           {captionChars}
         </div>
+        <InfoBox
+          x={translationPos[0]}
+          y={translationPos[1]}
+          hide={!translationBox}
+          ref={translationRef}
+        >
+          <div style={{ display: "flex" }}>
+            <div>
+              <span
+                style={{ fontFamily: "Arial", fontSize: 30, color: "blue" }}
+              >
+                {translationText.original}
+              </span>
+
+              <div style={{ fontFamily: "Arial", fontSize: 14, marginTop: 10 }}>
+                {translationText.translatedText}
+              </div>
+            </div>
+            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+              <div>
+                <FontAwesomeIcon
+                  icon={faVolumeUp}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    speak(
+                      voiceRef,
+                      translationText.original,
+                      translationText.detectedSourceLanguage
+                    );
+                  }}
+                />
+              </div>
+              <div>
+                <FontAwesomeIcon
+                  icon={faCopy}
+                  style={{ cursor: "pointer", marginTop: 10 }}
+                  onClick={() => {
+                    copyToClipboard(translationText.original);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </InfoBox>
       </div>
     </div>
   );
@@ -537,4 +527,16 @@ const Caption = styled.span`
   &:hover {
     color: #ee3699;
   }
+`;
+
+const InfoBox = styled.div`
+  position: absolute;
+  top: ${(props) => props.y}px;
+  left: ${(props) => props.x}px;
+  display: ${(props) => (props.hide ? "none" : "inline-block")};
+  z-index: 3;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 15px;
+  border: 2px solid blue;
 `;
