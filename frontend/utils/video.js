@@ -12,7 +12,7 @@ export function enterFullScreen(videoRef) {
 }
 
 export function exitFullScreen() {
-  if (document) {
+  if (window.innerHeight == screen.height) {
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.webkitExitFullscreen) {

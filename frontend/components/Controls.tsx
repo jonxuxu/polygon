@@ -22,17 +22,26 @@ const VideoControls = ({
   return (
     <div
       ref={controlRef}
-      style={{ position: "absolute", bottom: 0, width: "100%", zIndex: 4 }}
+      style={{
+        position: "absolute",
+        bottom: 0,
+        width: "100%",
+        zIndex: 3,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        backgroundImage:
+          "linear-gradient(rgba(0, 0, 0, 0) ,rgba(40, 40, 40, 0.7))",
+        height: 60,
+      }}
     >
       <progress
-        min="0"
+        // min="0"
         max="100"
         style={{
           width: "100%",
           height: 5,
           cursor: "pointer",
-          position: "relative",
-          top: 1,
         }}
         value={progress}
         onClick={(e) => {
@@ -48,12 +57,12 @@ const VideoControls = ({
         style={{
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           color: "white",
           padding: "5px 25px",
-          backgroundColor: "rgba(40, 40, 40, 0.6)",
         }}
       >
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <FontAwesomeIcon icon={faBackward} style={{ cursor: "pointer" }} />
           <FontAwesomeIcon
             icon={playing ? faPause : faPlay}

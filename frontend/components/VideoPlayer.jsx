@@ -15,11 +15,12 @@ import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { exitFullScreen, enterFullScreen } from "../utils/video";
 
-import Controls from "../components/controls";
+import Controls from "./Controls";
 
-// Video player dimensions
+// Video player variables
 var offsetX;
 var offsetY;
+var controlTimeout = null
 
 // Canvas contexts
 var baseContext;
@@ -41,6 +42,7 @@ export default function VideoPlayer() {
 
   const [playing, setPlaying] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
+  const [showControls, setShowControls] = useState(false)
 
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
@@ -139,7 +141,7 @@ export default function VideoPlayer() {
 
   useEffect(() => {
     if (fullScreen) {
-      enterFullScreen();
+      enterFullScreen(videoRef);
       setVideoWidth(screen.width);
       setVideoHeight(screen.height);
     } else {
@@ -204,18 +206,12 @@ export default function VideoPlayer() {
       }
     }
 
-    // console.log(cursorPoint, collision);
-    if (!zoomedIn) {
-      if (cursorPoint && !collision) {
-        setCursorPoint(false);
-        secondaryContext.clearRect(
-          0,
-          0,
-          secondaryContext.canvas.width,
-          secondaryContext.canvas.height
-        );
-      }
+    setShowControls(true)
+    if(controlTimeout){
+      clearTimeout(controlTimeout);
     }
+    controlTimeout =  setTimeout(function(){     setShowControls(false)
+    }, 2000);
   }
 
   function handleMouseDown(e) {
@@ -419,21 +415,9 @@ export default function VideoPlayer() {
           width={videoWidth}
           height={videoHeight}
           pointer={cursorPoint}
+          hide={!showControls}
           style={{ position: "absolute", left: 0, top: 0, zIndex: 1 }}
         />
-        <div
-          style={{
-            position: "absolute",
-            display: "flex",
-            justifyContent: "center",
-            bottom: 40,
-            left: 0,
-            width: videoWidth,
-            zIndex: 2,
-          }}
-        >
-          {captionChars}
-        </div>
         <InfoBox
           x={translationPos[0]}
           y={translationPos[1]}
@@ -478,6 +462,7 @@ export default function VideoPlayer() {
             </div>
           </div>
         </InfoBox>
+        {showControls && 
         <Controls
           videoRef={videoRef}
           setPlaying={setPlaying}
@@ -485,14 +470,35 @@ export default function VideoPlayer() {
           progress={videoProgress}
           setFullScreen={setFullScreen}
           fullScreen={fullScreen}
-        />
+        />}
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            bottom: 40,
+            left: 0,
+            width: videoWidth,
+            zIndex: 4,
+            pointerEvents: "none" // passthrough of hover and click
+          }}
+        >
+          {captionChars}
+        </div>
+        
+        
       </div>
     </div>
   );
 }
 
 const MouseCanvas = styled.canvas`
-  cursor: ${(props) => (props.pointer ? "pointer" : "default")};
+  cursor: ${(props) => {
+    if(props.hide){
+      return "none"
+    }
+    return props.pointer ? "pointer" : "default"
+  }};
 `;
 
 const Caption = styled.span`
@@ -502,6 +508,7 @@ const Caption = styled.span`
   font-size: 30px;
   margin: 0px 1px;
   cursor: pointer;
+  pointer-events: auto;
   &:hover {
     color: #ee3699;
   }
@@ -512,7 +519,7 @@ const InfoBox = styled.div`
   top: ${(props) => props.y}px;
   left: ${(props) => props.x}px;
   display: ${(props) => (props.hide ? "none" : "inline-block")};
-  z-index: 3;
+  z-index: 2;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 15px;
