@@ -1,5 +1,5 @@
 import Topbar from "../components/Topbar";
-import VideoPlayer from "../components/videoPlayer";
+import VideoPlayer from "../components/VideoPlayer";
 
 const App = () => {
   return (
