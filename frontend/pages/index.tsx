@@ -1,3 +1,4 @@
+import Link from "next/link";
 const Index = () => (
   <div className="bg-white">
     <div className="relative overflow-hidden">
@@ -34,9 +35,9 @@ const Index = () => (
                       aria-hidden="true"
                     >
                       <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
                         d="M4 6h16M4 12h16M4 18h16"
                       />
                     </svg>
@@ -74,12 +75,11 @@ const Index = () => (
               </div>
             </div>
             <div className="hidden md:flex md:items-center md:space-x-6">
-              <a
-                href="#"
-                className="text-base font-medium text-white hover:text-gray-300"
-              >
-                Log in
-              </a>
+              <Link href="/login">
+                <a className="text-base font-medium text-white hover:text-gray-300">
+                  Log in
+                </a>
+              </Link>
               <a
                 href="#"
                 className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
@@ -126,9 +126,9 @@ const Index = () => (
                     aria-hidden="true"
                   >
                     <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
                       d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
@@ -176,9 +176,9 @@ const Index = () => (
               <div className="mt-6 px-5">
                 <p className="text-center text-base font-medium text-gray-500">
                   Existing customer?{" "}
-                  <a href="#" className="text-gray-900 hover:underline">
-                    Login
-                  </a>
+                  <Link href="/login">
+                    <a className="text-gray-900 hover:underline">Login</a>
+                  </Link>
                 </p>
               </div>
             </div>
@@ -205,9 +205,7 @@ const Index = () => (
                     <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
                       <div className="sm:flex">
                         <div className="min-w-0 flex-1">
-                          <label for="email" className="sr-only">
-                            Email address
-                          </label>
+                          <label className="sr-only">Email address</label>
                           <input
                             id="email"
                             type="email"
@@ -255,15 +253,14 @@ const Index = () => (
           <div className="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
             <div>
               <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">
-                Serverless
+                Instantly
               </h2>
               <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-                No server? No problem.
+                Start with your videos
               </p>
               <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-                Phasellus lorem quam molestie id quisque diam aenean nulla in.
-                Accumsan in quis quis nunc, ullamcorper malesuada. Eleifend
-                condimentum id viverra nulla.
+                Upload your videos to our admin dashboard and we'll take care of
+                the rest.
               </p>
             </div>
             <div className="mt-12 -mb-10 sm:-mb-24 lg:-mb-80">
@@ -280,16 +277,12 @@ const Index = () => (
         <div className="relative bg-white py-16 sm:py-24 lg:py-32">
           <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
             <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">
-              Deploy faster
+              Interactive video
             </h2>
             <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-              Everything you need to deploy your app
+              Everything you need to create amazing video experiences
             </p>
-            <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-              Phasellus lorem quam molestie id quisque diam aenean nulla in.
-              Accumsan in quis quis nunc, ullamcorper malesuada. Eleifend
-              condimentum id viverra nulla.
-            </p>
+            <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500"></p>
             <div className="mt-12">
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="pt-6">
@@ -307,9 +300,9 @@ const Index = () => (
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                             />
                           </svg>
@@ -341,9 +334,9 @@ const Index = () => (
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                             />
                           </svg>
@@ -375,9 +368,9 @@ const Index = () => (
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                             />
                           </svg>
@@ -409,9 +402,9 @@ const Index = () => (
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
                             />
                           </svg>
@@ -443,15 +436,15 @@ const Index = () => (
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
                             />
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                             />
                           </svg>
@@ -483,9 +476,9 @@ const Index = () => (
                             aria-hidden="true"
                           >
                             <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
                               d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
                             />
                           </svg>
@@ -616,7 +609,7 @@ const Index = () => (
                         </a>
                       </p>
                       <div className="flex space-x-1 text-sm text-gray-500">
-                        <time datetime="2020-03-16">Mar 16, 2020</time>
+                        <time dateTime="2020-03-16">Mar 16, 2020</time>
                         <span aria-hidden="true">&middot;</span>
                         <span>6 min read</span>
                       </div>
@@ -669,7 +662,7 @@ const Index = () => (
                         </a>
                       </p>
                       <div className="flex space-x-1 text-sm text-gray-500">
-                        <time datetime="2020-03-10">Mar 10, 2020</time>
+                        <time dateTime="2020-03-10">Mar 10, 2020</time>
                         <span aria-hidden="true">&middot;</span>
                         <span>4 min read</span>
                       </div>
@@ -722,7 +715,7 @@ const Index = () => (
                         </a>
                       </p>
                       <div className="flex space-x-1 text-sm text-gray-500">
-                        <time datetime="2020-02-12">Feb 12, 2020</time>
+                        <time dateTime="2020-02-12">Feb 12, 2020</time>
                         <span aria-hidden="true">&middot;</span>
                         <span>11 min read</span>
                       </div>
@@ -1058,7 +1051,7 @@ const Index = () => (
           </div>
           <div className="mt-12 border-t border-gray-200 py-8">
             <p className="text-base text-gray-400 xl:text-center">
-              &copy; 2020 Workflow, Inc. All rights reserved.
+              &copy; 2020 Website, Inc. All rights reserved.
             </p>
           </div>
         </div>
