@@ -16,12 +16,11 @@ const VideoControls = ({ videoRef, setPlaying, playing, progress }) => {
       style={{ position: "absolute", bottom: 0, width: "100%", zIndex: 4 }}
     >
       <progress
-        min="0"
+        // min="0"
         max="100"
         style={{
           width: "100%",
           height: 5,
-          width: "100%",
           cursor: "pointer",
           position: "relative",
           top: 1,

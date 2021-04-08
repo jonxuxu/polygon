@@ -12,7 +12,7 @@ import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
-import Controls from "../components/controls";
+import Controls from "./Controls";
 
 // Video player dimensions
 const videoWidth = 1200;
