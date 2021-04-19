@@ -5,7 +5,7 @@ const textToSpeech = require("@google-cloud/text-to-speech");
 const client = new textToSpeech.TextToSpeechClient({
   credentials: {
     private_key: process.env.GCP_PRIVATE_KEY,
-    client_email: "owner-107@video-world-308113.iam.gserviceaccount.com",
+    client_email: process.env.GCP_CLIENT_EMAIL,
   },
 });
 

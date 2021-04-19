@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faPlay,
@@ -18,6 +18,24 @@ const VideoControls = ({
   fullScreen,
 }) => {
   const controlRef = useRef(null);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleUserKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleUserKeyPress);
+    };
+  }, []);
+
+  const handleUserKeyPress = (e) => {
+    const { key, keyCode } = e;
+    console.log("user pressed ", keyCode);
+
+    if (keyCode === 32) {
+      //spacebar
+      setPlaying(!playing);
+    }
+  };
 
   return (
     <div

@@ -4,7 +4,7 @@ const { Translate } = require("@google-cloud/translate").v2;
 const translate = new Translate({
   credentials: {
     private_key: process.env.GCP_PRIVATE_KEY,
-    client_email: "owner-107@video-world-308113.iam.gserviceaccount.com",
+    client_email: process.env.GCP_CLIENT_EMAIL,
   },
 });
 

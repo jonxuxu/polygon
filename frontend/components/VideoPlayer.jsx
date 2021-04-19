@@ -135,6 +135,7 @@ export default function VideoPlayer() {
       setTranslationBox(false);
       zoomedIn = false;
     } else {
+      console.log("pausing")
       videoRef.current.pause();
     }
   }, [playing]);
@@ -205,18 +206,24 @@ export default function VideoPlayer() {
         );
       }
     }
+    if(!collision && cursorPoint){
+      setCursorPoint(false)
+    }
 
     setShowControls(true)
     if(controlTimeout){
       clearTimeout(controlTimeout);
     }
-    controlTimeout =  setTimeout(function(){     setShowControls(false)
+    controlTimeout =  setTimeout(function(){
+      setShowControls(false)
     }, 2000);
   }
 
   function handleMouseDown(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    console.log("click")
 
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
@@ -232,6 +239,7 @@ export default function VideoPlayer() {
         videoHeight,
         annotations[millis],
         (word) => {
+          console.log("click on word")
           zoomIn(word);
         }
       );
