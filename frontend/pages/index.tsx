@@ -194,7 +194,7 @@ const Index = () => (
                   <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
                     <span className="block">A better way to</span>
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-cyan-400 block">
-                      watch video
+                      interact with video
                     </span>
                   </h1>
                   <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
@@ -275,231 +275,7 @@ const Index = () => (
         {/* <TestimonialSection /> */}
 
         {/* <!-- Feature section with grid --> */}
-        <div className="relative bg-white py-16 sm:py-24 lg:py-32">
-          <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
-            <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">
-              Interactive video
-            </h2>
-            <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-              Everything you need to create amazing video experiences
-            </p>
-            <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500"></p>
-            <div className="mt-12">
-              <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="pt-6">
-                  <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-                    <div className="-mt-6">
-                      <div>
-                        <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
-                          {/* <!-- Heroicon name: outline/cloud-upload --> */}
-                          <svg
-                            className="h-6 w-6 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                        Push to Deploy
-                      </h3>
-                      <p className="mt-5 text-base text-gray-500">
-                        Ac tincidunt sapien vehicula erat auctor pellentesque
-                        rhoncus. Et magna sit morbi vitae lobortis.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-                    <div className="-mt-6">
-                      <div>
-                        <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
-                          {/* <!-- Heroicon name: outline/lock-closed --> */}
-                          <svg
-                            className="h-6 w-6 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                        SSL Certificates
-                      </h3>
-                      <p className="mt-5 text-base text-gray-500">
-                        Qui aut temporibus nesciunt vitae dicta repellat sit
-                        dolores pariatur. Temporibus qui illum aut.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-                    <div className="-mt-6">
-                      <div>
-                        <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
-                          {/* <!-- Heroicon name: outline/refresh --> */}
-                          <svg
-                            className="h-6 w-6 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                        Simple Queues
-                      </h3>
-                      <p className="mt-5 text-base text-gray-500">
-                        Rerum quas incidunt deleniti quaerat suscipit mollitia.
-                        Amet repellendus ut odit dolores qui.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-                    <div className="-mt-6">
-                      <div>
-                        <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
-                          {/* <!-- Heroicon name: outline/shield-check --> */}
-                          <svg
-                            className="h-6 w-6 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                        Advanced Security
-                      </h3>
-                      <p className="mt-5 text-base text-gray-500">
-                        Ullam laboriosam est voluptatem maxime ut mollitia
-                        commodi. Et dignissimos suscipit perspiciatis.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-                    <div className="-mt-6">
-                      <div>
-                        <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
-                          {/* <!-- Heroicon name: outline/cog --> */}
-                          <svg
-                            className="h-6 w-6 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                        Powerful API
-                      </h3>
-                      <p className="mt-5 text-base text-gray-500">
-                        Ab a facere voluptatem in quia corrupti veritatis
-                        aliquam. Veritatis labore quaerat ipsum quaerat id.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6">
-                  <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
-                    <div className="-mt-6">
-                      <div>
-                        <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
-                          {/* <!-- Heroicon name: outline/server --> */}
-                          <svg
-                            className="h-6 w-6 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
-                        Database Backups
-                      </h3>
-                      <p className="mt-5 text-base text-gray-500">
-                        Quia qui et est officia cupiditate qui consectetur.
-                        Ratione similique et impedit ea ipsum et.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <FeatureSection />
         {/* <!-- Testimonial section --> */}
       </main>
       <footer className="bg-gray-50" aria-labelledby="footerHeading">
@@ -520,6 +296,232 @@ const Index = () => (
 
 export default Index;
 
+const FeatureSection = () => (
+  <div className="relative bg-white py-16 sm:py-24 lg:py-32">
+    <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
+      <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">
+        Interactive video
+      </h2>
+      <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+        Everything you need to create amazing video experiences
+      </p>
+      <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500"></p>
+      <div className="mt-12">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="pt-6">
+            <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+              <div className="-mt-6">
+                <div>
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                    {/* <!-- Heroicon name: outline/cloud-upload --> */}
+                    <svg
+                      className="h-6 w-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                  Upload Content
+                </h3>
+                <p className="mt-5 text-base text-gray-500">
+                  Apply our video augmentation features to your own video
+                  library.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6">
+            <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+              <div className="-mt-6">
+                <div>
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                    {/* <!-- Heroicon name: outline/lock-closed --> */}
+                    <svg
+                      className="h-6 w-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                  Privacy First
+                </h3>
+                <p className="mt-5 text-base text-gray-500">
+                  Employ granular settings to share your content with specific
+                  people, your following, or the public.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6">
+            <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+              <div className="-mt-6">
+                <div>
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                    {/* <!-- Heroicon name: outline/refresh --> */}
+                    <svg
+                      className="h-6 w-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                  Realtime Augmentation
+                </h3>
+                <p className="mt-5 text-base text-gray-500">
+                  Enhance your videos with translation, transcription,
+                  image-detection, and more in realtime as your users watch.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6">
+            <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+              <div className="-mt-6">
+                <div>
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                    {/* <!-- Heroicon name: outline/shield-check --> */}
+                    <svg
+                      className="h-6 w-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                  Advanced Security
+                </h3>
+                <p className="mt-5 text-base text-gray-500">
+                  End-to-end encryption and required authentication to access
+                  and manage your content.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6">
+            <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+              <div className="-mt-6">
+                <div>
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                    {/* <!-- Heroicon name: outline/cog --> */}
+                    <svg
+                      className="h-6 w-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                  Powerful Customizations
+                </h3>
+                <p className="mt-5 text-base text-gray-500">
+                  Use our admin dashboard to specify the features and controls
+                  that are right for your application.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="pt-6">
+            <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+              <div className="-mt-6">
+                <div>
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                    {/* <!-- Heroicon name: outline/server --> */}
+                    <svg
+                      className="h-6 w-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                  Explore Videos
+                </h3>
+                <p className="mt-5 text-base text-gray-500">
+                  Enable your users to browse your library and find the right
+                  videos with our search and explore pages.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 const TestimonialSection = () => (
   <div className="pb-16 bg-gradient-to-r from-teal-500 to-cyan-600 lg:pb-0 lg:z-10 lg:relative">
     <div className="lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-3 lg:gap-8">
