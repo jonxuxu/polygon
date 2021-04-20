@@ -20,6 +20,8 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "font-awesome": "^4.7.0",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0",
     "hls.js": "^0.14.17",
     "next": "10.0.8",
     "postcss": "^8.2.9",

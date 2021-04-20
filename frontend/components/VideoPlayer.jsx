@@ -60,9 +60,10 @@ export default function VideoPlayer() {
     document.fonts.load('900 48px "Font Awesome 5 Free"');
 
     // Fetch Video URL
-    const hlsUrl =
-      "https://storage.googleapis.com/video-world-source/test-speech.mp4";
+    // const hlsUrl =
+    //   "https://storage.googleapis.com/video-world-source/test-speech.mp4";
     // const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
+    const hlsUrl = `https://storage.googleapis.com/video-world-transcode/test-speech/manifest.m3u8`
     const video = videoRef.current;
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       console.log("natively supported");
@@ -70,27 +71,10 @@ export default function VideoPlayer() {
       video.src = hlsUrl;
     } else if (Hls.isSupported()) {
       console.log("not natively supported");
-      video.src = hlsUrl;
       // If the browser supports MSE, use hls.js to play the video
-      // var hls = new Hls({
-      //   // This configuration is required to insure that only the
-      //   // viewer can access the content by sending a session cookie
-      //   // to api.video service
-      //   xhrSetup: function (xhr, url) {
-      //     xhr.withCredentials = true;
-      //     // xhr.setRequestHeader(
-      //     //   "Access-Control-Allow-Headers",
-      //     //   "Content-Type, Accept, X-Requested-With"
-      //     // );
-      //     // xhr.setRequestHeader(
-      //     //   "Access-Control-Allow-Origin",
-      //     //   "http:localhost:3000"
-      //     // );
-      //     // xhr.setRequestHeader("Access-Control-Allow-Credentials", "true");
-      //   },
-      // });
-      // hls.loadSource(hlsUrl);
-      // hls.attachMedia(video);
+      var hls = new Hls();
+      hls.loadSource(hlsUrl);
+      hls.attachMedia(video);
     } else {
       alert("Please use a modern browser to play the video");
     }
