@@ -2,7 +2,7 @@ import prisma from "../../../prisma/client";
 
 export default async (req, res) => {
   const video = await prisma.videos.findUnique({
-    where: { id: parseInt(req.query.id) },
+    where: { cuid: req.query.cuid },
   });
 
   return res.json(video);
