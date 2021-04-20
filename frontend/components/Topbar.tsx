@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/client";
 
-const Topbar = () => {
+const Topbar = ({ user }) => {
   const [menu, setMenu] = useState(false);
   const routes = [
     {
@@ -13,6 +14,7 @@ const Topbar = () => {
     { route: "/uploads", label: "Uploads" },
   ];
   const router = useRouter();
+  // const { session } = useSession();
   return (
     <nav className="bg-white shadow">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -118,26 +120,6 @@ const Topbar = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <span className="sr-only">View notifications</span>
-              {/* <!-- Heroicon name: outline/bell --> */}
-              <svg
-                className="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                />
-              </svg>
-            </button>
-
             {/* <!-- Profile dropdown --> */}
             <div className="ml-3 relative">
               <div>
@@ -150,11 +132,23 @@ const Topbar = () => {
                   onClick={() => setMenu(!menu)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    className="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=pjAAJImGFV&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
+                  {!!user ? (
+                    <img
+                      className="h-8 w-8 rounded-full"
+                      src={user.image}
+                      alt=""
+                    />
+                  ) : (
+                    <span className="inline-block h-8 w-8 rounded-full overflow-hidden bg-gray-100">
+                      <svg
+                        className="h-full w-full text-gray-300"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </span>
+                  )}
                 </button>
               </div>
 
@@ -175,22 +169,17 @@ const Topbar = () => {
                   aria-orientation="vertical"
                   aria-labelledby="user-menu"
                 >
+                  <Link href="/profile">
+                    <a
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Your Profile
+                    </a>
+                  </Link>
+
                   <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
-                  >
-                    Your Profile
-                  </a>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
-                  >
-                    Settings
-                  </a>
-                  <a
-                    href="#"
+                    onClick={() => signOut()}
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     role="menuitem"
                   >
