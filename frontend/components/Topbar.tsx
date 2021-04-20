@@ -3,12 +3,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 
-const Topbar = ({
-  user,
-}: {
-  user?: { image: string; email: string; name: string };
-}) => {
+const Topbar = () => {
   const [menu, setMenu] = useState(false);
+  const [session, loading] = useSession();
   const routes = [
     {
       route: "/app",
@@ -136,10 +133,10 @@ const Topbar = ({
                   onClick={() => setMenu(!menu)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  {!!user ? (
+                  {!!session ? (
                     <img
                       className="h-8 w-8 rounded-full"
-                      src={user.image}
+                      src={session.user.image}
                       alt=""
                     />
                   ) : (
