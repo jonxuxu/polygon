@@ -64,16 +64,16 @@ model verification_requests {
 }
 
 model videos {
-  id                 Int      @id @default(autoincrement())
-  creator            Int
-  title              String
-  description        String
-  created            DateTime @default(now()) @db.Timestamptz(6)
-  transcription_url  String?
-  annotation_url     String?
-  url                String?
-  transcription_done Boolean  @default(false)
-  annotation_done    Boolean  @default(false)
-  cuid               String
-  user              users    @relation(fields: [creator], references: [id])
+  id                  Int      @id @default(autoincrement())
+  creator             Int
+  title               String
+  description         String
+  created             DateTime @default(now()) @db.Timestamptz(6)
+  transcription_url   String?
+  annotation_url      String?
+  url                 String?
+  transcription_state String   @default("pending")
+  annotation_state    String   @default("pending")
+  cuid                String
+  user                users    @relation(fields: [creator], references: [id])
 }

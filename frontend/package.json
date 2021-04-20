@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:pull": "prisma db pull",
+    "generate": "prisma generate"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
