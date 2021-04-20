@@ -78,7 +78,7 @@ const Topbar = () => {
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <Link href="/">
               <div className="flex-shrink-0 flex items-center">
-                <img
+                {/* <img
                   className="block lg:hidden h-8 w-auto"
                   src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                   alt="Workflow"
@@ -87,7 +87,7 @@ const Topbar = () => {
                   className="hidden lg:block h-8 w-auto"
                   src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
                   alt="Workflow"
-                />
+                /> */}
               </div>
             </Link>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -165,27 +165,29 @@ const Topbar = () => {
           --> */}
               {menu && (
                 <div
-                  className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="user-menu"
                 >
-                  <Link href="/profile">
+                  <Link href={session ? "/profile" : "/api/auth/signin/google"}>
                     <a
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       role="menuitem"
                     >
-                      Your Profile
+                      {session ? "Your Profile" : "Log In"}
                     </a>
                   </Link>
 
-                  <a
-                    onClick={() => signOut()}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    role="menuitem"
-                  >
-                    Sign out
-                  </a>
+                  {session && (
+                    <a
+                      onClick={() => signOut()}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Sign out
+                    </a>
+                  )}
                 </div>
               )}
             </div>
