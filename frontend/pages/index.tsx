@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ScreenshotSections from "../components/ScreenshotSections";
 const Index = () => (
   <div className="bg-white">
     <div className="relative overflow-hidden">
@@ -247,6 +248,7 @@ const Index = () => (
             </div>
           </div>
         </div>
+        {/* <ScreenshotSections /> */}
 
         {/* <!-- Feature section with screenshot --> */}
         <div className="relative bg-gray-50 pt-16 sm:pt-24 lg:pt-32">
