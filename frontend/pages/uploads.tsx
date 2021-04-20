@@ -2,6 +2,29 @@ import Topbar from "../components/Topbar";
 import VideoPlayer from "../components/VideoPlayer";
 
 const App = () => {
+  const uploadPhoto = async (e) => {
+    const file = e.target.files[0];
+    const filename = encodeURIComponent(file.name);
+    const res = await fetch(`/api/upload-url?file=${filename}`);
+    const { url, fields } = await res.json();
+    const formData = new FormData();
+
+    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+      // @ts-ignore
+      formData.append(key, value);
+    });
+
+    const upload = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (upload.ok) {
+      console.log("Uploaded successfully!");
+    } else {
+      console.error("Upload failed.");
+    }
+  };
   return (
     <div>
       <Topbar />
@@ -19,8 +42,8 @@ const App = () => {
                 <path
                   d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
                   stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
               </svg>
               <div className="flex text-sm text-gray-600">
@@ -31,6 +54,7 @@ const App = () => {
                     name="file-upload"
                     type="file"
                     className="sr-only"
+                    onChange={uploadPhoto}
                   />
                 </label>
                 <p className="pl-1">or drag and drop</p>
