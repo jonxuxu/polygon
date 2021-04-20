@@ -3,7 +3,11 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 
-const Topbar = ({ user }) => {
+const Topbar = ({
+  user,
+}: {
+  user?: { image: string; email: string; name: string };
+}) => {
   const [menu, setMenu] = useState(false);
   const routes = [
     {

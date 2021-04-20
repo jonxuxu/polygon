@@ -67,7 +67,7 @@ model videos {
   id                  Int      @id @default(autoincrement())
   creator             Int
   title               String
-  description         String
+  description         String?
   created             DateTime @default(now()) @db.Timestamptz(6)
   transcription_url   String?
   annotation_url      String?
