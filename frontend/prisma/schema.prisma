@@ -76,6 +76,6 @@ model videos {
   annotation_state    String   @default("pending")
   cuid                String   @unique
   transcode_state     String   @default("pending")
-  upload_state        String   @default("'pending'::text")
+  upload_state        String   @default("pending")
   user                users    @relation(fields: [creator], references: [id])
 }
