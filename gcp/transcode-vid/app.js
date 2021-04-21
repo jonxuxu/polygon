@@ -5,9 +5,8 @@
 // [START gae_node_request_example]
 const express = require("express");
 const bodyParser = require("body-parser");
-// UNCOMMENT FOR LOCAL DEV
-// const path = require("path");
-// require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 const ffmpeg = require("fluent-ffmpeg");
