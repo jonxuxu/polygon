@@ -7,10 +7,6 @@ const Topbar = () => {
   const [menu, setMenu] = useState(false);
   const [session, loading] = useSession();
   const routes = [
-    {
-      route: "/app",
-      label: "Dashboard",
-    },
     { route: "/explore", label: "Explore" },
     { route: "/uploads", label: "Uploads" },
   ];

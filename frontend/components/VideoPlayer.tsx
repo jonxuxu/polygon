@@ -14,8 +14,11 @@ import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { exitFullScreen, enterFullScreen } from "../utils/video";
+import { useRouter } from "next/router";
 
 import Controls from "./Controls";
+import { useVideo } from "utils/fetcher";
+import { videos } from ".prisma/client";
 
 // Video player variables
 var offsetX;
@@ -30,7 +33,7 @@ var secondaryContext;
 var zoomedIn = false;
 var focusText = null;
 
-export default function VideoPlayer() {
+export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   const [videoWidth, setVideoWidth] = useState(1200);
   const [videoHeight, setVideoHeight] = useState(676);
 
@@ -62,8 +65,10 @@ export default function VideoPlayer() {
     // Fetch Video URL
     // const hlsUrl =
     //   "https://storage.googleapis.com/video-world-source/test-speech.mp4";
-    const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
+    // const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
     // const hlsUrl = `https://storage.googleapis.com/video-world-transcode/test-speech/manifest.m3u8`;
+    if (!videoRow || !videoRow.url) return;
+    const hlsUrl = videoRow ? videoRow.url : null;
     const video = videoRef.current;
     // video.src = hlsUrl;
     if (video.canPlayType("application/vnd.apple.mpegURL")) {
@@ -111,7 +116,7 @@ export default function VideoPlayer() {
     // Set global vars for easy access
     baseContext = baseCanvas.current.getContext("2d");
     secondaryContext = secondayCanvas.current.getContext("2d");
-  }, []);
+  }, [videoRow]);
 
   useEffect(() => {
     if (playing) {
