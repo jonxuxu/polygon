@@ -14,13 +14,16 @@ import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { exitFullScreen, enterFullScreen } from "../utils/video";
+import { useRouter } from "next/router";
 
 import Controls from "./Controls";
+import { useVideo } from "utils/fetcher";
+import { videos } from ".prisma/client";
 
 // Video player variables
 var offsetX;
 var offsetY;
-var controlTimeout = null
+var controlTimeout = null;
 
 // Canvas contexts
 var baseContext;
@@ -30,7 +33,7 @@ var secondaryContext;
 var zoomedIn = false;
 var focusText = null;
 
-export default function VideoPlayer() {
+export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   const [videoWidth, setVideoWidth] = useState(1200);
   const [videoHeight, setVideoHeight] = useState(676);
 
@@ -42,7 +45,7 @@ export default function VideoPlayer() {
 
   const [playing, setPlaying] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
-  const [showControls, setShowControls] = useState(false)
+  const [showControls, setShowControls] = useState(false);
 
   const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
@@ -63,9 +66,12 @@ export default function VideoPlayer() {
     // const hlsUrl =
     //   "https://storage.googleapis.com/video-world-source/test-speech.mp4";
     // const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
-    const hlsUrl = `https://storage.googleapis.com/video-world-transcode/test-speech/manifest.m3u8`
+    // const hlsUrl = `https://storage.googleapis.com/video-world-transcode/test-speech/manifest.m3u8`;
+    if (!videoRow || !videoRow.url) return;
+    const hlsUrl = videoRow ? videoRow.url : null;
     const video = videoRef.current;
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+    // video.src = hlsUrl;
+    if (video.canPlayType("application/vnd.apple.mpegURL")) {
       console.log("natively supported");
       // If HLS is natively supported, let the browser do the work!
       video.src = hlsUrl;
@@ -110,7 +116,7 @@ export default function VideoPlayer() {
     // Set global vars for easy access
     baseContext = baseCanvas.current.getContext("2d");
     secondaryContext = secondayCanvas.current.getContext("2d");
-  }, []);
+  }, [videoRow]);
 
   useEffect(() => {
     if (playing) {
@@ -119,7 +125,7 @@ export default function VideoPlayer() {
       setTranslationBox(false);
       zoomedIn = false;
     } else {
-      console.log("pausing")
+      console.log("pausing");
       videoRef.current.pause();
     }
   }, [playing]);
@@ -190,16 +196,16 @@ export default function VideoPlayer() {
         );
       }
     }
-    if(!collision && cursorPoint){
-      setCursorPoint(false)
+    if (!collision && cursorPoint) {
+      setCursorPoint(false);
     }
 
-    setShowControls(true)
-    if(controlTimeout){
+    setShowControls(true);
+    if (controlTimeout) {
       clearTimeout(controlTimeout);
     }
-    controlTimeout =  setTimeout(function(){
-      setShowControls(false)
+    controlTimeout = setTimeout(function () {
+      setShowControls(false);
     }, 2000);
   }
 
@@ -207,7 +213,7 @@ export default function VideoPlayer() {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log("click")
+    console.log("click");
 
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
@@ -223,7 +229,7 @@ export default function VideoPlayer() {
         videoHeight,
         annotations[millis],
         (word) => {
-          console.log("click on word")
+          console.log("click on word");
           zoomIn(word);
         }
       );
@@ -454,15 +460,16 @@ export default function VideoPlayer() {
             </div>
           </div>
         </InfoBox>
-        {showControls && 
-        <Controls
-          videoRef={videoRef}
-          setPlaying={setPlaying}
-          playing={playing}
-          progress={videoProgress}
-          setFullScreen={setFullScreen}
-          fullScreen={fullScreen}
-        />}
+        {showControls && (
+          <Controls
+            videoRef={videoRef}
+            setPlaying={setPlaying}
+            playing={playing}
+            progress={videoProgress}
+            setFullScreen={setFullScreen}
+            fullScreen={fullScreen}
+          />
+        )}
         <div
           style={{
             position: "absolute",
@@ -472,13 +479,11 @@ export default function VideoPlayer() {
             left: 0,
             width: videoWidth,
             zIndex: 4,
-            pointerEvents: "none" // passthrough of hover and click
+            pointerEvents: "none", // passthrough of hover and click
           }}
         >
           {captionChars}
         </div>
-        
-        
       </div>
     </div>
   );
@@ -486,10 +491,10 @@ export default function VideoPlayer() {
 
 const MouseCanvas = styled.canvas`
   cursor: ${(props) => {
-    if(props.hide){
-      return "none"
+    if (props.hide) {
+      return "none";
     }
-    return props.pointer ? "pointer" : "default"
+    return props.pointer ? "pointer" : "default";
   }};
 `;
 

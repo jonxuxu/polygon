@@ -31,15 +31,13 @@ const LoginPage = () => {
           <div className="mt-8">
             <div>
               <div>
-                <div className="mt-1 grid grid-cols-3 gap-3">
-                  <div>
-                    <Link href="/api/auth/signin/google">
-                      <a className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                        <span className="sr-only">Sign in with Google</span>
-                        <FontAwesomeIcon icon={faGoogle} />
-                      </a>
-                    </Link>
-                  </div>
+                <div className="mt-1 w-full">
+                  <Link href="/api/auth/signin/google">
+                    <a className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                      <span className="sr-only">Sign in with Google</span>
+                      <FontAwesomeIcon icon={faGoogle} />
+                    </a>
+                  </Link>
                 </div>
               </div>
 

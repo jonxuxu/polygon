@@ -4,10 +4,10 @@ import { signIn, signOut, useSession } from "next-auth/client";
 
 const App = () => {
   const [session, loading] = useSession();
-  console.log(session);
+  // console.log(session);
   return (
     <div>
-      <Topbar user={session && session.user} />
+      <Topbar />
       <div className="grid grid-cols-12">
         <div className="col-span-6 m-10">
           {loading ? (
