@@ -15,11 +15,7 @@ const App = () => {
         <div className="mb-8 text-2xl text-gray-700">
           {video ? video.title : "loading... "}
         </div>
-        {video && video.url ? (
-          <VideoPlayer videoRow={video} />
-        ) : (
-          <div>No video URL found :( </div>
-        )}
+        {video && video.url ? <VideoPlayer videoRow={video} /> : <div></div>}
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ function VideoList() {
         feed.map((video) => (
           <div
             key={video.id}
-            className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+            className="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
           >
             {/* <div className="flex-shrink-0">
             <img className="h-10 w-10 rounded-full" src={video.imageUrl} alt="" />
