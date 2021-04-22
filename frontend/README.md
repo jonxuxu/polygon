@@ -12,3 +12,8 @@ yarn dev
 https://stackoverflow.com/questions/10812699/html5-manually-playing-a-video-inside-a-canvas-in-ios-safari
 
 https://mux.com/blog/canvas-adding-filters-and-more-to-video-using-just-a-browser/
+
+## Database Migration
+
+Pull schema changes `yarn db:pull`
+Push schema changes `yarn db:push`
