@@ -4,8 +4,8 @@ import prisma from "prisma/client";
 import cuid from "cuid";
 
 export default async function handler(req, res) {
-  const { title, description } = req.body;
-  if (!req.query.email)
+  const { title, description, email } = req.body;
+  if (!req.body.email)
     return res.json({
       error: "Must specify a user email.",
     });
@@ -21,11 +21,12 @@ export default async function handler(req, res) {
   const video = await prisma.videos.create({
     data: {
       cuid: cuid(),
-      title: title || req.query.file,
+      title: title || req.body.file,
       description,
+      upload_state: "pending",
       user: {
         connect: {
-          email: req.query.email,
+          email,
         },
       },
     },
@@ -39,6 +40,6 @@ export default async function handler(req, res) {
   };
 
   const [response] = await file.generateSignedPostPolicyV4(options);
-  console.log(response);
-  res.status(200).json(response);
+  // console.log(response);
+  res.status(200).json({ response, video });
 }

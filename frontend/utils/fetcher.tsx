@@ -1,4 +1,4 @@
-import { videos } from "@prisma/client";
+import { users, videos } from "@prisma/client";
 import useSWR from "swr";
 
 export const fetcher = (url, data = undefined) =>
@@ -18,6 +18,13 @@ export function useFeed() {
     fetcher
   );
   return { feed };
+}
+export function useMe() {
+  const { data: me }: { data?: users & { videos: videos[] } } = useSWR(
+    "/api/me",
+    fetcher
+  );
+  return { me };
 }
 export function useVideo({ cuid }) {
   const {

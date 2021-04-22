@@ -1,52 +1,55 @@
+import { useSession } from "next-auth/client";
 import Link from "next/link";
 import ScreenshotSections from "../components/ScreenshotSections";
-const Index = () => (
-  <div className="bg-white">
-    <div className="relative overflow-hidden">
-      <header className="relative">
-        <div className="bg-gray-900 pt-6">
-          <nav
-            className="relative max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6"
-            aria-label="Global"
-          >
-            <div className="flex items-center flex-1">
-              <div className="flex items-center justify-between w-full md:w-auto">
-                <a href="#">
-                  <span className="sr-only">Workflow</span>
-                  <img
-                    className="h-8 w-auto sm:h-10"
-                    src="https://tailwindui.com/img/logos/workflow-mark-teal-200-cyan-400.svg"
-                    alt=""
-                  />
-                </a>
-                <div className="-mr-2 flex items-center md:hidden">
-                  <button
-                    type="button"
-                    className="bg-gray-900 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-800 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-white"
-                    aria-expanded="false"
-                  >
-                    <span className="sr-only">Open main menu</span>
-
-                    <svg
-                      className="h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
+const Index = () => {
+  const [session] = useSession();
+  return (
+    <div className="bg-white">
+      <div className="relative overflow-hidden">
+        <header className="relative">
+          <div className="bg-gray-900 pt-6">
+            <nav
+              className="relative max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6"
+              aria-label="Global"
+            >
+              <div className="flex items-center flex-1">
+                <div className="flex items-center justify-between w-full md:w-auto">
+                  <a href="#">
+                    <span className="sr-only">Workflow</span>
+                    <img
+                      className="h-8 w-auto sm:h-10"
+                      src="https://tailwindui.com/img/logos/workflow-mark-teal-200-cyan-400.svg"
+                      alt=""
+                    />
+                  </a>
+                  <div className="-mr-2 flex items-center md:hidden">
+                    <button
+                      type="button"
+                      className="bg-gray-900 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-800 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-white"
+                      aria-expanded="false"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 6h16M4 12h16M4 18h16"
-                      />
-                    </svg>
-                  </button>
+                      <span className="sr-only">Open main menu</span>
+
+                      <svg
+                        className="h-6 w-6"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M4 6h16M4 12h16M4 18h16"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="hidden space-x-8 md:flex md:ml-10">
-                {/* <a
+                <div className="hidden space-x-8 md:flex md:ml-10">
+                  {/* <a
                   href="#"
                   className="text-base font-medium text-white hover:text-gray-300"
                 >
@@ -73,24 +76,21 @@ const Index = () => (
                 >
                   Company
                 </a> */}
+                </div>
               </div>
-            </div>
-            <div className="hidden md:flex md:items-center md:space-x-6">
-              <Link href="/login">
-                <a className="text-base font-medium text-white hover:text-gray-300">
-                  Log in
-                </a>
-              </Link>
-              <a
-                href="#"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700"
-              >
-                Join Waitlist
-              </a>
-            </div>
-          </nav>
-        </div>
-        {/* 
+              <div className="hidden md:flex md:items-center md:space-x-6">
+                {/* <a className="text-base font-medium text-white hover:text-gray-300">
+                  log in 
+                </a> */}
+                <Link href={session ? "/explore" : "/login"}>
+                  <a className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
+                    {session ? "Go to App" : "Log In"}
+                  </a>
+                </Link>
+              </div>
+            </nav>
+          </div>
+          {/* 
       <!--
         Mobile menu, show/hide based on menu open state.
 
@@ -101,129 +101,132 @@ const Index = () => (
           From: "opacity-100 scale-100"
           To: "opacity-0 scale-95"
       --> */}
-        <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top md:hidden">
-          <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
-            <div className="px-5 pt-4 flex items-center justify-between">
-              <div>
-                <img
-                  className="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-mark-teal-500-cyan-600.svg"
-                  alt=""
-                />
-              </div>
-              <div className="-mr-2">
-                <button
-                  type="button"
-                  className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-600"
-                >
-                  <span className="sr-only">Close menu</span>
-                  {/* <!-- Heroicon name: outline/x --> */}
-                  <svg
-                    className="h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    aria-hidden="true"
+          <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top md:hidden">
+            <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
+              <div className="px-5 pt-4 flex items-center justify-between">
+                <div>
+                  <img
+                    className="h-8 w-auto"
+                    src="https://tailwindui.com/img/logos/workflow-mark-teal-500-cyan-600.svg"
+                    alt=""
+                  />
+                </div>
+                <div className="-mr-2">
+                  <button
+                    type="button"
+                    className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-600"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                    <span className="sr-only">Close menu</span>
+                    {/* <!-- Heroicon name: outline/x --> */}
+                    <svg
+                      className="h-6 w-6"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="pt-5 pb-6">
-              <div className="px-2 space-y-1">
-                <a
-                  href="#"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  Product
-                </a>
+              <div className="pt-5 pb-6">
+                <div className="px-2 space-y-1">
+                  <a
+                    href="#"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
+                  >
+                    Product
+                  </a>
 
-                <a
-                  href="#"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  Features
-                </a>
+                  <a
+                    href="#"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
+                  >
+                    Features
+                  </a>
 
-                <a
-                  href="#"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  Marketplace
-                </a>
+                  <a
+                    href="#"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
+                  >
+                    Marketplace
+                  </a>
 
-                <a
-                  href="#"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
-                >
-                  Company
-                </a>
-              </div>
-              <div className="mt-6 px-5">
-                <a
-                  href="#"
-                  className="block text-center w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700"
-                >
-                  Join Waitlist
-                </a>
-              </div>
-              <div className="mt-6 px-5">
-                <p className="text-center text-base font-medium text-gray-500">
-                  Existing customer?{" "}
-                  <Link href="/login">
-                    <a className="text-gray-900 hover:underline">Login</a>
-                  </Link>
-                </p>
+                  <a
+                    href="#"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-900 hover:bg-gray-50"
+                  >
+                    Company
+                  </a>
+                </div>
+                <div className="mt-6 px-5">
+                  <a
+                    href="#"
+                    className="block text-center w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700"
+                  >
+                    Join Waitlist
+                  </a>
+                </div>
+                <div className="mt-6 px-5">
+                  <p className="text-center text-base font-medium text-gray-500">
+                    Existing customer?{" "}
+                    <Link href="/login">
+                      <a className="text-gray-900 hover:underline">Login</a>
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </header>
-      <main>
-        <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
-          <div className="mx-auto max-w-7xl lg:px-8">
-            <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
-                <div className="lg:py-24">
-                  <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
-                    <span className="block">A better way to</span>
-                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-cyan-400 block">
-                      interact with video
-                    </span>
-                  </h1>
-                  <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                    Video World adds a layer of rich interactions directly into
-                    video, so you can get pulled in like never before.
-                  </p>
-                  <div className="mt-10 sm:mt-12">
-                    <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
-                      <div className="sm:flex">
-                        <div className="min-w-0 flex-1">
-                          <label className="sr-only">Email address</label>
-                          <input
-                            id="email"
-                            type="email"
-                            placeholder="Enter your email"
-                            className="block w-full px-4 py-3 rounded-md border-0 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
-                          />
+        </header>
+        <main>
+          <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
+            <div className="mx-auto max-w-7xl lg:px-8">
+              <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+                  <div className="lg:py-24">
+                    <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
+                      <span className="block">A better way to</span>
+                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-cyan-400 block">
+                        interact with video
+                      </span>
+                    </h1>
+                    <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                      Video World adds a layer of rich interactions directly
+                      into video, so you can get pulled in like never before.
+                    </p>
+                    <div className="mt-10 sm:mt-12">
+                      <form
+                        action="#"
+                        className="sm:max-w-xl sm:mx-auto lg:mx-0"
+                      >
+                        <div className="sm:flex">
+                          <div className="min-w-0 flex-1">
+                            <label className="sr-only">Email address</label>
+                            <input
+                              id="email"
+                              type="email"
+                              placeholder="Enter your email"
+                              className="block w-full px-4 py-3 rounded-md border-0 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
+                            />
+                          </div>
+                          <div className="mt-3 sm:mt-0 sm:ml-3">
+                            <button
+                              type="submit"
+                              className="block w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
+                            >
+                              Join our waitlist
+                            </button>
+                          </div>
                         </div>
-                        <div className="mt-3 sm:mt-0 sm:ml-3">
-                          <button
-                            type="submit"
-                            className="block w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900"
-                          >
-                            Join our waitlist
-                          </button>
-                        </div>
-                      </div>
-                      {/* <p className="mt-3 text-sm text-gray-300 sm:mt-4">
+                        {/* <p className="mt-3 text-sm text-gray-300 sm:mt-4">
                         Start your free 14-day trial, no credit card necessary.
                         By providing your email, you agree to our{" "}
                         <a href="#" className="font-medium text-white">
@@ -231,70 +234,71 @@ const Index = () => (
                         </a>
                         .
                       </p> */}
-                    </form>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
+                  <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
+                    {/* <!-- Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ --> */}
+                    <img
+                      className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
+                      src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
+                      alt=""
+                    />
                   </div>
                 </div>
               </div>
-              <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
-                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
-                  {/* <!-- Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ --> */}
-                  <img
-                    className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                    src="https://tailwindui.com/img/component-images/cloud-illustration-teal-cyan.svg"
-                    alt=""
-                  />
-                </div>
+            </div>
+          </div>
+          {/* <ScreenshotSections /> */}
+
+          {/* <!-- Feature section with screenshot --> */}
+          <div className="relative bg-gray-50 pt-16 sm:pt-24 lg:pt-32">
+            <div className="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
+              <div>
+                <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">
+                  Instantly
+                </h2>
+                <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+                  Start with your videos
+                </p>
+                <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500">
+                  Upload your videos to our admin dashboard and we'll take care
+                  of the rest.
+                </p>
+              </div>
+              <div className="mt-12 -mb-10 sm:-mb-24 lg:-mb-80">
+                <img
+                  className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5"
+                  src="https://tailwindui.com/img/component-images/green-project-app-screenshot.jpg"
+                  alt=""
+                />
               </div>
             </div>
           </div>
-        </div>
-        {/* <ScreenshotSections /> */}
+          {/* <TestimonialSection /> */}
 
-        {/* <!-- Feature section with screenshot --> */}
-        <div className="relative bg-gray-50 pt-16 sm:pt-24 lg:pt-32">
-          <div className="mx-auto max-w-md px-4 text-center sm:px-6 sm:max-w-3xl lg:px-8 lg:max-w-7xl">
-            <div>
-              <h2 className="text-base font-semibold tracking-wider text-cyan-600 uppercase">
-                Instantly
-              </h2>
-              <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
-                Start with your videos
-              </p>
-              <p className="mt-5 max-w-prose mx-auto text-xl text-gray-500">
-                Upload your videos to our admin dashboard and we'll take care of
-                the rest.
+          {/* <!-- Feature section with grid --> */}
+          <FeatureSection />
+          {/* <!-- Testimonial section --> */}
+        </main>
+        <footer className="bg-gray-50" aria-labelledby="footerHeading">
+          <h2 id="footerHeading" className="sr-only">
+            Footer
+          </h2>
+          <div className="max-w-md mx-auto pt-12 px-4 sm:max-w-7xl sm:px-6 lg:pt-16 lg:px-8">
+            <div className="mt-12 border-t border-gray-200 py-8">
+              <p className="text-base text-gray-400 xl:text-center">
+                &copy; 2020 Website, Inc. All rights reserved.
               </p>
             </div>
-            <div className="mt-12 -mb-10 sm:-mb-24 lg:-mb-80">
-              <img
-                className="rounded-lg shadow-xl ring-1 ring-black ring-opacity-5"
-                src="https://tailwindui.com/img/component-images/green-project-app-screenshot.jpg"
-                alt=""
-              />
-            </div>
           </div>
-        </div>
-        {/* <TestimonialSection /> */}
-
-        {/* <!-- Feature section with grid --> */}
-        <FeatureSection />
-        {/* <!-- Testimonial section --> */}
-      </main>
-      <footer className="bg-gray-50" aria-labelledby="footerHeading">
-        <h2 id="footerHeading" className="sr-only">
-          Footer
-        </h2>
-        <div className="max-w-md mx-auto pt-12 px-4 sm:max-w-7xl sm:px-6 lg:pt-16 lg:px-8">
-          <div className="mt-12 border-t border-gray-200 py-8">
-            <p className="text-base text-gray-400 xl:text-center">
-              &copy; 2020 Website, Inc. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+        </footer>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default Index;
 
