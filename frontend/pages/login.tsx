@@ -10,7 +10,8 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (session && session.user) Router.push("/app");
-  });
+    Router.push("/api/auth/signin/google");
+  }, []);
 
   return (
     <div className="min-h-screen bg-white flex">
