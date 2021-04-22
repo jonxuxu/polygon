@@ -1,33 +1,20 @@
 // Listens for new videos and starts transcode and annotate job
 
 "use strict";
-// Imports the Google Cloud Video Intelligence library
 const Video = require("@google-cloud/video-intelligence");
-const { TranscoderServiceClient } = require("@google-cloud/video-transcoder");
+const axios = require("axios");
 
-async function transcodeVid(bucket, filename) {
-  // Instantiates a client
-  const transcoderServiceClient = new TranscoderServiceClient();
-  const projectId = "video-world-308113";
-  const location = "us-central1";
-  const inputUri = `gs://${bucket}/${filename}`;
-  const folderName = filename.replace(/\.[^/.]+$/, "");
-  const outputUri = `gs://video-world-transcode/${folderName}/`;
-  const preset = "preset/web-hd";
-
-  // Construct request
-  const request = {
-    parent: transcoderServiceClient.locationPath(projectId, location),
-    job: {
-      inputUri: inputUri,
-      outputUri: outputUri,
-      templateId: preset,
-    },
-  };
-
-  // Run request
-  const [response] = await transcoderServiceClient.createJob(request);
-  console.log(`Job: ${response.name}`);
+function transcodeVid(bucket, filename) {
+  // Tells our transcode vm to transcode the videos on FFMPEG
+  try {
+    axios.post("http://23.22.196.188:8080", {
+      api_key: process.env.TRANSCODE_API_KEY,
+      cuid: filename,
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+  console.log("sent transcode request succesfully");
 }
 
 async function annotateVid(bucket, filename) {
@@ -61,6 +48,5 @@ exports.processVid = async (event) => {
     );
   }
 
-  // TODO: Get rid of this, move to another cloud function that listens for annotate and transcode finish
   await Promise.all([annotateVid(bucket, name), transcodeVid(bucket, name)]);
 };
