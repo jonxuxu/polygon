@@ -55,7 +55,6 @@ exports.parseAnnotate = async (event) => {
 
       // Upload processed annotation to bucket
       console.log("Uploading to bucket...");
-      console.log("POGGERS", timedAnnotations["100"][0].text);
       let data = JSON.stringify(timedAnnotations);
 
       fs.writeFileSync(os.tmpdir() + "/annotationsTemp.json", data);

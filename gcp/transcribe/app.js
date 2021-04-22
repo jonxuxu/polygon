@@ -1,4 +1,5 @@
-require("dotenv").config();
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const speech = require("@google-cloud/speech");
 const fs = require("fs");
 // const ffmpegPath = require("@ffmpeg-installer/ffmpeg").path;
@@ -13,33 +14,6 @@ const client = new speech.SpeechClient({
   },
 });
 
-/**
- *    input - string, path of input file
- *    output - string, path of output file
- *    callback - function, node-style callback fn (error, result)
- */
-// function convert(input, output, callback) {
-//   ffmpeg(input)
-//     .output(output)
-//     .on("end", function () {
-//       console.log("conversion ended");
-//       callback(null);
-//     })
-//     .on("error", function (err) {
-//       console.log("error: ", err);
-//       callback(err);
-//     })
-//     .run();
-// }
-
-// convert("./test-speech.mp4", "./output.wav", async function (err) {
-//   if (!err) {
-//     console.log("conversion complete");
-//   } else {
-//     console.log("ERROR ", err);
-//   }
-// });
-
 // Parse and upload
 async function parseBoi() {
   // config: {
@@ -53,16 +27,18 @@ async function parseBoi() {
   //   },
   const request = {
     config: {
-      languageCode: "en-US",
-      model: "video",
+      languageCode: "zh",
+      alternativeLanguageCodes: ["zh", "en-US"],
       enableWordTimeOffsets: true,
       audioChannelCount: 2,
+      enableAutomaticPunctuation: true,
+      model: "default",
     },
     audio: {
-      uri: "gs://video-world-audio/output.wav",
+      uri: "gs://video-world-audio/audio.wav",
     },
     outputConfig: {
-      gcsUri: "gs://video-world-transcription/output.wav",
+      gcsUri: "gs://video-world-transcription/output",
     },
   };
 
@@ -83,10 +59,10 @@ async function parseBoi() {
     }
   });
 
-  //   const transcription = response.results
-  //     .map((result) => result.alternatives[0].transcript)
-  //     .join("\n");
-  //   console.log(`Transcription: ${transcription}`);
+  // const transcription = response.results
+  //   .map((result) => result.alternatives[0].transcript)
+  //   .join("\n");
+  // console.log(`Transcription: ${transcription}`);
   fs.writeFileSync("transcriptionsTemp.json", JSON.stringify(annotations));
 }
 
