@@ -1,4 +1,6 @@
 // Video transcode
+// Transcodes a video with provided cuid, to hls encoding, and uploads it to video-world-encoded
+// Transcodes a video with provided cuid, to wav, and uploads it to video-world-audio
 
 "use strict";
 
@@ -18,6 +20,7 @@ const connectionString = process.env.POSTGRES_URL;
 const pool = new Pool({ connectionString });
 
 var fs = require("fs");
+const fsPromises = fs.promises;
 
 const storage = new Storage({
   projectId: process.env.GCP_PROJECT_ID,
@@ -34,7 +37,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
-const setSuccess = async (cuid) => {
+const setTranscodeSuccess = async (cuid) => {
   const res = await pool.query(
     "UPDATE videos SET url = $1, transcode_state = 'success' WHERE cuid = $2",
     [
@@ -44,20 +47,18 @@ const setSuccess = async (cuid) => {
   );
 };
 
-const setProcessing = async (cuid) => {
+const setTranscodeState = async (cuid, state) => {
   const res = await pool.query(
-    "UPDATE videos SET transcode_state = 'processing' WHERE cuid = $1",
-    [cuid]
+    "UPDATE videos SET transcode_state = $2 WHERE cuid = $1",
+    [cuid, state]
   );
-  console.log(res);
 };
 
-const setFailed = async (cuid) => {
+const setTranscribeState = async (cuid, state) => {
   const res = await pool.query(
-    "UPDATE videos SET transcode_state = 'failed' WHERE cuid = $1",
-    [cuid]
+    "UPDATE videos SET transcribe_state = $2 WHERE cuid = $1",
+    [cuid, state]
   );
-  console.log(res);
 };
 
 const checkExists = async (cuid) => {
@@ -67,14 +68,114 @@ const checkExists = async (cuid) => {
   return res.rows[0].count === "1";
 };
 
+// Runs speech to text to get the captions of video
+const transcribe = async (cuid, res) => {
+  console.log("Converting to wav...");
+  setTranscribeState(cuid, "processing");
+  ffmpeg(`https://storage.googleapis.com/video-world-source/${cuid}`)
+    .output("./audio.wav")
+    .on("end", function () {
+      console.log("conversion to wav done");
+      const uploadOptions = {
+        destination: cuid,
+      };
+      audioBucket.upload("./audio.wav", uploadOptions, async function (err, f) {
+        if (err) {
+          setTranscribeState(cuid, "failed");
+          return res.status(500).json({ "upload error": err });
+        }
+        console.log("uploaded " + f.name);
+        await fsPromises.unlink("./audio.wav");
+        return res
+          .status(200)
+          .send(`successfully processed and uploaded ${cuid}`);
+      });
+    })
+    .on("error", function (err) {
+      setTranscribeState(cuid, "failed");
+      return res.status(500).json({ "transcribe error": err.message });
+    })
+    .run();
+};
+
+// Runs
+const transcode = async (cuid, res) => {
+  if (!fs.existsSync("./converted")) {
+    fs.mkdirSync("./converted");
+  }
+
+  ffmpeg(`https://storage.googleapis.com/video-world-source/${cuid}`)
+    .outputOptions([
+      "-c copy",
+      "-start_number 0",
+      "-hls_time 10",
+      "-hls_list_size 0",
+      "-f hls",
+    ])
+    .output("./converted/output.m3u8")
+    .on("error", function (err) {
+      console.log("An error occurred: " + err.message);
+      setTranscodeState(cuid, "failed");
+      return res.status(500).send(`Transcode error: ${err.message}`);
+    })
+    // .on("stderr", function (stderrLine) {
+    //   console.log("Stderr output: " + stderrLine);
+    // })
+    .on("progress", function (progress) {
+      console.log("... frames: " + progress.frames);
+    })
+    .on("end", async function () {
+      console.log("Finished processing");
+      // uploading converted files to bucket
+
+      const files = await fsPromises.readdir("./converted");
+
+      if (Array.isArray(files) && files.length) {
+        var counter = 0;
+
+        files.map(function (file, index) {
+          const uploadOptions = {
+            destination: cuid + "/" + file,
+            resumable: false,
+            gzip: false,
+          };
+
+          // iterate through files in folder
+          transcodeBucket.upload(
+            "./converted/" + file,
+            uploadOptions,
+            async function (err, f) {
+              if (err) {
+                setTranscodeState(cuid, "failed");
+                return res.status(500).json({ "upload error": err });
+              }
+              console.log("uploaded " + file);
+              counter += 1;
+              if (counter === files.length) {
+                console.log("file upload complete");
+                await setTranscodeSuccess(cuid);
+                await fsPromises.rmdir("./converted", { recursive: true });
+                // Run text to speech
+                transcribe(cuid, res);
+              }
+            }
+          );
+        });
+      }
+    })
+    .run();
+};
+
 app.get("/", (req, res) => {
-  res.status(200).send("Hello, world!").end();
+  return res.status(200).send("Hello, world!");
 });
 
 app.post("/", async (req, res) => {
   if (!req.body) {
     return res.status(401).json({ error: "no body" });
   }
+  // console.log(req.body.api_key);
+  // console.log(process.env.TRANSCODE_API_KEY);
   if (req.body.api_key !== process.env.TRANSCODE_API_KEY) {
     return res
       .status(401)
@@ -88,79 +189,11 @@ app.post("/", async (req, res) => {
     if (!cuidExists) {
       return res.status(401).json({ "cuid error": "cuid does not exist" });
     }
-
-    await setProcessing(cuid);
-
-    const command = ffmpeg(
-      `https://storage.googleapis.com/video-world-source/${cuid}`
-    )
-      .outputOptions([
-        "-c copy",
-        "-start_number 0",
-        "-hls_time 10",
-        "-hls_list_size 0",
-        "-f hls",
-      ])
-      .output("./converted/output.m3u8")
-      .on("error", function (err) {
-        console.log("An error occurred: " + err.message);
-        setFailed(cuid);
-        return res.status(500).send("An error occurred: " + err.message);
-      })
-      // .on("stderr", function (stderrLine) {
-      //   console.log("Stderr output: " + stderrLine);
-      // })
-      .on("progress", function (progress) {
-        console.log("... frames: " + progress.frames);
-      })
-      .on("end", function () {
-        console.log("Finished processing");
-        // uploading converted files to bucket
-
-        fs.readdir("./converted", function (err, files) {
-          if (err) {
-            console.error("Could not list the directory.", err);
-            setFailed(cuid);
-            return res.status(500).json({ "directory error": err });
-          }
-          if (Array.isArray(files) && files.length) {
-            var counter = 0;
-
-            files.map(function (file, index) {
-              const uploadOptions = {
-                destination: cuid + "/" + file,
-                resumable: false,
-                gzip: false,
-              };
-
-              // iterate through files in folder
-              transcodeBucket.upload(
-                "./converted/" + file,
-                uploadOptions,
-                async function (err, f) {
-                  if (err) {
-                    setFailed(cuid);
-                    return res.status(500).json({ "upload error": err });
-                  }
-                  console.log("uploaded " + file);
-                  counter += 1;
-                  if (counter === files.length) {
-                    console.log("file upload complete");
-                    await setSuccess(cuid);
-                    return res
-                      .status(200)
-                      .send("successfully processed " + cuid);
-                  }
-                }
-              );
-            });
-          }
-        });
-      })
-      .run();
+    await setTranscodeState(cuid, "processing");
+    transcode(cuid, res);
   } catch (err) {
     console.error("error: ", err);
-    await setFailed(cuid);
+    await setTranscodeState(cuid, "failed");
     return res.status(500).json({ error: err });
   }
 });
