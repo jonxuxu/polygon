@@ -9,6 +9,19 @@ import Link from "next/link";
 import Router from "next/router";
 import { mutate } from "swr";
 
+function validateFile(file, setDuration) {
+  var video = document.createElement("video");
+  video.preload = "metadata";
+  video.onloadedmetadata = function () {
+    window.URL.revokeObjectURL(video.src);
+    console.log("duration: ", video.duration);
+    setDuration(video.duration);
+    // return video.duration;
+  };
+
+  video.src = URL.createObjectURL(file);
+}
+
 const App = () => {
   const [session, loading] = useSession();
   const [success, setSuccess] = useState(false);
@@ -16,6 +29,8 @@ const App = () => {
   const [description, setDescription] = useState("");
   const [video, setVideo] = useState(null);
   const [file, setFile] = useState(null);
+  const [duration, setDuration] = useState(0);
+  const { me } = useMe();
 
   useEffect(() => {
     if (!loading && !session) Router.push("/login");
@@ -33,13 +48,26 @@ const App = () => {
     e.preventDefault();
     if (!file) return;
     const filename = encodeURIComponent(file.name);
+    mutate(
+      "/api/me",
+      {
+        ...me,
+        videos: [
+          { title, description, duration, upload_state: "pending" },
+          ...me.videos,
+        ],
+      },
+      false
+    );
     const { response, video } = await fetcher(`/api/video/upload-url`, {
       file: filename,
       email: session.user.email,
       title,
       description,
+      duration,
     });
     setVideo(video);
+
     const { url, fields } = response;
     const formData = new FormData();
 
@@ -59,6 +87,7 @@ const App = () => {
       setFile(null);
       setTitle("");
       setDescription("");
+      setDuration(0);
 
       await fetcher(`/api/video/update`, {
         id: video.id,
@@ -199,7 +228,11 @@ const App = () => {
                                 name="file-upload"
                                 type="file"
                                 className="sr-only"
-                                onChange={(e) => setFile(e.target.files[0])}
+                                onChange={(e) => {
+                                  const f = e.target.files[0];
+                                  setFile(f);
+                                  validateFile(f, setDuration);
+                                }}
                                 accept="video/*"
                               />
                             </label>
@@ -241,36 +274,23 @@ function UploadList() {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Title
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Description
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Upload State
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Transcode State
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Transcription State
-                      </th>
+                      {[
+                        "Title",
+                        "Description",
+                        "Duration (sec)",
+                        "Upload State",
+                        "Transcode State",
+                        "Transcription State",
+                      ].map((title) => (
+                        <th
+                          key={title}
+                          scope="col"
+                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          {title}
+                        </th>
+                      ))}
+
                       <th scope="col" className="relative px-6 py-3">
                         <span className="sr-only">Edit</span>
                       </th>
@@ -284,21 +304,28 @@ function UploadList() {
                           videoIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
                         }
                       >
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                          {video.title}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {video.description}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {video.upload_state}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {video.transcode_state}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {video.transcription_state}
-                        </td>
+                        {[
+                          video.title,
+                          video.description,
+                          video.duration
+                            ? Math.ceil(video.duration) + " s"
+                            : "Unknown",
+                          video.upload_state,
+                          video.transcode_state,
+                          video.transcribe_state,
+                        ].map((state, i) => (
+                          <td
+                            key={i}
+                            className={`px-6 py-4 whitespace-nowrap text-sm ${
+                              i == 0
+                                ? "font-medium text-gray-900 "
+                                : "text-gray-500"
+                            }`}
+                          >
+                            {state}
+                          </td>
+                        ))}
+
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <a
                             href="#"

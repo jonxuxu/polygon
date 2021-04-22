@@ -79,7 +79,7 @@ model videos {
   upload_state      String   @default("pending")
   views             Int      @default(0)
   language          String?
-  duration          Int?
+  duration          Float?
   user              users    @relation(fields: [creator], references: [id])
 }
 
