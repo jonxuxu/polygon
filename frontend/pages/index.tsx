@@ -454,7 +454,7 @@ const FeatureSection = () => (
             <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
               <div className="-mt-6">
                 <div>
-                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-teal-500 to-cyan-600 rounded-md shadow-lg">
+                  <span className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-primary-500 to-secondary-600 rounded-md shadow-lg">
                     {/* <!-- Heroicon name: outline/cog --> */}
                     <svg
                       className="h-6 w-6 text-white"

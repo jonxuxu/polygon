@@ -5,7 +5,6 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 
 import { useEffect, useState } from "react";
 import { fetcher, useFeed, useMe } from "utils/fetcher";
-import Link from "next/link";
 import Router from "next/router";
 import { mutate } from "swr";
 
@@ -16,7 +15,6 @@ function validateFile(file, setDuration) {
     window.URL.revokeObjectURL(video.src);
     console.log("duration: ", video.duration);
     setDuration(video.duration);
-    // return video.duration;
   };
 
   video.src = URL.createObjectURL(file);
@@ -162,7 +160,7 @@ const App = () => {
                       name="title"
                       id="title"
                       // autoComplete="title"
-                      className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -181,7 +179,7 @@ const App = () => {
                       name="description"
                       id="description"
                       // autoComplete="description"
-                      className="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     />
                   </div>
                 </div>
@@ -198,7 +196,7 @@ const App = () => {
                         {file.name}{" "}
                         <a
                           onClick={() => setFile(null)}
-                          className="text-indigo-600 hover:text-indigo-900"
+                          className="text-primary-600 hover:text-primary-900"
                         >
                           Remove
                         </a>
@@ -221,7 +219,7 @@ const App = () => {
                             />
                           </svg>
                           <div className="flex text-sm text-gray-600">
-                            <label className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                            <label className="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
                               <span>Upload a file</span>
                               <input
                                 id="file-upload"
@@ -329,7 +327,7 @@ function UploadList() {
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <a
                             href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
+                            className="text-primary-600 hover:text-primary-900"
                           >
                             Edit
                           </a>
