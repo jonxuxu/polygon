@@ -22,7 +22,7 @@ async function annotateVid(bucket, filename) {
 
   const videoUri = `gs://${bucket}/${filename}`;
 
-  const destName = filename.replace(/\.[^/.]+$/, "") + ".json";
+  const destName = filename.replace(/\.[^/.]+$/, "");
   const request = {
     inputUri: videoUri,
     features: ["TEXT_DETECTION"],
