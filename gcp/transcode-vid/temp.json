@@ -1,0 +1,16 @@
+{
+    "config": {
+      "languageCode": "zh",
+      "alternativeLanguageCodes": ["zh", "en-US"],
+      "enableWordTimeOffsets": true,
+      "audioChannelCount": 2,
+      "enableAutomaticPunctuation": true,
+      "model": "default"
+    },
+    "audio": {
+      "uri": "gs://video-world-audio/cknsehrjh00047r5z7duq9c5s"
+    },
+    "outputConfig": {
+      "gcsUri": "gs://video-world-transcription-raw/cknsehrjh00047r5z7duq9c5s"
+    }
+  }

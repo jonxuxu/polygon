@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.20",
+    "@google-cloud/speech": "^4.4.0",
     "@google-cloud/storage": "^5.8.4",
     "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",

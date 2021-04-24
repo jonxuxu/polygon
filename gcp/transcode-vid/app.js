@@ -15,6 +15,8 @@ const ffmpeg = require("fluent-ffmpeg");
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 
 const { Storage } = require("@google-cloud/storage");
+const { SpeechClient } = require("@google-cloud/speech").v1p1beta1;
+
 const { Pool } = require("pg");
 const connectionString = process.env.POSTGRES_URL;
 const pool = new Pool({ connectionString });
@@ -27,6 +29,13 @@ const storage = new Storage({
   credentials: {
     client_email: process.env.GCP_CLIENT_EMAIL,
     private_key: process.env.GCP_PRIVATE_KEY,
+  },
+});
+
+const speechClient = new SpeechClient({
+  credentials: {
+    private_key: process.env.GCP_PRIVATE_KEY,
+    client_email: process.env.GCP_CLIENT_EMAIL,
   },
 });
 
@@ -68,11 +77,27 @@ const checkExists = async (cuid) => {
   return res.rows[0].count === "1";
 };
 
+const getLanguage = async (cuid) => {
+  const res = await pool.query("SELECT language FROM videos WHERE cuid = $1", [
+    cuid,
+  ]);
+  return res.rows[0].language;
+};
+
 // Runs speech to text to get the captions of video
 const transcribe = async (cuid, res) => {
+  const languageCode = await getLanguage(cuid);
+  console.log("the language is " + languageCode);
+
+  if (languageCode === null) {
+    await setTranscribeState(cuid, "not computed");
+    return res.status(200).send(`successfully processed and uploaded ${cuid}`);
+  }
+
   console.log("Converting to wav...");
   setTranscribeState(cuid, "processing");
   ffmpeg(`https://storage.googleapis.com/video-world-source/${cuid}`)
+    .outputOptions(["-ac 1"])
     .output("./audio.wav")
     .on("end", function () {
       console.log("conversion to wav done");
@@ -86,6 +111,25 @@ const transcribe = async (cuid, res) => {
         }
         console.log("uploaded " + f.name);
         await fsPromises.unlink("./audio.wav");
+        // Annotate video
+        const request = {
+          config: {
+            languageCode: languageCode,
+            alternativeLanguageCodes: [languageCode, "en-US"],
+            enableWordTimeOffsets: true,
+            enableAutomaticPunctuation: true,
+            model: "default",
+          },
+          audio: {
+            uri: `gs://video-world-audio/${cuid}`,
+          },
+          outputConfig: {
+            gcsUri: `gs://video-world-transcription-raw/${cuid}`,
+          },
+        };
+        // Detects text in a video
+        speechClient.longRunningRecognize(request);
+        console.log("transcription request sent");
         return res
           .status(200)
           .send(`successfully processed and uploaded ${cuid}`);
