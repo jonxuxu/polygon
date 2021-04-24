@@ -2,9 +2,19 @@
 
 "use strict";
 const { Storage } = require("@google-cloud/storage");
+const { Pool } = require("pg");
+const connectionString = process.env.POSTGRES_URL;
+const pool = new Pool({ connectionString });
 
 const os = require("os");
 const fs = require("fs");
+
+const setAnnotateSucess = async (cuid) => {
+  const res = await pool.query(
+    "UPDATE videos SET annotation_url = $1, annotate_state = 'success' WHERE cuid = $2",
+    [`https://storage.googleapis.com/video-world-annotations/${cuid}`, cuid]
+  );
+};
 
 exports.parseAnnotate = async (event) => {
   const { bucket, name } = event;
@@ -64,9 +74,12 @@ exports.parseAnnotate = async (event) => {
           destination: name,
         });
 
-      console.log("Deleting from raw bucket...");
+      console.log("Updating db...");
+      await setAnnotateSucess(name);
+
+      console.log("Deleting from video-world-annotations-raw bucket...");
       storage.bucket("video-world-annotations-raw").file(name).delete();
 
-      console.log("Done annotating vid");
+      console.log("Done parsing annotations");
     });
 };
