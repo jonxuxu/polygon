@@ -4,7 +4,10 @@ import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
 const options = {
-  site: process.env.NEXTAUTH_URL || "http://localhost:3000/explore",
+  site:
+    process.env.NODE_ENV === "production"
+      ? "https://videoworld.xyz"
+      : "http://localhost:3000/explore",
 
   // Configure one or more authentication providers
   providers: [

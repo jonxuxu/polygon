@@ -82,6 +82,7 @@ model videos {
   views             Int      @default(0)
   language          String?
   duration          Float?
+  isPublic           Boolean @default(true)
   user              users    @relation(fields: [creator], references: [id], name:"VideoCreator")
   savedBy           users[]  @relation(name: "SavedVideo")
 }

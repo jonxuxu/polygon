@@ -82,7 +82,7 @@ const Index = () => {
                 {/* <a className="text-base font-medium text-white hover:text-gray-300">
                   log in 
                 </a> */}
-                <Link href={session ? "/explore" : "/login"}>
+                <Link href={session ? "/explore" : "/api/auth/signin/google"}>
                   <a className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
                     {session ? "Go to App" : "Log In"}
                   </a>
@@ -177,7 +177,7 @@ const Index = () => {
                 <div className="mt-6 px-5">
                   <p className="text-center text-base font-medium text-gray-500">
                     Existing customer?{" "}
-                    <Link href="/login">
+                    <Link href="/api/auth/signin/google">
                       <a className="text-gray-900 hover:underline">Login</a>
                     </Link>
                   </p>
@@ -208,7 +208,7 @@ const Index = () => {
                         className="sm:max-w-xl sm:mx-auto lg:mx-0"
                       >
                         <div className="sm:flex">
-                          <div className="min-w-0 flex-1">
+                          {/* <div className="min-w-0 flex-1">
                             <label className="sr-only">Email address</label>
                             <input
                               id="email"
@@ -224,7 +224,7 @@ const Index = () => {
                             >
                               Join our waitlist
                             </button>
-                          </div>
+                          </div> */}
                         </div>
                         {/* <p className="mt-3 text-sm text-gray-300 sm:mt-4">
                         Start your free 14-day trial, no credit card necessary.

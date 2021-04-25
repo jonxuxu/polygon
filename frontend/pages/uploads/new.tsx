@@ -30,7 +30,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [video, setVideo] = useState(null);
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguage] = useState("");
   const [file, setFile] = useState(null);
   const [uploadPercent, setUploadPercent] = useState(0);
   const [thumbnail, setThumbnail] = useState(null);
@@ -117,13 +117,7 @@ const App = () => {
       },
     });
 
-<<<<<<< HEAD
     if (res.status >= 200 && res.status < 300) {
-      console.log("Uploaded successfully!");
-=======
-    if (upload.ok) {
-      console.log("Uploaded successfully!", upload);
->>>>>>> 045aa3ea54e76e4598fd686ea489a08de5ad716a
       setSuccess(true);
       setFile(null);
       setTitle("");
@@ -277,7 +271,7 @@ const App = () => {
                                 accept="video/*"
                               />
                             </label>
-                            <p className="pl-1">or drag and drop</p>
+                            {/* <p className="pl-1">or drag and drop</p> */}
                           </div>
                           <p className="text-xs text-gray-500">MP4, MOV</p>
                         </div>
@@ -335,7 +329,7 @@ const App = () => {
                                 accept="image/*"
                               />
                             </label>
-                            <p className="pl-1">or drag and drop</p>
+                            {/* <p className="pl-1">or drag and drop</p> */}
                           </div>
                           <p className="text-xs text-gray-500">
                             JPEG, PNG, GIF

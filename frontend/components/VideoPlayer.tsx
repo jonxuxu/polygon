@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import axios from "axios";
@@ -63,7 +64,6 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     // increment views
     fetcher("/api/video/view", { cuid: videoRow.cuid });
 
-    // Loads font
     document.fonts.load('900 48px "Font Awesome 5 Free"');
 
     // Fetch Video URL
