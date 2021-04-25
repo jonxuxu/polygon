@@ -17,7 +17,7 @@ import { exitFullScreen, enterFullScreen } from "../utils/video";
 import { useRouter } from "next/router";
 
 import Controls from "./Controls";
-import { useVideo } from "utils/fetcher";
+import { fetcher, useVideo } from "utils/fetcher";
 import { videos } from ".prisma/client";
 
 // Video player variables
@@ -59,6 +59,9 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   });
 
   useEffect(() => {
+    // increment views
+    fetcher("/api/video/view", { cuid: videoRow.cuid });
+
     // Loads font
     document.fonts.load('900 48px "Font Awesome 5 Free"');
 
@@ -116,7 +119,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     // Set global vars for easy access
     baseContext = baseCanvas.current.getContext("2d");
     secondaryContext = secondayCanvas.current.getContext("2d");
-  }, [videoRow]);
+  }, []);
 
   useEffect(() => {
     if (playing) {

@@ -51,7 +51,8 @@ model users {
   image          String?
   created_at     DateTime  @default(now()) @db.Timestamptz(6)
   updated_at     DateTime  @default(now()) @db.Timestamptz(6)
-  videos         videos[]
+  videos         videos[] @relation(name: "VideoCreator")
+  savedVideos         videos[] @relation(name: "SavedVideo")
 }
 
 model verification_requests {
@@ -70,6 +71,7 @@ model videos {
   description       String?
   created           DateTime @default(now()) @db.Timestamptz(6)
   transcription_url String?
+  thumbnail_url String?
   annotation_url    String?
   url               String?
   transcribe_state  String   @default("pending")
@@ -80,7 +82,8 @@ model videos {
   views             Int      @default(0)
   language          String?
   duration          Float?
-  user              users    @relation(fields: [creator], references: [id])
+  user              users    @relation(fields: [creator], references: [id], name:"VideoCreator")
+  savedBy           users[]  @relation(name: "SavedVideo")
 }
 
 model waitlist {
