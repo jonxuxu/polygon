@@ -1,4 +1,4 @@
-import { useFeed, useMe, useVideo } from "utils/fetcher";
+import { fetcher, useFeed, useMe, useVideo } from "utils/fetcher";
 import Topbar from "components/Topbar";
 
 import Link from "next/link";
@@ -14,8 +14,9 @@ const App = () => {
     <div>
       <Topbar />
       <div className="m-10">
-        {video ? (
+        {video && video.url ? (
           <div>
+            <VideoPlayer videoRow={video} />
             <div className="mb-2 text-2xl text-gray-700">
               {video.title}{" "}
               {me && me.id === video.creator && (
@@ -25,12 +26,24 @@ const App = () => {
               )}
             </div>
 
-            <div className="mb-8 text-md text-gray-700">{video.user.name}</div>
+            <div className="mb text-md text-gray-700 mb-2">
+              {video.user.name}
+            </div>
+            {/* Save button */}
+            {/* <button
+              className="primary mt-2"
+              onClick={() => {
+                fetcher("/api/video/update", {
+                  savedBy: { connect: { email: me.email } },
+                });
+              }}
+            >
+              {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
+            </button> */}
           </div>
         ) : (
           "loading... "
         )}
-        {video && video.url ? <VideoPlayer videoRow={video} /> : <div></div>}
       </div>
     </div>
   );

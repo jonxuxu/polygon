@@ -8,19 +8,21 @@ const App = () => {
   return (
     <div>
       <Topbar />
-      <div className="grid grid-cols-12">
-        <div className="col-span-6 m-10">
+      <div className="">
+        <div className="">
           {loading ? (
             <div>loading... </div>
           ) : !!session ? (
             <div>
-              <img
-                className="h-12 w-12 rounded-full mb-5"
-                src={session.user.image}
-                alt=""
-              />
-              <h1 className="text-xl text-gray-700">{session.user.name}</h1>
-              <div>{session.user.email}</div>
+              <div className="flex flex-col w-full m-10 items-center justify-center">
+                <img
+                  className="h-20 w-20 rounded-full mb-5"
+                  src={session.user.image}
+                  alt=""
+                />
+                <h1 className="text-xl text-gray-700">{session.user.name}</h1>
+                <div>{session.user.email}</div>
+              </div>
             </div>
           ) : null}
         </div>
