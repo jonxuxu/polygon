@@ -164,7 +164,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
 
     // If not zoomed in, draw rectangles over all the signs the user can click on
     if (!zoomedIn) {
-      const millis = (Math.floor(video.currentTime * 10) * 100).toString();
+      const millis = Math.floor(video.currentTime * 10) * 100;
       if (annotations[millis]) {
         annotations[millis].forEach((word) => {
           baseContext.strokeStyle = "red";
