@@ -9,6 +9,7 @@ import { mutate } from "swr";
 import Topbar from "components/Topbar";
 import EditField from "components/EditField";
 import { UploadList } from "components/UploadList";
+import languages from "constants/languages.json";
 
 function validateFile(file, setDuration) {
   var video = document.createElement("video");
@@ -28,6 +29,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [video, setVideo] = useState(null);
+  const [language, setLanguage] = useState(null);
   const [file, setFile] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
   const [duration, setDuration] = useState(0);
@@ -66,6 +68,7 @@ const App = () => {
       title,
       description,
       duration,
+      language,
     });
     if (thumbnail) {
       const { response: t } = await fetcher(`/api/storage/upload-thumbnail`, {
@@ -107,12 +110,6 @@ const App = () => {
     });
 
     if (upload.ok) {
-      try {
-        const data = await upload.json();
-        console.log("data ", data);
-      } catch (error) {
-        console.log("err", error);
-      }
       console.log("Uploaded successfully!", upload);
       setSuccess(true);
       setFile(null);
@@ -185,6 +182,33 @@ const App = () => {
                   setState={setDescription}
                   label="Description"
                 />
+                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                  <label
+                    htmlFor="language"
+                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                  >
+                    Language
+                  </label>
+                  <div className="mt-1 sm:mt-0 sm:col-span-2">
+                    {languages && (
+                      <select
+                        value={language}
+                        onChange={(e) => {
+                          console.log(e.target.value);
+                          setLanguage(e.target.value);
+                        }}
+                        // autoComplete="title"
+                        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      >
+                        {languages.map((lang) => (
+                          <option key={lang.code} value={lang.code}>
+                            {lang.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                </div>
 
                 <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                   <label
