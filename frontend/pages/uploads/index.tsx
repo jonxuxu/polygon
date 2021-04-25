@@ -2,6 +2,8 @@ import Topbar from "../../components/Topbar";
 import VideoPlayer from "../../components/VideoPlayer";
 import { useSession } from "next-auth/client";
 import { CheckCircleIcon } from "@heroicons/react/solid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 import { useEffect, useState } from "react";
 import { fetcher, useFeed, useMe } from "utils/fetcher";
@@ -25,6 +27,7 @@ const App = () => {
   const [success, setSuccess] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [uploading, setUploading] = useState(false);
   const [video, setVideo] = useState(null);
   const [file, setFile] = useState(null);
   const [duration, setDuration] = useState(0);
@@ -45,6 +48,7 @@ const App = () => {
     // const file = e.target.files[0];
     e.preventDefault();
     if (!file) return;
+    setUploading(true);
     const filename = encodeURIComponent(file.name);
     mutate(
       "/api/me",
@@ -95,6 +99,7 @@ const App = () => {
     } else {
       console.error("Upload failed.");
     }
+    setUploading(false);
   };
   return (
     <div>
@@ -105,7 +110,7 @@ const App = () => {
             <h2 className="text-gray-700">Give your file a name</h2>
             <input type="text" className="rounded-md border-gray-500 mb-2" />
           </div> */}
-          {video && (
+          {uploading && (
             <div
               className={`rounded-md ${
                 success ? "bg-green-50" : "bg-yellow-50"
@@ -243,8 +248,19 @@ const App = () => {
                   </div>
                 </div>
               </div>
-              <button type="submit" className="primary mt-10 mb-10">
-                Upload
+              <button
+                type="submit"
+                className={`primary mt-10 mb-10 ${
+                  uploading && "cursor-not-allowed"
+                }`}
+              >
+                {uploading ? (
+                  <span>
+                    <FontAwesomeIcon icon={faCircleNotch} spin /> Uploading...
+                  </span>
+                ) : (
+                  "Upload"
+                )}
               </button>
             </form>
 
