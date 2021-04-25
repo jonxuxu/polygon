@@ -6,7 +6,12 @@ export function UploadList() {
   const { me } = useMe();
   return (
     <div className="">
-      <h1 className="text-xl text-gray-700 mb-4">Uploads</h1>
+      <div className="flex mb-3">
+        <h1 className="text-xl text-gray-700 mb-4">Uploads</h1>
+        <Link href="/uploads/new">
+          <button className="primary  ml-5 ">Upload New Video</button>
+        </Link>
+      </div>
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -19,6 +24,7 @@ export function UploadList() {
                         "Title",
                         "Description",
                         "Duration (sec)",
+                        "Thumbnail",
                         "Upload State",
                         "Transcode State",
                         "Transcription State",
@@ -46,11 +52,16 @@ export function UploadList() {
                         }
                       >
                         {[
-                          video.title,
+                          <Link href={`/video/${video.cuid}`}>
+                            <a href="#" className="link">
+                              {video.title}
+                            </a>
+                          </Link>,
                           video.description,
                           video.duration
                             ? Math.ceil(video.duration) + " s"
                             : "Unknown",
+                          video.thumbnail_url,
                           video.upload_state,
                           video.transcode_state,
                           video.transcribe_state,
@@ -69,10 +80,7 @@ export function UploadList() {
 
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <Link href={`/video/${video.cuid}/edit`}>
-                            <a
-                              href="#"
-                              className="text-primary-600 hover:text-primary-900"
-                            >
+                            <a href="#" className="link">
                               Edit
                             </a>
                           </Link>

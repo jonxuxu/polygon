@@ -30,7 +30,7 @@ export function useVideo({ cuid }) {
   const {
     data: video,
   }: {
-    data?: videos & { user: users };
+    data?: videos & { user: users; savedBy: users[] };
   } = useSWR(`/api/video/${cuid}`, fetcher);
   return { video };
 }
