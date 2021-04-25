@@ -1,5 +1,4 @@
 import Topbar from "../../components/Topbar";
-import VideoPlayer from "../../components/VideoPlayer";
 import { useSession } from "next-auth/client";
 import { CheckCircleIcon } from "@heroicons/react/solid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,6 +8,8 @@ import { useEffect, useState } from "react";
 import { fetcher, useFeed, useMe } from "utils/fetcher";
 import Router from "next/router";
 import { mutate } from "swr";
+import axios from "axios";
+import { upload } from "gcs-resumable-upload";
 
 function validateFile(file, setDuration) {
   var video = document.createElement("video");
@@ -28,6 +29,7 @@ const App = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadPercent, setUploadPercent] = useState(0);
   const [video, setVideo] = useState(null);
   const [file, setFile] = useState(null);
   const [duration, setDuration] = useState(0);
@@ -78,13 +80,17 @@ const App = () => {
       formData.append(key, value);
     });
 
-    const upload = await fetch(url, {
-      method: "POST",
-      body: formData,
+    const res = await axios.request({
+      method: "post",
+      url: url,
+      data: formData,
+      onUploadProgress: (p) => {
+        setUploadPercent(Math.round((p.loaded / p.total) * 100));
+      },
     });
 
-    if (upload.ok) {
-      console.log("Uploaded successfully!", upload);
+    if (res.status >= 200 && res.status < 300) {
+      console.log("Uploaded successfully!");
       setSuccess(true);
       setFile(null);
       setTitle("");
@@ -104,6 +110,8 @@ const App = () => {
   return (
     <div>
       <Topbar />
+      {uploading && ProgressCard(uploadPercent)}
+
       <div className="">
         <div className="m-10">
           {/* <div>
@@ -356,6 +364,42 @@ function UploadList() {
                 <div>loading...</div>
               )}
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ProgressCard(uploadPercent) {
+  return (
+    <div className="rounded-md bg-blue-50 p-4 right-0 bottom-0">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <svg
+            className="h-5 w-5 text-blue-400"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </div>
+        <div className="ml-3 flex-1 md:flex md:justify-between">
+          <p className="text-sm text-blue-700">Uploading the video...</p>
+          <p>{`${uploadPercent}%`}</p>
+          <div className="h-3 relative max-w-xl rounded-full overflow-hidden">
+            <div className="w-full h-full bg-gray-200 absolute"></div>
+            <div
+              id="bar"
+              className="h-full bg-green-500 relative w-0"
+              style={{ width: `${uploadPercent}%` }}
+            ></div>
           </div>
         </div>
       </div>
