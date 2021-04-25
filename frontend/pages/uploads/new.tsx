@@ -51,6 +51,7 @@ const App = () => {
     // const file = e.target.files[0];
     e.preventDefault();
     if (!file) return;
+    setUploading(true);
     const filename = encodeURIComponent(file.name);
     mutate(
       "/api/me",
@@ -130,6 +131,7 @@ const App = () => {
     } else {
       console.error("Upload failed.");
     }
+    setUploading(false);
   };
   return (
     <div>
@@ -347,7 +349,7 @@ function ProgressCard(uploadPercent) {
             <div className="w-full h-full bg-gray-200 absolute"></div>
             <div
               id="bar"
-              className="h-full bg-green-500 relative w-0"
+              className="h-full bg-green-500 relative w-0 "
               style={{ width: `${uploadPercent}%` }}
             ></div>
           </div>
