@@ -6,9 +6,6 @@ import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 
-import annotations from "../annotationsTemp.json";
-import transcriptions from "../transcriptionsTemp.json";
-
 import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
@@ -19,6 +16,10 @@ import { useRouter } from "next/router";
 import Controls from "./Controls";
 import { fetcher, useVideo } from "utils/fetcher";
 import { videos } from ".prisma/client";
+
+// Content variables
+var annotations = [];
+var transcriptions = [];
 
 // Video player variables
 var offsetX;
@@ -101,12 +102,18 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     video.addEventListener("timeupdate", updateProgressBar, false);
 
     // Fetch annotations
-    // const annotationUrl =
-    //   "https://storage.googleapis.com/video-world-annotations/test-walk.json";
-    // (async () => {
-    //   const res = await axios.get(annotationUrl);
-    //   console.log(res.data);
-    // })();
+    const annotationUrl = videoRow ? videoRow.annotation_url : null;
+    (async () => {
+      const res = await axios.get(annotationUrl);
+      annotations = res.data;
+    })();
+
+    // Fetch transcriptions
+    const transcriptionUrl = videoRow ? videoRow.transcription_url : null;
+    (async () => {
+      const res = await axios.get(transcriptionUrl);
+      transcriptions = res.data;
+    })();
 
     // Canvas toolitp to top canvas
     const canvas = secondayCanvas.current;
@@ -157,7 +164,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
 
     // If not zoomed in, draw rectangles over all the signs the user can click on
     if (!zoomedIn) {
-      const millis = Math.floor(video.currentTime * 10) * 100;
+      const millis = (Math.floor(video.currentTime * 10) * 100).toString();
       if (annotations[millis]) {
         annotations[millis].forEach((word) => {
           baseContext.strokeStyle = "red";
@@ -374,18 +381,21 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   }
 
   const captionChars = [];
-  for (var i = 0; i < transcriptions["0"].text.length; i++) {
-    const word = transcriptions["0"].text.charAt(i);
-    captionChars.push(
-      <Caption
-        key={i}
-        onClick={() => {
-          speak(voiceRef, word, "zh");
-        }}
-      >
-        {word}
-      </Caption>
-    );
+  // todo
+  if ("0" in transcriptions) {
+    for (var i = 0; i < transcriptions["0"].text.length; i++) {
+      const word = transcriptions["0"].text.charAt(i);
+      captionChars.push(
+        <Caption
+          key={i}
+          onClick={() => {
+            speak(voiceRef, word, "zh");
+          }}
+        >
+          {word}
+        </Caption>
+      );
+    }
   }
 
   return (

@@ -7,7 +7,7 @@ const App = () => {
     <div>
       <Topbar />
       <div className="m-10">
-        <div className="mb-8 text-2xl text-gray-700">Explore</div>
+        <div className="mb-8 text-2xl text-gray-700 ">Explore</div>
         <VideoList />
       </div>
     </div>

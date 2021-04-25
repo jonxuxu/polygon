@@ -349,7 +349,7 @@ function ProgressCard(uploadPercent) {
             <div className="w-full h-full bg-gray-200 absolute"></div>
             <div
               id="bar"
-              className="h-full bg-green-500 relative w-0 "
+              className="h-full bg-green-500 relative w-0"
               style={{ width: `${uploadPercent}%` }}
             ></div>
           </div>
