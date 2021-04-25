@@ -12,7 +12,10 @@ const fs = require("fs");
 const setAnnotateSucess = async (cuid) => {
   const res = await pool.query(
     "UPDATE videos SET annotation_url = $1, annotate_state = 'success' WHERE cuid = $2",
-    [`https://storage.googleapis.com/video-world-annotations/${cuid}`, cuid]
+    [
+      `https://storage.googleapis.com/video-world-annotations/${cuid}.json`,
+      cuid,
+    ]
   );
 };
 
@@ -71,7 +74,7 @@ exports.parseAnnotate = async (event) => {
       await storage
         .bucket("video-world-annotations")
         .upload(os.tmpdir() + "/annotationsTemp.json", {
-          destination: name,
+          destination: name + ".json",
         });
 
       console.log("Updating db...");
