@@ -2,6 +2,8 @@ import { useFeed } from "utils/fetcher";
 import Topbar from "../components/Topbar";
 import VideoPlayer from "../components/VideoPlayer";
 import Link from "next/link";
+import Skeleton from "react-loading-skeleton";
+
 const App = () => {
   return (
     <div>
@@ -47,7 +49,9 @@ function VideoList() {
             </div>
           ))
       ) : (
-        <div>loading...</div>
+        <div className="p-3">
+          <Skeleton count={5} />
+        </div>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import Topbar from "../components/Topbar";
 import VideoPlayer from "../components/VideoPlayer";
 import { signIn, signOut, useSession } from "next-auth/client";
+import Skeleton from "react-loading-skeleton";
 
 const App = () => {
   const [session, loading] = useSession();
@@ -11,7 +12,9 @@ const App = () => {
       <div className="">
         <div className="">
           {loading ? (
-            <div>loading... </div>
+            <div className="p-3">
+              <Skeleton count={5} />
+            </div>
           ) : !!session ? (
             <div>
               <div className="flex flex-col w-full m-10 items-center justify-center">

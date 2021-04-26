@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/client";
-import { CheckCircleIcon } from "@heroicons/react/solid";
 
 import { useEffect, useState } from "react";
 import { fetcher, useFeed, useMe } from "utils/fetcher";
@@ -11,18 +10,7 @@ import EditField from "components/EditField";
 import { UploadList } from "components/UploadList";
 import axios from "axios";
 import languages from "constants/languages.json";
-
-function validateFile(file, setDuration) {
-  var video = document.createElement("video");
-  video.preload = "metadata";
-  video.onloadedmetadata = function () {
-    window.URL.revokeObjectURL(video.src);
-    console.log("duration: ", video.duration);
-    setDuration(video.duration);
-  };
-
-  video.src = URL.createObjectURL(file);
-}
+import { uploadThumbnail, validateFile } from "utils/upload-util";
 
 const App = () => {
   const [session, loading] = useSession();
@@ -49,7 +37,7 @@ const App = () => {
     };
   }, []);
 
-  const uploadPhoto = async (e) => {
+  const upload = async (e) => {
     // const file = e.target.files[0];
     e.preventDefault();
     if (!file) return;
@@ -75,28 +63,7 @@ const App = () => {
       language,
     });
     if (thumbnail) {
-      const { response: t } = await fetcher(`/api/storage/upload-thumbnail`, {
-        cuid: video.cuid,
-      });
-      const { url, fields } = t;
-      const tData = new FormData();
-
-      Object.entries({ ...fields, file: thumbnail }).forEach(([key, value]) => {
-        // @ts-ignore
-        tData.append(key, value);
-      });
-
-      const u = await fetch(url, {
-        method: "POST",
-        body: tData,
-      });
-      if (u.ok) {
-        console.log("thumbnail uploaded", t);
-        fetcher("/api/video/update", {
-          thumbnail_url: t.url + video.cuid,
-          id: video.id,
-        });
-      }
+      uploadThumbnail(video, thumbnail);
     }
     setVideo(video);
 
@@ -146,37 +113,9 @@ const App = () => {
             <h2 className="text-gray-700">Give your file a name</h2>
             <input type="text" className="rounded-md border-gray-500 mb-2" />
           </div> */}
-          {video && (
-            <div
-              className={`rounded-md ${
-                success ? "bg-green-50" : "bg-yellow-50"
-              } p-4 my-4`}
-            >
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  {success && (
-                    <CheckCircleIcon
-                      className="h-5 w-5 text-green-400"
-                      aria-hidden="true"
-                    />
-                  )}
-                </div>
-                <div className="ml-3">
-                  <h3
-                    className={`text-sm font-medium text-${
-                      success ? "green" : "yellow"
-                    }-800`}
-                  >
-                    {success
-                      ? "Video Uploaded!"
-                      : "Video uploading - please don't close this tab!"}
-                  </h3>
-                </div>
-              </div>
-            </div>
-          )}
+
           <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-            <form onSubmit={uploadPhoto}>
+            <form onSubmit={upload}>
               <div>
                 <h3 className="text-lg leading-6 font-medium text-gray-900">
                   Upload a Video
@@ -268,7 +207,7 @@ const App = () => {
                                   setFile(f);
                                   validateFile(f, setDuration);
                                 }}
-                                accept="video/*"
+                                accept="video/mp4, video/mov"
                               />
                             </label>
                             {/* <p className="pl-1">or drag and drop</p> */}
@@ -352,36 +291,34 @@ const App = () => {
 };
 
 export default App;
+
 function ProgressCard(uploadPercent) {
   return (
-    <div className="rounded-md bg-blue-50 p-4 right-0 bottom-0">
-      <div className="flex">
-        <div className="flex-shrink-0">
-          <svg
-            className="h-5 w-5 text-blue-400"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </div>
-        <div className="ml-3 flex-1 md:flex md:justify-between">
-          <p className="text-sm text-blue-700">Uploading the video...</p>
-          <p>{`${uploadPercent}%`}</p>
-          <div className="h-3 relative max-w-xl rounded-full overflow-hidden">
-            <div className="w-full h-full bg-gray-200 absolute"></div>
-            <div
-              id="bar"
-              className="h-full bg-green-500 relative w-0"
-              style={{ width: `${uploadPercent}%` }}
-            ></div>
+    <div className="rounded-md right-0 bottom-0 ">
+      <div
+        className="bg-blue-400 shadow-md text-xs leading-none py-1.5 text-center text-gray-50 rounded-sm"
+        style={{ width: `${uploadPercent}%` }}
+      >
+        {uploadPercent}%
+      </div>
+      <div className="flex mt-2">
+        <div className="ml-3 flex-1 flex items-center justify-center">
+          <div className="flex-shrink-0 ">
+            <svg
+              className="h-5 w-5 text-blue-400 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
+          <p className="text-sm text-blue-700">Uploading the video...</p>
         </div>
       </div>
     </div>

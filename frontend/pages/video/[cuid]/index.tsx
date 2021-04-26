@@ -4,6 +4,8 @@ import Topbar from "components/Topbar";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import VideoPlayer from "components/VideoPlayer";
+import Skeleton from "react-loading-skeleton";
+
 const App = () => {
   const router = useRouter();
 
@@ -42,7 +44,9 @@ const App = () => {
             </button> */}
           </div>
         ) : (
-          "loading... "
+          <div className="p-3">
+            <Skeleton count={5} />
+          </div>
         )}
       </div>
     </div>
