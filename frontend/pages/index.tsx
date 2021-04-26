@@ -3,7 +3,7 @@ import Topbar from "../components/Topbar";
 import VideoPlayer from "../components/VideoPlayer";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
-
+import Image from "next/image";
 const App = () => {
   return (
     <div>
@@ -20,14 +20,14 @@ export default App;
 function VideoList() {
   const { feed } = useFeed();
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-6 gap-4">
       {feed ? (
         feed
           .filter((v) => v.isPublic && v.transcode_state === "success")
           .map((video) => (
             <div
               key={video.id}
-              className="relative rounded-lg bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
+              className="col-span-6 md:col-span-3 lg:col-span-2 relative rounded-lg bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
             >
               {/* <div className="flex-shrink-0">
             <img className="h-10 w-10 rounded-full" src={video.imageUrl} alt="" />
@@ -36,11 +36,12 @@ function VideoList() {
                 <Link href={`/video/${video.cuid}`}>
                   <a className="focus:outline-none">
                     <div className="h-100 w-100">
-                      <img
+                      <Image
+                        width={500}
+                        height={300}
                         className="rounded-md mr-2 object-cover shadow-sm "
                         src={
-                          video.thumbnail_url ??
-                          "https://www.skyscrapercenter.com/img/my-ctbuh/video-thumbnail.jpg"
+                          video.thumbnail_url ?? "/default-video-thumbnail.jpg"
                         }
                         alt="Thumbnail"
                       />
