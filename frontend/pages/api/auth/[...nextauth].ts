@@ -6,7 +6,7 @@ import Providers from "next-auth/providers";
 const options = {
   site:
     process.env.NODE_ENV === "production"
-      ? "https://videoworld.xyz"
+      ? "https://polygon.video"
       : "http://localhost:3000/explore",
 
   // Configure one or more authentication providers

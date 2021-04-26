@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:3000", "https://videoworld.xyz"],
+    "origin": ["http://localhost:3000", "https://polygon.video"],
     "responseHeader": ["Content-Type"],
     "method": ["POST", "GET"],
     "maxAgeSeconds": 3600

@@ -96,7 +96,7 @@ const App = () => {
             </form>
           </div>
         ) : (
-          <div></div>
+          <div>That video does not exist.</div>
         )}
       </div>
     </div>

@@ -8,8 +8,10 @@ const Topbar = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [session, loading] = useSession();
   const routes = [
-    { route: "/explore", label: "Explore" },
-    { route: "/uploads", label: "Uploads" },
+    { route: "/", label: "Explore" },
+    session
+      ? { route: "/uploads", label: "Uploads" }
+      : { route: "/api/auth/signin/google", label: "Login" },
   ];
   const router = useRouter();
   // const { session } = useSession();
@@ -79,16 +81,16 @@ const Topbar = () => {
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <Link href="/">
               <div className="flex-shrink-0 flex items-center">
-                {/* <img
+                <img
                   className="block lg:hidden h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                  alt="Workflow"
+                  src="/logo.png"
+                  alt="Polygon"
                 />
                 <img
                   className="hidden lg:block h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-                  alt="Workflow"
-                /> */}
+                  src="/logo.png"
+                  alt="Polygon"
+                />
               </div>
             </Link>
 
