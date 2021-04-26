@@ -4,7 +4,8 @@ import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 
 const Topbar = () => {
-  const [menu, setMenu] = useState(false);
+  const [profileMenu, setProfileMenu] = useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [session, loading] = useSession();
   const routes = [
     { route: "/explore", label: "Explore" },
@@ -20,9 +21,13 @@ const Topbar = () => {
             {/* <!-- Mobile menu button --> */}
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary-500"
               aria-controls="mobile-menu"
               aria-expanded="false"
+              onClick={() => {
+                setOpenMobileMenu(!openMobileMenu);
+                console.log(openMobileMenu);
+              }}
             >
               <span className="sr-only">Open main menu</span>
               {/* <!--
@@ -33,7 +38,7 @@ const Topbar = () => {
             Menu open: "hidden", Menu closed: "block"
           --> */}
               <svg
-                className="block h-6 w-6"
+                className={"block h-6 w-6"}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -86,6 +91,7 @@ const Topbar = () => {
                 /> */}
               </div>
             </Link>
+
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {/* <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" --> */}
               {routes.map((route) => (
@@ -102,18 +108,6 @@ const Topbar = () => {
                   </a>
                 </Link>
               ))}
-              {/* <a
-                href="#"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Explore
-              </a>
-              <a
-                href="#"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Uploads
-              </a> */}
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
@@ -126,7 +120,7 @@ const Topbar = () => {
                   id="user-menu"
                   aria-expanded="false"
                   aria-haspopup="true"
-                  onClick={() => setMenu(!menu)}
+                  onClick={() => setProfileMenu(!profileMenu)}
                 >
                   <span className="sr-only">Open user menu</span>
                   {!!session ? (
@@ -159,7 +153,7 @@ const Topbar = () => {
               From: "transform opacity-100 scale-100"
               To: "transform opacity-0 scale-95"
           --> */}
-              {menu && (
+              {profileMenu && (
                 <div
                   className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                   role="menu"
@@ -193,36 +187,25 @@ const Topbar = () => {
 
       {/* <!-- Mobile menu, show/hide based on menu state. --> */}
 
-      <div className={`sm:hidden`} id="mobile-menu">
-        <div className="pt-2 pb-4 space-y-1">
-          {/* <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" --> */}
-          {/* <a
-            href="#"
-            className="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-          >
-            Dashboard
-          </a>
-          <a
-            href="#"
-            className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-          >
-            Explore
-          </a> */}
-          {routes.map((route) => (
-            <Link href="/uploads" key={route.route}>
-              <a
-                className={
-                  router.pathname === route.route
-                    ? "bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-                }
-              >
-                {route.label}
-              </a>
-            </Link>
-          ))}
+      {openMobileMenu && (
+        <div className={`sm:hidden`} id="mobile-menu">
+          <div className="pt-2 pb-4 space-y-1">
+            {routes.map((route) => (
+              <Link href={route.route} key={route.route}>
+                <a
+                  className={
+                    router.pathname === route.route
+                      ? "bg-secondary-50 border-primary-500 text-primary-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                      : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                  }
+                >
+                  {route.label}
+                </a>
+              </Link>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };

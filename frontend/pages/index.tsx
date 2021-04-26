@@ -22,7 +22,7 @@ const Index = () => {
                       alt=""
                     />
                   </a>
-                  <div className="-mr-2 flex items-center md:hidden">
+                  {/* <div className="-mr-2 flex items-center md:hidden">
                     <button
                       type="button"
                       className="bg-gray-900 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-800 focus:outline-none focus:ring-2 focus-ring-inset focus:ring-white"
@@ -46,7 +46,7 @@ const Index = () => {
                         />
                       </svg>
                     </button>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="hidden space-x-8 md:flex md:ml-10">
                   {/* <a
@@ -78,7 +78,7 @@ const Index = () => {
                 </a> */}
                 </div>
               </div>
-              <div className="hidden md:flex md:items-center md:space-x-6">
+              <div className=" md:flex md:items-center md:space-x-6">
                 {/* <a className="text-base font-medium text-white hover:text-gray-300">
                   log in 
                 </a> */}
@@ -101,7 +101,7 @@ const Index = () => {
           From: "opacity-100 scale-100"
           To: "opacity-0 scale-95"
       --> */}
-          <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top md:hidden">
+          {/* <div className="absolute top-0 inset-x-0 p-2 transition transform origin-top md:hidden">
             <div className="rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden">
               <div className="px-5 pt-4 flex items-center justify-between">
                 <div>
@@ -117,7 +117,7 @@ const Index = () => {
                     className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-600"
                   >
                     <span className="sr-only">Close menu</span>
-                    {/* <!-- Heroicon name: outline/x --> */}
+
                     <svg
                       className="h-6 w-6"
                       xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +184,7 @@ const Index = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </header>
         <main>
           <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
