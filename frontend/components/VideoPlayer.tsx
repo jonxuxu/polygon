@@ -101,19 +101,21 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     // Connect video to progress bar
     video.addEventListener("timeupdate", updateProgressBar, false);
 
-    // Fetch annotations
-    const annotationUrl = videoRow ? videoRow.annotation_url : null;
-    (async () => {
-      const res = await axios.get(annotationUrl);
-      annotations = res.data;
-    })();
+    try {
+      // Fetch annotations
+      const annotationUrl = videoRow ? videoRow.annotation_url : null;
+      (async () => {
+        const res = await axios.get(annotationUrl);
+        annotations = res.data;
+      })();
 
-    // Fetch transcriptions
-    const transcriptionUrl = videoRow ? videoRow.transcription_url : null;
-    (async () => {
-      const res = await axios.get(transcriptionUrl);
-      transcriptions = res.data;
-    })();
+      // Fetch transcriptions
+      const transcriptionUrl = videoRow ? videoRow.transcription_url : null;
+      (async () => {
+        const res = await axios.get(transcriptionUrl);
+        transcriptions = res.data;
+      })();
+    } catch (error) {}
 
     // Canvas toolitp to top canvas
     const canvas = secondayCanvas.current;
