@@ -4,6 +4,10 @@ import VideoPlayer from "../components/VideoPlayer";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import Image from "next/image";
+import dayjs from "dayjs";
+var relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
+
 const App = () => {
   return (
     <div>
@@ -61,6 +65,9 @@ function VideoList() {
                       />
                       <p className="text-sm text-gray-500 truncate">
                         {video.user.name}
+                        <br />
+                        {video.views} views | {/* @ts-ignore */}
+                        {dayjs(video.created).from(dayjs())}
                       </p>
                     </div>
                   </a>
