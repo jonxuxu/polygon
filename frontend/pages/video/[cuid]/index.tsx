@@ -14,6 +14,7 @@ const App = () => {
 
   return (
     <div>
+      {/* {video && video.url && <VideoPlayer videoRow={video} />} */}
       <Topbar />
       <div className="m-10">
         {video && video.url ? (
@@ -32,7 +33,7 @@ const App = () => {
               {video.user.name}
             </div>
             {/* Save button */}
-            {/* <button
+            <button
               className="primary mt-2"
               onClick={() => {
                 fetcher("/api/video/update", {
@@ -41,7 +42,7 @@ const App = () => {
               }}
             >
               {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
-            </button> */}
+            </button>
           </div>
         ) : (
           <div className="p-3">

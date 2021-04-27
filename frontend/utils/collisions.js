@@ -21,9 +21,12 @@ export const wordCollider = (
         y: word.boundingBox[2].y * videoHeight,
       },
     ];
+    // console.log(word);
+    // console.log(bounds);
     collision = boundsCollider(mouseX, mouseY, bounds, () => {
       callback(word);
     });
+
     if (collision) {
       break;
     }

@@ -11,6 +11,7 @@ import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
+import { rgbToHex } from "../utils/colors";
 import { exitFullScreen, enterFullScreen } from "../utils/video";
 import { useRouter } from "next/router";
 
@@ -26,6 +27,8 @@ var transcriptions = [];
 var offsetX;
 var offsetY;
 var controlTimeout = null;
+var videoWidth = 1200;
+var videoHeight = 676;
 
 // Canvas contexts
 var baseContext;
@@ -36,9 +39,6 @@ var zoomedIn = false;
 var focusText = null;
 
 export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
-  const [videoWidth, setVideoWidth] = useState(1200);
-  const [videoHeight, setVideoHeight] = useState(676);
-
   const videoRef = useRef(null);
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
@@ -145,12 +145,12 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   useEffect(() => {
     if (fullScreen) {
       enterFullScreen(videoRef);
-      setVideoWidth(screen.width);
-      setVideoHeight(screen.height);
+      videoWidth = screen.width;
+      videoHeight = screen.height;
     } else {
       exitFullScreen();
-      setVideoWidth(1200);
-      setVideoHeight(676);
+      videoWidth = 1200;
+      videoHeight = 676;
     }
   }, [fullScreen]);
 
@@ -177,6 +177,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
           const height =
             (word.boundingBox[2].y - word.boundingBox[0].y) * video.height;
           baseContext.strokeRect(vidX, vidY, width, height);
+          // console.log("drew rectangle", vidX, vidY, width, height);
         });
       }
     }
@@ -230,22 +231,32 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     const mouseX = e.clientX - offsetX;
     const mouseY = e.clientY - offsetY;
     const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-    // console.log(mouseX, mouseY);
-    if (zoomedIn) {
-      console.log("clicked when zoomin");
-    } else {
-      wordCollider(
-        mouseX,
-        mouseY,
-        videoWidth,
-        videoHeight,
-        annotations[millis],
-        (word) => {
-          console.log("click on word");
-          zoomIn(word);
-        }
-      );
+
+    if (annotations[millis] !== null && annotations[millis] !== undefined) {
+      annotations[millis].forEach((word) => {
+        const x = word.boundingBox[0].x * videoWidth;
+        const y = word.boundingBox[0].y * videoHeight;
+        const p = baseContext.getImageData(x, y, 1, 1).data;
+        const hex = rgbToHex(p[0], p[1], p[2]);
+        // TODO
+      });
     }
+
+    // if (zoomedIn) {
+    //   console.log("clicked when zoomin");
+    // } else {
+    //   wordCollider(
+    //     mouseX,
+    //     mouseY,
+    //     videoWidth,
+    //     videoHeight,
+    //     annotations[millis],
+    //     (word) => {
+    //       console.log("click on word");
+    //       zoomIn(word);
+    //     }
+    //   );
+    // }
   }
 
   const drawTranslation = async (word, zoom, endx, endy) => {
