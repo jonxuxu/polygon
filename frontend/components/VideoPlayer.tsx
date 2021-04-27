@@ -52,6 +52,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     original: null,
     detectedSourceLanguage: null,
   });
+  const [transColor, setTransColor] = useState("#000000");
 
   useEffect(() => {
     // increment views
@@ -372,12 +373,13 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
           x={translationPos[0]}
           y={translationPos[1]}
           hide={!translationBox}
+          borderColor={transColor}
           ref={translationRef}
         >
           <div style={{ display: "flex" }}>
             <div>
               <span
-                style={{ fontFamily: "Arial", fontSize: 30, color: "blue" }}
+                style={{ fontFamily: "Arial", fontSize: 30, color: transColor }}
               >
                 {translationText.original}
               </span>
@@ -419,6 +421,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
                 annotations={annotations}
                 videoRef={videoRef}
                 zoomIn={zoomIn}
+                setTransColor={setTransColor}
               />
             )}
             <Controls
@@ -450,7 +453,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   );
 }
 
-const ToolTips = ({ annotations, videoRef, zoomIn }) => {
+const ToolTips = ({ annotations, videoRef, zoomIn, setTransColor }) => {
   if (videoRef.current === undefined) {
     return <div></div>;
   }
@@ -479,6 +482,7 @@ const ToolTips = ({ annotations, videoRef, zoomIn }) => {
             zIndex: 4,
           }}
           onClick={() => {
+            setTransColor(hex);
             zoomIn(word);
           }}
         />
@@ -510,5 +514,5 @@ const InfoBox = styled.div`
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 15px;
-  border: 2px solid blue;
+  border: 2px solid ${(props) => props.borderColor};
 `;
