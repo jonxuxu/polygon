@@ -7,13 +7,11 @@ import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 
-import { wordCollider } from "../utils/collisions";
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { rgbToHex } from "../utils/colors";
 import { exitFullScreen, enterFullScreen } from "../utils/video";
-import { useRouter } from "next/router";
 
 import Controls from "./Controls";
 import { fetcher, useVideo } from "utils/fetcher";
@@ -32,11 +30,6 @@ var videoHeight = 676;
 
 // Canvas contexts
 var baseContext;
-var secondaryContext;
-
-// Zoom variables
-var zoomedIn = false;
-var focusText = null;
 
 export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   const videoRef = useRef(null);
@@ -46,10 +39,10 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   const secondayCanvas = useRef(null);
 
   const [playing, setPlaying] = useState(false);
+  const [zoomedIn, setZoomedIn] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
 
-  const [cursorPoint, setCursorPoint] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
 
   const [translationBox, setTranslationBox] = useState(false);
@@ -123,11 +116,9 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     offsetX = BB.left;
     offsetY = BB.top;
     canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("mousedown", handleMouseDown);
 
     // Set global vars for easy access
     baseContext = baseCanvas.current.getContext("2d");
-    secondaryContext = secondayCanvas.current.getContext("2d");
   }, []);
 
   useEffect(() => {
@@ -135,7 +126,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
       console.log("playing");
       videoRef.current.play();
       setTranslationBox(false);
-      zoomedIn = false;
+      setZoomedIn(false);
     } else {
       console.log("pausing");
       videoRef.current.pause();
@@ -164,23 +155,21 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     // Draw the current frame of the video
     baseContext.drawImage(video, 0, 0, video.width, video.height);
 
-    // If not zoomed in, draw rectangles over all the signs the user can click on
-    if (!zoomedIn) {
-      const millis = Math.floor(video.currentTime * 10) * 100;
-      if (annotations[millis]) {
-        annotations[millis].forEach((word) => {
-          baseContext.strokeStyle = "red";
-          const vidX = word.boundingBox[0].x * video.width;
-          const vidY = word.boundingBox[0].y * video.height;
-          const width =
-            (word.boundingBox[2].x - word.boundingBox[0].x) * video.width;
-          const height =
-            (word.boundingBox[2].y - word.boundingBox[0].y) * video.height;
-          baseContext.strokeRect(vidX, vidY, width, height);
-          // console.log("drew rectangle", vidX, vidY, width, height);
-        });
-      }
-    }
+    // If not zoomed in, draw rectangles over all the signs
+    //   const millis = Math.floor(video.currentTime * 10) * 100;
+    //   if (annotations[millis]) {
+    //     annotations[millis].forEach((word) => {
+    //       baseContext.strokeStyle = "red";
+    //       const vidX = word.boundingBox[0].x * video.width;
+    //       const vidY = word.boundingBox[0].y * video.height;
+    //       const width =
+    //         (word.boundingBox[2].x - word.boundingBox[0].x) * video.width;
+    //       const height =
+    //         (word.boundingBox[2].y - word.boundingBox[0].y) * video.height;
+    //       baseContext.strokeRect(vidX, vidY, width, height);
+    //       // console.log("drew rectangle", vidX, vidY, width, height);
+    //     });
+    //   }
     requestAnimationFrame(updateCanvas);
   };
 
@@ -190,29 +179,6 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     e.preventDefault();
     e.stopPropagation();
 
-    const mouseX = e.clientX - offsetX;
-    const mouseY = e.clientY - offsetY;
-    const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-
-    var collision = false;
-    if (!zoomedIn) {
-      if (annotations[millis]) {
-        collision = wordCollider(
-          mouseX,
-          mouseY,
-          videoWidth,
-          videoHeight,
-          annotations[millis],
-          (word) => {
-            setCursorPoint(true);
-          }
-        );
-      }
-    }
-    if (!collision && cursorPoint) {
-      setCursorPoint(false);
-    }
-
     setShowControls(true);
     if (controlTimeout) {
       clearTimeout(controlTimeout);
@@ -220,43 +186,6 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
     controlTimeout = setTimeout(function () {
       setShowControls(false);
     }, 2000);
-  }
-
-  function handleMouseDown(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    console.log("click");
-
-    const mouseX = e.clientX - offsetX;
-    const mouseY = e.clientY - offsetY;
-    const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
-
-    if (annotations[millis] !== null && annotations[millis] !== undefined) {
-      annotations[millis].forEach((word) => {
-        const x = word.boundingBox[0].x * videoWidth;
-        const y = word.boundingBox[0].y * videoHeight;
-        const p = baseContext.getImageData(x, y, 1, 1).data;
-        const hex = rgbToHex(p[0], p[1], p[2]);
-        // TODO
-      });
-    }
-
-    // if (zoomedIn) {
-    //   console.log("clicked when zoomin");
-    // } else {
-    //   wordCollider(
-    //     mouseX,
-    //     mouseY,
-    //     videoWidth,
-    //     videoHeight,
-    //     annotations[millis],
-    //     (word) => {
-    //       console.log("click on word");
-    //       zoomIn(word);
-    //     }
-    //   );
-    // }
   }
 
   const drawTranslation = async (word, zoom, endx, endy) => {
@@ -283,6 +212,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   const zoomIn = (word) => {
     console.log("zoom in to " + word.text);
     setPlaying(false);
+    setZoomedIn(true);
 
     const width = word.boundingBox[2].x - word.boundingBox[0].x;
     const height = word.boundingBox[2].y - word.boundingBox[0].y;
@@ -320,9 +250,6 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
       endY: endy,
       progress: 0,
       callback: () => {
-        zoomedIn = true;
-        console.log("focus word set to ", word.text);
-        focusText = word.text;
         drawTranslation(word, zoom, endx, endy);
       },
     };
@@ -434,11 +361,10 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
           height={videoHeight}
           style={{ position: "absolute", left: 0, top: 0, zIndex: 0 }}
         />
-        <MouseCanvas
+        <canvas
           ref={secondayCanvas}
           width={videoWidth}
           height={videoHeight}
-          pointer={cursorPoint}
           hide={!showControls}
           style={{ position: "absolute", left: 0, top: 0, zIndex: 1 }}
         />
@@ -487,14 +413,23 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
           </div>
         </InfoBox>
         {showControls && (
-          <Controls
-            videoRef={videoRef}
-            setPlaying={setPlaying}
-            playing={playing}
-            progress={videoProgress}
-            setFullScreen={setFullScreen}
-            fullScreen={fullScreen}
-          />
+          <>
+            {!zoomedIn && !playing && (
+              <ToolTips
+                annotations={annotations}
+                videoRef={videoRef}
+                zoomIn={zoomIn}
+              />
+            )}
+            <Controls
+              videoRef={videoRef}
+              setPlaying={setPlaying}
+              playing={playing}
+              progress={videoProgress}
+              setFullScreen={setFullScreen}
+              fullScreen={fullScreen}
+            />
+          </>
         )}
         <div
           style={{
@@ -515,14 +450,43 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
   );
 }
 
-const MouseCanvas = styled.canvas`
-  cursor: ${(props) => {
-    if (props.hide) {
-      return "none";
-    }
-    return props.pointer ? "pointer" : "default";
-  }};
-`;
+const ToolTips = ({ annotations, videoRef, zoomIn }) => {
+  if (videoRef.current === undefined) {
+    return <div></div>;
+  }
+  const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
+
+  var tooltips = [];
+
+  if (annotations[millis] !== null && annotations[millis] !== undefined) {
+    tooltips = annotations[millis].map((word) => {
+      const x = word.boundingBox[0].x * videoWidth;
+      const y = word.boundingBox[0].y * videoHeight;
+      const p = baseContext.getImageData(x, y, 1, 1).data;
+      const hex = rgbToHex(p[0], p[1], p[2]);
+      return (
+        <div
+          style={{
+            width: 20,
+            height: 20,
+            borderRadius: 20,
+            border: "3px solid white",
+            backgroundColor: hex,
+            position: "absolute",
+            top: y,
+            left: x,
+            cursor: "pointer",
+            zIndex: 4,
+          }}
+          onClick={() => {
+            zoomIn(word);
+          }}
+        />
+      );
+    });
+  }
+  return <>{tooltips}</>;
+};
 
 const Caption = styled.span`
   color: white;
