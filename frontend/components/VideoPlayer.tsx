@@ -6,11 +6,11 @@ import styled from "styled-components";
 import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
+import tinycolor from "tinycolor2";
 
 import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
-import { rgbToHex } from "../utils/colors";
 import { exitFullScreen, enterFullScreen } from "../utils/video";
 
 import Controls from "./Controls";
@@ -379,7 +379,11 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
           <div style={{ display: "flex" }}>
             <div>
               <span
-                style={{ fontFamily: "Arial", fontSize: 30, color: transColor }}
+                style={{
+                  fontFamily: "Arial",
+                  fontSize: 30,
+                  color: tinycolor(transColor).darken(30),
+                }}
               >
                 {translationText.original}
               </span>
@@ -466,7 +470,7 @@ const ToolTips = ({ annotations, videoRef, zoomIn, setTransColor }) => {
       const x = word.boundingBox[0].x * videoWidth;
       const y = word.boundingBox[0].y * videoHeight;
       const p = baseContext.getImageData(x, y, 1, 1).data;
-      const hex = rgbToHex(p[0], p[1], p[2]);
+      const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
       return (
         <div
           style={{
