@@ -1,4 +1,5 @@
-import { fetcher, useFeed, useMe, useVideo } from "utils/fetcher";
+import React, { useState } from "react";
+import { fetcher, useMe, useVideo } from "utils/fetcher";
 import Topbar from "components/Topbar";
 
 import Link from "next/link";
@@ -6,11 +7,39 @@ import { useRouter } from "next/router";
 import VideoPlayer from "components/VideoPlayer";
 import Skeleton from "react-loading-skeleton";
 
+import languages from "constants/translateLanguages.json";
+
 const App = () => {
   const router = useRouter();
 
   const { video } = useVideo({ cuid: router.query?.cuid });
   const { me } = useMe();
+
+  const [targetLang, setTargetLang] = useState("en");
+
+  const Dropdown = () => {
+    return (
+      <div className="mt-1 sm:mt-0 sm:col-span-2">
+        {languages && (
+          <select
+            value={targetLang}
+            onChange={(e) => {
+              console.log(e.target.value);
+              setTargetLang(e.target.value);
+            }}
+            // autoComplete="title"
+            className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+          >
+            {languages.map((lang) => (
+              <option key={lang.code} value={lang.code}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -19,7 +48,7 @@ const App = () => {
       <div className="m-10">
         {video && video.url ? (
           <div>
-            <VideoPlayer videoRow={video} />
+            <VideoPlayer videoRow={video} targetLang={targetLang} />
             <div className="mb-2 text-2xl text-gray-700">
               {video.title}{" "}
               {me && me.id === video.creator && (
@@ -43,6 +72,9 @@ const App = () => {
             >
               {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
             </button>
+            {/* Language specifier */}
+            <div>Choose your target language</div>
+            <Dropdown />
           </div>
         ) : (
           <div className="p-3">

@@ -31,7 +31,12 @@ var videoHeight = 676;
 // Canvas contexts
 var baseContext;
 
-export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
+export default function VideoPlayer({
+  videoRow,
+  targetLang,
+}: {
+  videoRow: videos;
+}) {
   const videoRef = useRef(null);
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
@@ -191,8 +196,9 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
 
   const drawTranslation = async (word, zoom, endx, endy) => {
     const text = word.text;
+    console.log("lang:", targetLang);
     const res = await axios.get("/api/translate", {
-      params: { text: text, target: "en" },
+      params: { text: text, target: targetLang },
     });
 
     setTranslationText({ ...res.data.translation, original: word.text });

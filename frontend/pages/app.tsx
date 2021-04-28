@@ -1,7 +1,6 @@
 import Router from "next/router";
 import { useEffect } from "react";
 import Topbar from "../components/Topbar";
-import VideoPlayer from "../components/VideoPlayer";
 
 const App = () => {
   useEffect(() => {

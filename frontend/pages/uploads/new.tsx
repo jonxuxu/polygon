@@ -9,7 +9,7 @@ import Topbar from "components/Topbar";
 import EditField from "components/EditField";
 import { UploadList } from "components/UploadList";
 import axios from "axios";
-import languages from "constants/languages.json";
+import languages from "constants/speechLanguages.json";
 import { uploadThumbnail, validateFile } from "utils/upload-util";
 
 const App = () => {
