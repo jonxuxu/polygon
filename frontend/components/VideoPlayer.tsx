@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
-import Head from "next/head";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 import tinycolor from "tinycolor2";
@@ -347,9 +346,6 @@ export default function VideoPlayer({
 
   return (
     <div>
-      <Head>
-        <title>Video World</title>
-      </Head>
       {/* Video controls */}
       <audio ref={voiceRef} />
 
