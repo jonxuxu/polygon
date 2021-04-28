@@ -15,7 +15,7 @@ export default async (req, res) => {
     // Select the language and SSML voice gender (optional)
     voice: { languageCode: req.query.language },
     // select the type of audio encoding
-    audioConfig: { audioEncoding: "OGG_OPUS", speakingRate: 0.5 },
+    audioConfig: { audioEncoding: "OGG_OPUS", speakingRate: req.query.speed },
   };
 
   const [response] = await client.synthesizeSpeech(request);

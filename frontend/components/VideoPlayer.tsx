@@ -330,7 +330,7 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
         <Caption
           key={i}
           onClick={() => {
-            speak(voiceRef, word, "zh");
+            speak(voiceRef, word, "zh", true);
           }}
         >
           {word}
@@ -393,19 +393,37 @@ export default function VideoPlayer({ videoRow }: { videoRow: videos }) {
               </div>
             </div>
             <div style={{ paddingLeft: 10, paddingTop: 10 }}>
-              <div>
-                <FontAwesomeIcon
-                  icon={faVolumeUp}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    speak(
-                      voiceRef,
-                      translationText.original,
-                      translationText.detectedSourceLanguage
-                    );
-                  }}
-                />
-              </div>
+              <img
+                src="/turtle.svg"
+                alt="slow"
+                style={{
+                  width: 20,
+                  height: 20,
+                  cursor: "pointer",
+                  marginBottom: 5,
+                }}
+                onClick={() => {
+                  speak(
+                    voiceRef,
+                    translationText.original,
+                    translationText.detectedSourceLanguage,
+                    true
+                  );
+                }}
+              />
+              <img
+                src="/rabbit.svg"
+                alt="fast"
+                style={{ width: 20, height: 20, cursor: "pointer" }}
+                onClick={() => {
+                  speak(
+                    voiceRef,
+                    translationText.original,
+                    translationText.detectedSourceLanguage,
+                    false
+                  );
+                }}
+              />
               <div>
                 <FontAwesomeIcon
                   icon={faCopy}
