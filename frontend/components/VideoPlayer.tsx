@@ -35,6 +35,7 @@ export default function VideoPlayer({
   targetLang,
 }: {
   videoRow: videos;
+  targetLang: string;
 }) {
   const videoRef = useRef(null);
   const voiceRef = useRef(null);
