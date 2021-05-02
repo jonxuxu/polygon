@@ -8,6 +8,7 @@ import VideoPlayer from "components/VideoPlayer";
 import Skeleton from "react-loading-skeleton";
 
 import languages from "constants/translateLanguages.json";
+import { mutate } from "swr";
 
 const App = () => {
   const router = useRouter();
@@ -62,16 +63,23 @@ const App = () => {
               {video.user.name}
             </div>
             {/* Save button */}
-            <button
-              className="primary mt-2"
-              onClick={() => {
-                fetcher("/api/video/update", {
-                  savedBy: { connect: { email: me.email } },
-                });
-              }}
-            >
-              {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
-            </button>
+            {me && (
+              <button
+                className="primary mt-2"
+                onClick={async () => {
+                  const savedBy = video.savedBy.find((u) => u.id === me.id)
+                    ? { disconnect: { email: me.email } }
+                    : { connect: { email: me.email } };
+                  await fetcher("/api/video/update", {
+                    id: video.id,
+                    savedBy,
+                  });
+                  await mutate("/api/video/" + video.cuid);
+                }}
+              >
+                {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
+              </button>
+            )}
             {/* Language specifier */}
             <div>Choose your target language</div>
             <Dropdown />

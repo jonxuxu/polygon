@@ -2,9 +2,17 @@ import Topbar from "../components/Topbar";
 import VideoPlayer from "../components/VideoPlayer";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Skeleton from "react-loading-skeleton";
+import languages from "constants/speechLanguages.json";
+import { useEffect, useState } from "react";
+import { fetcher, useMe } from "utils/fetcher";
 
 const App = () => {
   const [session, loading] = useSession();
+  const { me } = useMe();
+  const [language, setLanguage] = useState("en-US");
+  useEffect(() => {
+    if (me) setLanguage(me.language);
+  }, [me]);
   // console.log(session);
   return (
     <div>
@@ -25,6 +33,35 @@ const App = () => {
                 />
                 <h1 className="text-xl text-gray-700">{session.user.name}</h1>
                 <div>{session.user.email}</div>
+                <div className=" p-5">
+                  <div className="mt-1 col-span-2 col-start-2">
+                    <label
+                      htmlFor="language"
+                      className="block text-sm font-medium text-gray-700 mb-3"
+                    >
+                      User Language
+                    </label>
+                    {languages && (
+                      <select
+                        value={language}
+                        onChange={(e) => {
+                          setLanguage(e.target.value);
+                          fetcher("/api/user/update", {
+                            language: e.target.value,
+                          });
+                        }}
+                        // autoComplete="title"
+                        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      >
+                        {languages.map((lang) => (
+                          <option key={lang.code} value={lang.code}>
+                            {lang.name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ) : null}
