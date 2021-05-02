@@ -388,7 +388,7 @@ export default function VideoPlayer({
                 style={{
                   fontFamily: "Arial",
                   fontSize: 30,
-                  color: tinycolor(transColor).darken(30),
+                  color: tinycolor(transColor).darken(20),
                 }}
               >
                 {translationText.original}
@@ -444,12 +444,12 @@ export default function VideoPlayer({
         </InfoBox>
         {showControls && (
           <>
-            {!zoomedIn && !playing && (
+            {!playing && (
               <ToolTips
                 annotations={annotations}
                 videoRef={videoRef}
-                zoomIn={zoomIn}
                 setTransColor={setTransColor}
+                drawTranslation={drawTranslation}
               />
             )}
             <Controls
@@ -481,7 +481,12 @@ export default function VideoPlayer({
   );
 }
 
-const ToolTips = ({ annotations, videoRef, zoomIn, setTransColor }) => {
+const ToolTips = ({
+  annotations,
+  videoRef,
+  setTransColor,
+  drawTranslation,
+}) => {
   if (videoRef.current === undefined) {
     return <div></div>;
   }
@@ -511,7 +516,7 @@ const ToolTips = ({ annotations, videoRef, zoomIn, setTransColor }) => {
           }}
           onClick={() => {
             setTransColor(hex);
-            zoomIn(word);
+            drawTranslation(word, 1, 0, 0);
           }}
         />
       );
