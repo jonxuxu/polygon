@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetcher, useFeed, useMe } from "utils/fetcher";
 import Router from "next/router";
 import { mutate } from "swr";
@@ -25,6 +25,9 @@ const App = () => {
   const [uploading, setUploading] = useState(false);
   const [duration, setDuration] = useState(0);
   const { me } = useMe();
+
+  const fileRef = useRef(null);
+  const thumbnailRef = useRef(null);
 
   useEffect(() => {
     if (!loading && !session) Router.push("/login");
@@ -87,6 +90,7 @@ const App = () => {
     if (res.status >= 200 && res.status < 300) {
       setSuccess(true);
       setFile(null);
+      setThumbnail(null);
       setTitle("");
       setDescription("");
       setDuration(0);
@@ -181,7 +185,10 @@ const App = () => {
                       <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
                         <div className="space-y-1 text-center">
                           <div className="flex text-sm text-gray-600">
-                            <button className="primary relative flex items-center space-x-2">
+                            <button
+                              className="primary relative flex items-center space-x-2"
+                              onClick={() => fileRef.current.click()}
+                            >
                               <svg
                                 className="mx-auto h-8 w-8 text-gray-400"
                                 stroke="currentColor"
@@ -202,7 +209,10 @@ const App = () => {
                                 name="file-upload"
                                 type="file"
                                 className="sr-only"
+                                ref={fileRef}
                                 onChange={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
                                   const f = e.target.files[0];
                                   setFile(f);
                                   validateFile(f, setDuration);
@@ -241,7 +251,10 @@ const App = () => {
                       <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
                         <div className="space-y-1 text-center">
                           <div className="flex text-sm text-gray-600">
-                            <button className="primary relative flex items-center space-x-2">
+                            <button
+                              className="primary relative flex items-center space-x-2"
+                              onClick={() => thumbnailRef.current.click()}
+                            >
                               <svg
                                 className="mx-auto h-8 w-8 text-gray-400"
                                 stroke="currentColor"
@@ -258,13 +271,17 @@ const App = () => {
                               </svg>
                               <span>Upload a thumbnail</span>
                               <input
+                                ref={thumbnailRef}
                                 id="file-upload"
                                 name="file-upload"
                                 type="file"
                                 className="sr-only"
-                                onChange={(e) =>
-                                  setThumbnail(e.target.files[0])
-                                }
+                                onChange={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+
+                                  setThumbnail(e.target.files[0]);
+                                }}
                                 accept="image/*"
                               />
                             </button>
