@@ -36,16 +36,18 @@ exports.parseTranscribe = async (event) => {
       const timedTranscriptions = {};
 
       //   Parse raw annotation
-      transcriptions.forEach((result) => {
-        if (result.alternatives[0].transcript) {
-          const entry = {
-            text: result.alternatives[0].transcript,
-          };
-          timedTranscriptions[
-            result.alternatives[0].words[0].start_offset.seconds
-          ] = entry;
-        }
-      });
+      if (transcriptions) {
+        transcriptions.forEach((result) => {
+          if (result.alternatives[0].transcript) {
+            const entry = {
+              text: result.alternatives[0].transcript,
+            };
+            timedTranscriptions[
+              result.alternatives[0].words[0].start_offset.seconds
+            ] = entry;
+          }
+        });
+      }
 
       // Upload processed annotation to bucket
       console.log("Uploading to bucket...");

@@ -1,0 +1,5 @@
+{
+    "inputUri": "gs://video-world-source/ckny3wl4d00007ou9c2gqd73g",
+    "features": ["TEXT_DETECTION"],
+    "outputUri": "gs://video-world-annotations-raw/ckny3wl4d00007ou9c2gqd73g"
+}

@@ -36,6 +36,7 @@ async function annotateVid(bucket, filename) {
 
 exports.processVid = async (event) => {
   const { bucket, name } = event;
+  console.log("Video " + name + " uploaded");
 
   if (!bucket) {
     throw new Error(

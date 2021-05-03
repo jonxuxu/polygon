@@ -7,7 +7,8 @@
     "@google-cloud/functions-framework": "^1.7.1",
     "@google-cloud/storage": "^5.8.1",
     "@google-cloud/video-intelligence": "^3.3.0",
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0"
   },
   "scripts": {
     "start": "functions-framework --target=processVid"
