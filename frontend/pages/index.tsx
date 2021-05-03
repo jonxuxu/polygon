@@ -24,14 +24,14 @@ export default App;
 function VideoList() {
   const { feed } = useFeed();
   return (
-    <div className="grid grid-cols-6 gap-4">
+    <div className="grid grid-cols-6 gap-6">
       {feed ? (
         feed
           .filter((v) => v.isPublic && v.transcode_state === "success")
           .map((video) => (
             <div
               key={video.id}
-              className="col-span-6 md:col-span-3 lg:col-span-2 mx-auto relative rounded-lg bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
+              className="col-span-6 md:col-span-3 xl:col-span-2 mx-auto relative rounded-lg bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500"
             >
               <div className="flex-1 min-w-0">
                 <Link href={`/video/${video.cuid}`}>
@@ -73,7 +73,7 @@ function VideoList() {
             </div>
           ))
       ) : (
-        <div className="p-3">
+        <div className="p-3 col-span-6">
           <Skeleton count={5} />
         </div>
       )}

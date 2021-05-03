@@ -9,9 +9,10 @@ const LoginPage = () => {
   const [session, loading] = useSession();
 
   useEffect(() => {
-    if (session && session.user) Router.push("/app");
-    Router.push("/api/auth/signin/google");
-  }, []);
+    if (loading) return;
+    if (session) Router.push("/");
+    if (!loading && !session) Router.push("/api/auth/signin/google");
+  }, [session, loading]);
 
   return (
     <div className="min-h-screen bg-white flex">
