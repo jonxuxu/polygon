@@ -28,7 +28,8 @@ export function UploadList() {
                         "Thumbnail",
                         "Upload State",
                         "Transcode State",
-                        "Transcription State",
+                        "Transcribe State",
+                        "Annotate State",
                       ].map((title) => (
                         <th
                           key={title}
@@ -70,6 +71,7 @@ export function UploadList() {
                           video.upload_state,
                           video.transcode_state,
                           video.transcribe_state,
+                          video.annotate_state,
                         ].map((state, i) => (
                           <td
                             key={i}
