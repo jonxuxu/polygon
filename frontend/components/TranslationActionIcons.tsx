@@ -12,7 +12,7 @@ export const TranslationActionIcons = ({
   voiceRef: React.MutableRefObject<any>;
   translationText: Transcription;
 }) => (
-  <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+  <div style={{ paddingLeft: 10, paddingTop: 3 }}>
     <img
       src="/turtle.svg"
       alt="slow"

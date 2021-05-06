@@ -267,10 +267,14 @@ export default function VideoPlayer({
           {snippets.map((t, i) => (
             <div
               key={i}
-              className="border-2 rounded-md py-3 px-4 my-2 border-primary-300"
+              className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
+              style={{ borderColor: transColor }}
             >
-              <span className="text-xl text-gray-700">{t.original}</span> <br />{" "}
-              {t.translatedText}{" "}
+              <span className="text-xl text-gray-700">
+                {t.original}
+                <br />
+                {t.translatedText}
+              </span>
               <TranslationActionIcons voiceRef={voiceRef} translationText={t} />
             </div>
           ))}
