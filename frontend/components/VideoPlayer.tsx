@@ -27,9 +27,6 @@ var controlTimeout = null;
 var videoWidth = 1200;
 var videoHeight = 676;
 
-// Canvas contexts
-var baseContext;
-
 export default function VideoPlayer({
   videoRow,
   targetLang,
@@ -40,11 +37,8 @@ export default function VideoPlayer({
   const videoRef = useRef(null);
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
-  const baseCanvas = useRef(null);
-  const secondayCanvas = useRef(null);
 
   const [playing, setPlaying] = useState(false);
-  const [zoomedIn, setZoomedIn] = useState(false);
   const [fullScreen, setFullScreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
 
@@ -88,17 +82,10 @@ export default function VideoPlayer({
       alert("Please use a modern browser to play the video");
     }
 
-    // Connect video to canvas
-    video.addEventListener(
-      "play",
-      () => {
-        requestAnimationFrame(updateCanvas);
-      },
-      false
-    );
-
     // Connect video to progress bar
-    video.addEventListener("timeupdate", updateProgressBar, false);
+    // video.addEventListener("timeupdate", updateProgressBar, false);
+    video.addEventListener("play", setPlaying(true), false);
+    video.addEventListener("pause", setPlaying(false), false);
 
     // Fetch annotations
     const annotationUrl = videoRow ? videoRow.annotation_url : null;
@@ -117,16 +104,6 @@ export default function VideoPlayer({
         transcriptions = res.data;
       }
     })();
-
-    // Canvas toolitp to top canvas
-    const canvas = secondayCanvas.current;
-    var BB = canvas.getBoundingClientRect();
-    offsetX = BB.left;
-    offsetY = BB.top;
-    canvas.addEventListener("mousemove", handleMouseMove);
-
-    // Set global vars for easy access
-    baseContext = baseCanvas.current.getContext("2d");
   }, []);
 
   useEffect(() => {
@@ -141,66 +118,23 @@ export default function VideoPlayer({
     }
   }, [playing]);
 
-  useEffect(() => {
-    if (fullScreen) {
-      enterFullScreen(videoRef);
-      videoWidth = screen.width;
-      videoHeight = screen.height;
-    } else {
-      exitFullScreen();
-      videoWidth = 1200;
-      videoHeight = 676;
-    }
-  }, [fullScreen]);
-
-  // Draw canvas
-  const updateCanvas = () => {
-    const video = videoRef.current;
-    if (video.ended || video.paused) {
-      return;
-    }
-
-    // Draw the current frame of the video
-    baseContext.drawImage(video, 0, 0, video.width, video.height);
-
-    // If not zoomed in, draw rectangles over all the signs
-    //   const millis = Math.floor(video.currentTime * 10) * 100;
-    //   if (annotations[millis]) {
-    //     annotations[millis].forEach((word) => {
-    //       baseContext.strokeStyle = "red";
-    //       const vidX = word.boundingBox[0].x * video.width;
-    //       const vidY = word.boundingBox[0].y * video.height;
-    //       const width =
-    //         (word.boundingBox[2].x - word.boundingBox[0].x) * video.width;
-    //       const height =
-    //         (word.boundingBox[2].y - word.boundingBox[0].y) * video.height;
-    //       baseContext.strokeRect(vidX, vidY, width, height);
-    //       // console.log("drew rectangle", vidX, vidY, width, height);
-    //     });
-    //   }
-    requestAnimationFrame(updateCanvas);
-  };
-
   // Mouse move function
-  function handleMouseMove(e) {
-    // tell the browser we're handling this event
-    e.preventDefault();
-    e.stopPropagation();
-
+  function handleMouseMove() {
     setShowControls(true);
     if (controlTimeout) {
       clearTimeout(controlTimeout);
     }
     controlTimeout = setTimeout(function () {
       setShowControls(false);
-    }, 2000);
+    }, 1000);
   }
 
   const drawTranslation = async (word, zoom, endx, endy) => {
     const text = word.text;
     console.log("lang:", targetLang);
+    var res;
     try {
-      const res = await axios.get("/api/translate", {
+      res = await axios.get("/api/translate", {
         params: { text: text, target: targetLang },
       });
     } catch (error) {
@@ -220,109 +154,6 @@ export default function VideoPlayer({
     const rectY = translateStartY;
 
     setTranslationPos([rectX, rectY]);
-  };
-
-  const zoomIn = (word) => {
-    console.log("zoom in to " + word.text);
-    setPlaying(false);
-    setZoomedIn(true);
-
-    const width = word.boundingBox[2].x - word.boundingBox[0].x;
-    const height = word.boundingBox[2].y - word.boundingBox[0].y;
-
-    const centerx =
-      word.boundingBox[0].x < 0.5
-        ? word.boundingBox[0].x * videoWidth
-        : word.boundingBox[2].x * videoWidth;
-    const centery =
-      word.boundingBox[0].y < 0.5
-        ? word.boundingBox[0].y * videoHeight
-        : word.boundingBox[2].y * videoHeight;
-
-    // Compute zoom factor.
-    const zoom = width > height ? 0.3 / width : 0.5 / height;
-
-    // Translate so the visible origin is at the context's origin.
-    baseContext.translate(0, 0);
-
-    // Compute the new visible origin. Originally the word is at a
-    // distance word/scale from the corner, we want the point under
-    // the word to remain in the same place after the zoom, but this
-    // is at word/new_scale away from the corner. Therefore we need to
-    // shift the origin (coordinates of the corner) to account for this.
-    const scale = 1;
-    const endx = -(centerx / (scale * zoom) - centerx / scale);
-    const endy = -(centery / (scale * zoom) - centery / scale);
-
-    const params = {
-      startZoom: 1,
-      endZoom: zoom,
-      startX: 0,
-      endX: endx,
-      startY: 0,
-      endY: endy,
-      progress: 0,
-      callback: () => {
-        drawTranslation(word, zoom, endx, endy);
-      },
-    };
-
-    zoomAnimate(params);
-  };
-
-  const zoomAnimate = (params) => {
-    // Ease animation for 100 frames
-    if (params.progress < 100) {
-      let zoomProgress = params.progress;
-      let xProgress = params.progress;
-      let yProgress = params.progress;
-      const frameZoom = getEase(
-        zoomProgress,
-        params.startZoom,
-        params.endZoom - params.startZoom,
-        100,
-        3
-      );
-      const frameOriginX = getEase(
-        xProgress,
-        params.startX,
-        params.endX - params.startX,
-        100,
-        3
-      );
-      const frameOriginY = getEase(
-        yProgress,
-        params.startY,
-        params.endY - params.startY,
-        100,
-        3
-      );
-
-      // console.log(params.progress, frameZoom, frameOriginX, frameOriginY);
-
-      baseContext.save();
-      // Scale it (centered around the origin due to the trasnslate above).
-      baseContext.scale(frameZoom, frameZoom);
-      // Offset the visible origin to it's proper position.
-      baseContext.translate(-frameOriginX, -frameOriginY);
-
-      // Update scale and others.
-      // scale *= zoom;
-
-      baseContext.drawImage(
-        videoRef.current,
-        0,
-        0,
-        videoRef.current.width,
-        videoRef.current.height
-      );
-      baseContext.restore();
-
-      params.progress += 1;
-      requestAnimationFrame(zoomAnimate.bind(null, params));
-    } else {
-      params.callback();
-    }
   };
 
   function updateProgressBar() {
@@ -356,27 +187,15 @@ export default function VideoPlayer({
       {/* Video controls */}
       <audio ref={voiceRef} />
 
-      <video
-        ref={videoRef}
-        width={videoWidth}
-        height={videoHeight}
-        style={{ display: "none" }}
-      />
       <div
         style={{ position: "relative", width: videoWidth, height: videoHeight }}
       >
-        <canvas
-          ref={baseCanvas}
+        <video
+          ref={videoRef}
           width={videoWidth}
           height={videoHeight}
-          style={{ position: "absolute", left: 0, top: 0, zIndex: 0 }}
-        />
-        <canvas
-          ref={secondayCanvas}
-          width={videoWidth}
-          height={videoHeight}
-          hide={!showControls}
-          style={{ position: "absolute", left: 0, top: 0, zIndex: 1 }}
+          controls={true}
+          onMouseMove={handleMouseMove}
         />
         <InfoBox
           x={translationPos[0]}
@@ -455,14 +274,6 @@ export default function VideoPlayer({
                 drawTranslation={drawTranslation}
               />
             )}
-            <Controls
-              videoRef={videoRef}
-              setPlaying={setPlaying}
-              playing={playing}
-              progress={videoProgress}
-              setFullScreen={setFullScreen}
-              fullScreen={fullScreen}
-            />
           </>
         )}
         <div
@@ -493,15 +304,28 @@ const ToolTips = ({
   if (videoRef.current === undefined) {
     return <div></div>;
   }
+
   const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
 
   var tooltips = [];
 
   if (annotations[millis] !== null && annotations[millis] !== undefined) {
+    var canvas = document.createElement("canvas");
+    canvas.width = videoRef.current.width;
+    canvas.height = videoRef.current.height;
+    var canvasContext = canvas.getContext("2d");
+    canvasContext.drawImage(
+      videoRef.current,
+      0,
+      0,
+      videoRef.current.width,
+      videoRef.current.height
+    );
+
     tooltips = annotations[millis].map((word) => {
       const x = word.boundingBox[0].x * videoWidth;
       const y = word.boundingBox[0].y * videoHeight;
-      const p = baseContext.getImageData(x, y, 1, 1).data;
+      const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
       return (
         <div
