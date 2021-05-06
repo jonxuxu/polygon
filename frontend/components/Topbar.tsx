@@ -80,7 +80,7 @@ const Topbar = () => {
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-between sm:mr-10">
             <Link href="/">
-              <div className="flex-shrink-0 flex items-center">
+              <div className="flex-shrink-0 flex items-center cursor-pointer">
                 <img
                   className="block lg:hidden h-8 w-auto"
                   src="/logo.png"

@@ -1,17 +1,14 @@
-// @ts-nocheck
 import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import tinycolor from "tinycolor2";
 
-import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 
 import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
+import { TranslationActionIcons } from "./TranslationActionIcons";
 
 // Content variables
 var annotations = [];
@@ -23,6 +20,12 @@ var offsetY;
 var controlTimeout = null;
 var videoWidth = 1200;
 var videoHeight = 676;
+
+export interface Transcription {
+  original: string;
+  translatedText: string;
+  detectedSourceLanguage?: string;
+}
 
 export default function VideoPlayer({
   videoRow,
@@ -39,24 +42,21 @@ export default function VideoPlayer({
   const [fullScreen, setFullScreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
 
-  const [videoProgress, setVideoProgress] = useState(0);
-
   const [translationBox, setTranslationBox] = useState(false);
   const [translationPos, setTranslationPos] = useState([0, 0]);
-  const [translationText, setTranslationText] = useState({
+  const [translationText, setTranslationText] = useState<Transcription>({
     translatedText: null,
     original: null,
     detectedSourceLanguage: null,
   });
   const [transColor, setTransColor] = useState("#000000");
-  const [snippets, setSnippets] = useState<
-    { original: string; translation: string }[]
-  >([]);
+  const [snippets, setSnippets] = useState<Transcription[]>([]);
 
   useEffect(() => {
     // increment views
     fetcher("/api/video/view", { cuid: videoRow.cuid });
 
+    // @ts-ignore
     document.fonts.load('900 48px "Font Awesome 5 Free"');
 
     // Fetch Video URL
@@ -111,7 +111,6 @@ export default function VideoPlayer({
       console.log("playing");
       videoRef.current.play();
       setTranslationBox(false);
-      setZoomedIn(false);
     } else {
       console.log("pausing");
       videoRef.current.pause();
@@ -149,7 +148,7 @@ export default function VideoPlayer({
     setTranslationText({ ...res.data.translation, original: word.text });
     setSnippets([
       ...snippets,
-      { original: word.text, translation: res.data.translation.translatedText },
+      { ...res.data.translation, original: word.text },
     ]);
 
     setTranslationBox(true);
@@ -165,18 +164,12 @@ export default function VideoPlayer({
     setTranslationPos([rectX, rectY]);
   };
 
-  function updateProgressBar() {
-    var percentage = Math.floor(
-      (100 / videoRef.current.duration) * videoRef.current.currentTime
-    );
-
-    setVideoProgress(percentage);
-  }
-
   const captionChars = [];
   // todo
   if ("0" in transcriptions) {
+    // @ts-ignore
     for (var i = 0; i < transcriptions["0"].text.length; i++) {
+      //@ts-ignore
       const word = transcriptions["0"].text.charAt(i);
       captionChars.push(
         <Caption
@@ -234,48 +227,10 @@ export default function VideoPlayer({
                   {translationText.translatedText}
                 </div>
               </div>
-              <div style={{ paddingLeft: 10, paddingTop: 10 }}>
-                <img
-                  src="/turtle.svg"
-                  alt="slow"
-                  style={{
-                    width: 20,
-                    height: 20,
-                    cursor: "pointer",
-                    marginBottom: 5,
-                  }}
-                  onClick={() => {
-                    speak(
-                      voiceRef,
-                      translationText.original,
-                      translationText.detectedSourceLanguage,
-                      true
-                    );
-                  }}
-                />
-                <img
-                  src="/rabbit.svg"
-                  alt="fast"
-                  style={{ width: 20, height: 20, cursor: "pointer" }}
-                  onClick={() => {
-                    speak(
-                      voiceRef,
-                      translationText.original,
-                      translationText.detectedSourceLanguage,
-                      false
-                    );
-                  }}
-                />
-                <div>
-                  <FontAwesomeIcon
-                    icon={faCopy}
-                    style={{ cursor: "pointer", marginTop: 10 }}
-                    onClick={() => {
-                      copyToClipboard(translationText.original);
-                    }}
-                  />
-                </div>
-              </div>
+              <TranslationActionIcons
+                voiceRef={voiceRef}
+                translationText={translationText}
+              />
             </div>
           </InfoBox>
           {showControls && (
@@ -307,15 +262,16 @@ export default function VideoPlayer({
         </div>
       </div>
       {
-        <div className="ml-5">
+        <div className="ml-5 w-60">
           {snippets.length > 0 && <h2>Your Snippets</h2>}
-          {snippets.map(({ original, translation }, i) => (
+          {snippets.map((t, i) => (
             <div
               key={i}
               className="border-2 rounded-md py-3 px-4 my-2 border-primary-300"
             >
-              <span className="text-xl text-gray-700">{original}</span> <br />{" "}
-              {translation}{" "}
+              <span className="text-xl text-gray-700">{t.original}</span> <br />{" "}
+              {t.translatedText}{" "}
+              <TranslationActionIcons voiceRef={voiceRef} translationText={t} />
             </div>
           ))}
         </div>
