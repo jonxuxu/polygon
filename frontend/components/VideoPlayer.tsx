@@ -77,8 +77,20 @@ export default function VideoPlayer({
 
     // Connect video to progress bar
     // video.addEventListener("timeupdate", updateProgressBar, false);
-    video.addEventListener("play", setPlaying(true), false);
-    video.addEventListener("pause", setPlaying(false), false);
+    video.addEventListener(
+      "play",
+      () => {
+        setPlaying(true);
+      },
+      false
+    );
+    video.addEventListener(
+      "pause",
+      () => {
+        setPlaying(false);
+      },
+      false
+    );
 
     // Fetch annotations
     const annotationUrl = videoRow ? videoRow.annotation_url : null;
@@ -102,12 +114,11 @@ export default function VideoPlayer({
   useEffect(() => {
     if (playing) {
       console.log("playing");
-      videoRef.current.play();
+      // videoRef.current.play();
       setTranslationBox(false);
-      setZoomedIn(false);
     } else {
       console.log("pausing");
-      videoRef.current.pause();
+      // videoRef.current.pause();
     }
   }, [playing]);
 
@@ -319,8 +330,6 @@ const ToolTips = ({
   if (annotations[millis] !== null && annotations[millis] !== undefined) {
     const videoWidth = videoRef.current.offsetWidth;
     const videoHeight = videoRef.current.offsetHeight;
-
-    console.log(videoWidth, videoHeight);
 
     var canvas = document.createElement("canvas");
     canvas.width = videoWidth;
