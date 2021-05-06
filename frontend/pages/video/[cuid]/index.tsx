@@ -9,6 +9,9 @@ import Skeleton from "react-loading-skeleton";
 
 import languages from "constants/translateLanguages.json";
 import { mutate } from "swr";
+import dayjs from "dayjs";
+var relativeTime = require("dayjs/plugin/relativeTime");
+dayjs.extend(relativeTime);
 
 const App = () => {
   const router = useRouter();
@@ -50,36 +53,52 @@ const App = () => {
         {video && video.url ? (
           <div>
             <VideoPlayer videoRow={video} targetLang={targetLang} />
-            <div className="mb-2 text-2xl text-gray-700">
+            <div className="my-2 text-2xl text-gray-700">
               {video.title}{" "}
+              {me && (
+                <button
+                  className="primary mt-2"
+                  onClick={async () => {
+                    const savedBy = video.savedBy.find((u) => u.id === me.id)
+                      ? { disconnect: { email: me.email } }
+                      : { connect: { email: me.email } };
+                    await fetcher("/api/video/update", {
+                      id: video.id,
+                      savedBy,
+                    });
+                    await mutate("/api/video/" + video.cuid);
+                  }}
+                >
+                  {video.savedBy.find((u) => u.id === me.id)
+                    ? "Unsave"
+                    : "Save"}
+                </button>
+              )}
               {me && me.id === video.creator && (
                 <Link href={`/video/${video.cuid}/edit`}>
                   <a className="link text-sm ml-2">Edit </a>
                 </Link>
               )}
             </div>
+            <span className="text-gray-500">
+              {" "}
+              {video.views} views - {/* @ts-ignore */}
+              {dayjs(video.created).from(dayjs())}
+            </span>
+            <hr className="my-4" />
 
-            <div className="mb text-md text-gray-700 mb-2">
+            <div className="mb text-md text-gray-700 mb-2 flex">
+              <img
+                className="h-8 w-8 rounded-full mr-2"
+                src={video.user.image}
+                alt="User creator"
+              />
               {video.user.name}
+              <br />
             </div>
+            <span className="text-sm text-gray-500">{video.description}</span>
             {/* Save button */}
-            {me && (
-              <button
-                className="primary mt-2"
-                onClick={async () => {
-                  const savedBy = video.savedBy.find((u) => u.id === me.id)
-                    ? { disconnect: { email: me.email } }
-                    : { connect: { email: me.email } };
-                  await fetcher("/api/video/update", {
-                    id: video.id,
-                    savedBy,
-                  });
-                  await mutate("/api/video/" + video.cuid);
-                }}
-              >
-                {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
-              </button>
-            )}
+            <br />
           </div>
         ) : (
           <div className="p-3">

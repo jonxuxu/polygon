@@ -100,21 +100,23 @@ export default function VideoPlayer({
     // Connect video to progress bar
     video.addEventListener("timeupdate", updateProgressBar, false);
 
-    try {
-      // Fetch annotations
-      const annotationUrl = videoRow ? videoRow.annotation_url : null;
-      (async () => {
+    // Fetch annotations
+    const annotationUrl = videoRow ? videoRow.annotation_url : null;
+    (async () => {
+      if (annotationUrl) {
         const res = await axios.get(annotationUrl);
         annotations = res.data;
-      })();
+      }
+    })();
 
-      // Fetch transcriptions
-      const transcriptionUrl = videoRow ? videoRow.transcription_url : null;
-      (async () => {
+    // Fetch transcriptions
+    const transcriptionUrl = videoRow ? videoRow.transcription_url : null;
+    (async () => {
+      if (transcriptionUrl) {
         const res = await axios.get(transcriptionUrl);
         transcriptions = res.data;
-      })();
-    } catch (error) {}
+      }
+    })();
 
     // Canvas toolitp to top canvas
     const canvas = secondayCanvas.current;
@@ -197,9 +199,13 @@ export default function VideoPlayer({
   const drawTranslation = async (word, zoom, endx, endy) => {
     const text = word.text;
     console.log("lang:", targetLang);
-    const res = await axios.get("/api/translate", {
-      params: { text: text, target: targetLang },
-    });
+    try {
+      const res = await axios.get("/api/translate", {
+        params: { text: text, target: targetLang },
+      });
+    } catch (error) {
+      console.log("error translating", error);
+    }
 
     setTranslationText({ ...res.data.translation, original: word.text });
 
