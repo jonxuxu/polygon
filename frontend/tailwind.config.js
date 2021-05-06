@@ -9,8 +9,8 @@ module.exports = {
       colors: {
         teal: colors.teal,
         cyan: colors.cyan,
-        primary: colors.teal,
-        secondary: colors.cyan,
+        primary: colors.pink,
+        secondary: colors.rose,
       },
     },
   },

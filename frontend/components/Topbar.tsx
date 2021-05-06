@@ -10,7 +10,7 @@ const Topbar = () => {
   const routes = [
     { route: "/", label: "Explore" },
     session
-      ? { route: "/uploads", label: "Uploads" }
+      ? { route: "/uploads", label: "Upload" }
       : { route: "/api/auth/signin/google", label: "Login" },
   ];
   const router = useRouter();
@@ -102,7 +102,7 @@ const Topbar = () => {
                     href="#"
                     className={`${
                       router.pathname === route.route
-                        ? "border-primary-500 text-gray-900"
+                        ? "border-primary-300 text-gray-900"
                         : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                     } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
                   >
