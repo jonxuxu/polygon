@@ -4,16 +4,13 @@ import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVolumeUp, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import tinycolor from "tinycolor2";
 
-import { getEase } from "../utils/transitions";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
-import { exitFullScreen, enterFullScreen } from "../utils/video";
 
-import Controls from "./Controls";
-import { fetcher, useVideo } from "utils/fetcher";
+import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
 
 // Content variables
