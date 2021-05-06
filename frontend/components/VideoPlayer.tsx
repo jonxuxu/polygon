@@ -18,11 +18,7 @@ var annotations = [];
 var transcriptions = [];
 
 // Video player variables
-var offsetX;
-var offsetY;
 var controlTimeout = null;
-var videoWidth = 1200;
-var videoHeight = 676;
 
 export default function VideoPlayer({
   videoRow,
@@ -36,10 +32,7 @@ export default function VideoPlayer({
   const translationRef = useRef(null);
 
   const [playing, setPlaying] = useState(false);
-  const [fullScreen, setFullScreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
-
-  const [videoProgress, setVideoProgress] = useState(0);
 
   const [translationBox, setTranslationBox] = useState(false);
   const [translationPos, setTranslationPos] = useState([0, 0]);
@@ -154,6 +147,9 @@ export default function VideoPlayer({
 
     setTranslationBox(true);
 
+    const videoWidth = videoRef.current.offsetWidth;
+    const videoHeight = videoRef.current.offsetHeight;
+
     const width = translationRef.current.offsetWidth;
     const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
     const translateStartX = (word.boundingBox[0].x * videoWidth - endx) * zoom;
@@ -164,14 +160,6 @@ export default function VideoPlayer({
 
     setTranslationPos([rectX, rectY]);
   };
-
-  function updateProgressBar() {
-    var percentage = Math.floor(
-      (100 / videoRef.current.duration) * videoRef.current.currentTime
-    );
-
-    setVideoProgress(percentage);
-  }
 
   const captionChars = [];
   // todo
@@ -192,24 +180,25 @@ export default function VideoPlayer({
   }
 
   return (
-    <div className="flex">
-      <div>
+    <div className="flex" style={{ width: "100%" }}>
+      <div style={{ flex: 1 }}>
         {/* Video controls */}
         <audio ref={voiceRef} />
         <div
           style={{
             position: "relative",
-            width: videoWidth,
-            height: videoHeight,
+            width: "100%",
           }}
         >
-          <video
-            ref={videoRef}
-            width={videoWidth}
-            height={videoHeight}
-            controls={true}
-            onMouseMove={handleMouseMove}
-          />
+          {showControls && !playing && (
+            <ToolTips
+              annotations={annotations}
+              videoRef={videoRef}
+              setTransColor={setTransColor}
+              drawTranslation={drawTranslation}
+            />
+          )}
+          <video ref={videoRef} controls={true} onMouseMove={handleMouseMove} />
           <InfoBox
             x={translationPos[0]}
             y={translationPos[1]}
@@ -278,18 +267,7 @@ export default function VideoPlayer({
               </div>
             </div>
           </InfoBox>
-          {showControls && (
-            <>
-              {!playing && (
-                <ToolTips
-                  annotations={annotations}
-                  videoRef={videoRef}
-                  setTransColor={setTransColor}
-                  drawTranslation={drawTranslation}
-                />
-              )}
-            </>
-          )}
+
           <div
             style={{
               position: "absolute",
@@ -297,7 +275,7 @@ export default function VideoPlayer({
               justifyContent: "center",
               bottom: 40,
               left: 0,
-              width: videoWidth,
+              width: "100%",
               zIndex: 4,
               pointerEvents: "none", // passthrough of hover and click
             }}
@@ -337,17 +315,16 @@ const ToolTips = ({
   var tooltips = [];
 
   if (annotations[millis] !== null && annotations[millis] !== undefined) {
+    const videoWidth = videoRef.current.offsetWidth;
+    const videoHeight = videoRef.current.offsetHeight;
+
+    console.log(videoWidth, videoHeight);
+
     var canvas = document.createElement("canvas");
-    canvas.width = videoRef.current.width;
-    canvas.height = videoRef.current.height;
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
     var canvasContext = canvas.getContext("2d");
-    canvasContext.drawImage(
-      videoRef.current,
-      0,
-      0,
-      videoRef.current.width,
-      videoRef.current.height
-    );
+    canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
 
     tooltips = annotations[millis].map((word, i) => {
       const x = word.boundingBox[0].x * videoWidth;
