@@ -41,7 +41,6 @@ const App = () => {
   }, []);
 
   const upload = async (e) => {
-    // const file = e.target.files[0];
     e.preventDefault();
     if (!file) return;
     setUploading(true);
@@ -106,6 +105,7 @@ const App = () => {
     }
     setUploading(false);
   };
+
   return (
     <div>
       <Topbar />
@@ -113,193 +113,188 @@ const App = () => {
 
       <div className="">
         <div className="mx-10">
-          {/* <div>
-            <h2 className="text-gray-700">Give your file a name</h2>
-            <input type="text" className="rounded-md border-gray-500 mb-2" />
-          </div> */}
-
           <div className="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-            <form onSubmit={upload}>
-              <div>
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  Upload a Video
-                </h3>
-                <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                  Add a title, description, and file to upload.
-                </p>
+            <div>
+              <h3 className="text-lg leading-6 font-medium text-gray-900">
+                Upload a Video
+              </h3>
+              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+                Add a title, description, and file to upload.
+              </p>
+            </div>
+            <div className="space-y-6 sm:space-y-5">
+              <EditField state={title} setState={setTitle} label="Title" />
+              <EditField
+                state={description}
+                setState={setDescription}
+                label="Description"
+              />
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="language"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Language
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  {languages && (
+                    <select
+                      value={language}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setLanguage(e.target.value);
+                      }}
+                      // autoComplete="title"
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      {languages.map((lang) => (
+                        <option key={lang.code} value={lang.code}>
+                          {lang.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
               </div>
-              <div className="space-y-6 sm:space-y-5">
-                <EditField state={title} setState={setTitle} label="Title" />
-                <EditField
-                  state={description}
-                  setState={setDescription}
-                  label="Description"
-                />
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label
-                    htmlFor="language"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Language
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    {languages && (
-                      <select
-                        value={language}
-                        onChange={(e) => {
-                          console.log(e.target.value);
-                          setLanguage(e.target.value);
-                        }}
-                        // autoComplete="title"
-                        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Upload
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  {file ? (
+                    <div>
+                      {file.name}{" "}
+                      <a
+                        onClick={() => setFile(null)}
+                        className="text-primary-600 hover:text-primary-900"
                       >
-                        {languages.map((lang) => (
-                          <option key={lang.code} value={lang.code}>
-                            {lang.name}
-                          </option>
-                        ))}
-                      </select>
-                    )}
-                  </div>
-                </div>
-
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Upload
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    {file ? (
-                      <div>
-                        {file.name}{" "}
-                        <a
-                          onClick={() => setFile(null)}
-                          className="text-primary-600 hover:text-primary-900"
-                        >
-                          Remove
-                        </a>
-                      </div>
-                    ) : (
-                      <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
-                        <div className="space-y-1 text-center">
-                          <div className="flex text-sm text-gray-600">
-                            <button
-                              className="primary relative flex items-center space-x-2"
-                              onClick={() => fileRef.current.click()}
+                        Remove
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
+                      <div className="space-y-1 text-center">
+                        <div className="flex text-sm text-gray-600">
+                          <button
+                            className="primary relative flex items-center space-x-2"
+                            onClick={() => fileRef.current.click()}
+                          >
+                            <svg
+                              className="mx-auto h-8 w-8 text-gray-400"
+                              stroke="currentColor"
+                              fill="none"
+                              viewBox="0 0 48 48"
+                              aria-hidden="true"
                             >
-                              <svg
-                                className="mx-auto h-8 w-8 text-gray-400"
-                                stroke="currentColor"
-                                fill="none"
-                                viewBox="0 0 48 48"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              <span>Upload a file</span>
-                              <input
-                                id="file-upload"
-                                name="file-upload"
-                                type="file"
-                                className="sr-only"
-                                ref={fileRef}
-                                onChange={(e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
-                                  const f = e.target.files[0];
-                                  setFile(f);
-                                  validateFile(f, setDuration);
-                                }}
-                                accept="video/mp4, video/mov"
+                              <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
                               />
-                            </button>
-                            {/* <p className="pl-1">or drag and drop</p> */}
-                          </div>
-                          <p className="text-xs text-gray-500">MP4, MOV</p>
+                            </svg>
+                            <span>Upload a file</span>
+                            <input
+                              id="file-upload"
+                              name="file-upload"
+                              type="file"
+                              className="sr-only"
+                              ref={fileRef}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                const f = e.target.files[0];
+                                setFile(f);
+                                validateFile(f, setDuration);
+                              }}
+                              accept="video/mp4, video/mov"
+                            />
+                          </button>
+                          {/* <p className="pl-1">or drag and drop</p> */}
                         </div>
+                        <p className="text-xs text-gray-500">MP4, MOV</p>
                       </div>
-                    )}
-                  </div>
-                </div>
-                {/* Thumbnail  */}
-                <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-                  <label
-                    htmlFor="description"
-                    className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-                  >
-                    Upload a Thumbnail
-                  </label>
-                  <div className="mt-1 sm:mt-0 sm:col-span-2">
-                    {thumbnail ? (
-                      <div>
-                        {thumbnail.name}{" "}
-                        <a
-                          onClick={() => setFile(null)}
-                          className="text-primary-600 hover:text-primary-900"
-                        >
-                          Remove
-                        </a>
-                      </div>
-                    ) : (
-                      <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
-                        <div className="space-y-1 text-center">
-                          <div className="flex text-sm text-gray-600">
-                            <button
-                              className="primary relative flex items-center space-x-2"
-                              onClick={() => thumbnailRef.current.click()}
-                            >
-                              <svg
-                                className="mx-auto h-8 w-8 text-gray-400"
-                                stroke="currentColor"
-                                fill="none"
-                                viewBox="0 0 48 48"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                                  strokeWidth="2"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                />
-                              </svg>
-                              <span>Upload a thumbnail</span>
-                              <input
-                                ref={thumbnailRef}
-                                id="file-upload"
-                                name="file-upload"
-                                type="file"
-                                className="sr-only"
-                                onChange={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-
-                                  setThumbnail(e.target.files[0]);
-                                }}
-                                accept="image/*"
-                              />
-                            </button>
-                            {/* <p className="pl-1">or drag and drop</p> */}
-                          </div>
-                          <p className="text-xs text-gray-500">
-                            JPEG, PNG, GIF
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
-              <button type="submit" className="primary mt-10 mb-10">
-                Upload
-              </button>
-            </form>
+              {/* Thumbnail  */}
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Upload a Thumbnail
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  {thumbnail ? (
+                    <div>
+                      {thumbnail.name}{" "}
+                      <a
+                        onClick={() => setFile(null)}
+                        className="text-primary-600 hover:text-primary-900"
+                      >
+                        Remove
+                      </a>
+                    </div>
+                  ) : (
+                    <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
+                      <div className="space-y-1 text-center">
+                        <div className="flex text-sm text-gray-600">
+                          <button
+                            className="primary relative flex items-center space-x-2"
+                            onClick={() => thumbnailRef.current.click()}
+                          >
+                            <svg
+                              className="mx-auto h-8 w-8 text-gray-400"
+                              stroke="currentColor"
+                              fill="none"
+                              viewBox="0 0 48 48"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                            <span>Upload a thumbnail</span>
+                            <input
+                              ref={thumbnailRef}
+                              id="file-upload"
+                              name="file-upload"
+                              type="file"
+                              className="sr-only"
+                              onChange={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                setThumbnail(e.target.files[0]);
+                              }}
+                              accept="image/*"
+                            />
+                          </button>
+                          {/* <p className="pl-1">or drag and drop</p> */}
+                        </div>
+                        <p className="text-xs text-gray-500">JPEG, PNG, GIF</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={upload}
+              className="primary mt-10 mb-10"
+            >
+              Upload
+            </button>
           </div>
         </div>
       </div>
