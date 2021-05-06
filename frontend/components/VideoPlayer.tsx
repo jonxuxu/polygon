@@ -284,18 +284,20 @@ export default function VideoPlayer({
           </div>
         </div>
       </div>
-      <div className="ml-5">
-        <h2>Your Snippets</h2>
-        {snippets.map(({ original, translation }, i) => (
-          <div
-            key={i}
-            className="border-2 rounded-md py-3 px-4 my-2 border-primary-300"
-          >
-            <span className="text-xl text-gray-700">{original}</span> <br />{" "}
-            {translation}{" "}
-          </div>
-        ))}
-      </div>
+      {
+        <div className="ml-5">
+          {snippets.length > 0 && <h2>Your Snippets</h2>}
+          {snippets.map(({ original, translation }, i) => (
+            <div
+              key={i}
+              className="border-2 rounded-md py-3 px-4 my-2 border-primary-300"
+            >
+              <span className="text-xl text-gray-700">{original}</span> <br />{" "}
+              {translation}{" "}
+            </div>
+          ))}
+        </div>
+      }
     </div>
   );
 }
