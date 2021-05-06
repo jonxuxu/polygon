@@ -84,6 +84,7 @@ model videos {
   duration          Float?
   thumbnail_url     String?
   isPublic          Boolean  @default(true)
+  useSubtitles      Boolean  @default(true)
   user              users    @relation("VideoCreator", fields: [creator], references: [id])
   savedBy           users[]  @relation("SavedVideo")
 }

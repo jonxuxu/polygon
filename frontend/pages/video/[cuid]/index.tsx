@@ -80,9 +80,6 @@ const App = () => {
                 {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
               </button>
             )}
-            {/* Language specifier */}
-            <div>Choose your target language</div>
-            <Dropdown />
           </div>
         ) : (
           <div className="p-3">

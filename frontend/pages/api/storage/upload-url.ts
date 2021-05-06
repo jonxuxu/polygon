@@ -4,7 +4,14 @@ import prisma from "prisma/client";
 import cuid from "cuid";
 
 export default async function handler(req, res) {
-  const { title, description, email, duration, language } = req.body;
+  const {
+    title,
+    description,
+    email,
+    duration,
+    language,
+    useSubtitles,
+  } = req.body;
   if (!req.body.email)
     return res.json({
       error: "Must specify a user email.",
@@ -26,6 +33,7 @@ export default async function handler(req, res) {
       upload_state: "pending",
       duration: parseFloat(duration),
       language,
+      useSubtitles,
       user: {
         connect: {
           email,

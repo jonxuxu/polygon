@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/client";
 import Router from "next/router";
 import { mutate } from "swr";
+import Skeleton from "react-loading-skeleton";
 const App = () => {
   const router = useRouter();
 
@@ -96,7 +97,7 @@ const App = () => {
             </form>
           </div>
         ) : (
-          <div>That video does not exist.</div>
+          <div>{/* <Skeleton count={3}></Skeleton> */}</div>
         )}
       </div>
     </div>

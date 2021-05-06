@@ -26,6 +26,7 @@ export function UploadList() {
                         "Description",
                         "Duration (sec)",
                         "Thumbnail",
+                        "Subtitles",
                         "Upload State",
                         "Transcode State",
                         "Transcribe State",
@@ -68,6 +69,7 @@ export function UploadList() {
                             ? Math.ceil(video.duration) + " s"
                             : "Unknown",
                           video.thumbnail_url,
+                          video.useSubtitles ? "Yes" : "No",
                           video.upload_state,
                           video.transcode_state,
                           video.transcribe_state,

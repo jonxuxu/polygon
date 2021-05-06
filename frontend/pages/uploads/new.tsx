@@ -19,6 +19,7 @@ const App = () => {
   const [description, setDescription] = useState("");
   const [video, setVideo] = useState(null);
   const [language, setLanguage] = useState("");
+  const [useSubtitles, setUseSubtitles] = useState(true);
   const [file, setFile] = useState(null);
   const [uploadPercent, setUploadPercent] = useState(0);
   const [thumbnail, setThumbnail] = useState(null);
@@ -63,6 +64,7 @@ const App = () => {
       description,
       duration,
       language,
+      useSubtitles,
     });
     if (thumbnail) {
       uploadThumbnail(video, thumbnail);
@@ -145,11 +147,38 @@ const App = () => {
                         setLanguage(e.target.value);
                       }}
                       // autoComplete="title"
-                      className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-300 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                     >
                       {languages.map((lang) => (
                         <option key={lang.code} value={lang.code}>
                           {lang.name}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label
+                  htmlFor="language"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                >
+                  Use Subtitles
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  {languages && (
+                    <select
+                      value={useSubtitles ? "Yes" : "No"}
+                      onChange={(e) => {
+                        setUseSubtitles(
+                          e.target.value === "Yes" ? true : false
+                        );
+                      }}
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-300 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      {["Yes", "No"].map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
                         </option>
                       ))}
                     </select>

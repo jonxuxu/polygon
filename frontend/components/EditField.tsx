@@ -14,7 +14,7 @@ const EditField = ({ state, setState, label }) => (
         name="title"
         id="title"
         // autoComplete="title"
-        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
       />
     </div>
   </div>
