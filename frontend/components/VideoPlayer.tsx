@@ -49,6 +49,9 @@ export default function VideoPlayer({
     detectedSourceLanguage: null,
   });
   const [transColor, setTransColor] = useState("#000000");
+  const [snippets, setSnippets] = useState<
+    { original: string; translation: string }[]
+  >([]);
 
   useEffect(() => {
     // increment views
@@ -130,11 +133,24 @@ export default function VideoPlayer({
     const text = word.text;
     console.log("lang:", targetLang);
 
-    const res = await axios.get("/api/translate", {
+    const res: {
+      data: {
+        translation: { translatedText: string; detectedSourceLanguage: string };
+      };
+    } = await axios.get("/api/translate", {
       params: { text: text, target: targetLang },
     });
+    console.log(
+      "transation:",
+      res.data.translation,
+      res.data.translation.translatedText
+    );
 
     setTranslationText({ ...res.data.translation, original: word.text });
+    setSnippets([
+      ...snippets,
+      { original: word.text, translation: res.data.translation.translatedText },
+    ]);
 
     setTranslationBox(true);
 
@@ -176,113 +192,131 @@ export default function VideoPlayer({
   }
 
   return (
-    <div>
-      {/* Video controls */}
-      <audio ref={voiceRef} />
-
-      <div
-        style={{ position: "relative", width: videoWidth, height: videoHeight }}
-      >
-        <video
-          ref={videoRef}
-          width={videoWidth}
-          height={videoHeight}
-          controls={true}
-          onMouseMove={handleMouseMove}
-        />
-        <InfoBox
-          x={translationPos[0]}
-          y={translationPos[1]}
-          hide={!translationBox}
-          borderColor={transColor}
-          ref={translationRef}
-        >
-          <div style={{ display: "flex" }}>
-            <div>
-              <span
-                style={{
-                  fontFamily: "Arial",
-                  fontSize: 30,
-                  color: tinycolor(transColor).darken(20),
-                }}
-              >
-                {translationText.original}
-              </span>
-
-              <div style={{ fontFamily: "Arial", fontSize: 14, marginTop: 10 }}>
-                {translationText.translatedText}
-              </div>
-            </div>
-            <div style={{ paddingLeft: 10, paddingTop: 10 }}>
-              <img
-                src="/turtle.svg"
-                alt="slow"
-                style={{
-                  width: 20,
-                  height: 20,
-                  cursor: "pointer",
-                  marginBottom: 5,
-                }}
-                onClick={() => {
-                  speak(
-                    voiceRef,
-                    translationText.original,
-                    translationText.detectedSourceLanguage,
-                    true
-                  );
-                }}
-              />
-              <img
-                src="/rabbit.svg"
-                alt="fast"
-                style={{ width: 20, height: 20, cursor: "pointer" }}
-                onClick={() => {
-                  speak(
-                    voiceRef,
-                    translationText.original,
-                    translationText.detectedSourceLanguage,
-                    false
-                  );
-                }}
-              />
-              <div>
-                <FontAwesomeIcon
-                  icon={faCopy}
-                  style={{ cursor: "pointer", marginTop: 10 }}
-                  onClick={() => {
-                    copyToClipboard(translationText.original);
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </InfoBox>
-        {showControls && (
-          <>
-            {!playing && (
-              <ToolTips
-                annotations={annotations}
-                videoRef={videoRef}
-                setTransColor={setTransColor}
-                drawTranslation={drawTranslation}
-              />
-            )}
-          </>
-        )}
+    <div className="flex">
+      <div>
+        {/* Video controls */}
+        <audio ref={voiceRef} />
         <div
           style={{
-            position: "absolute",
-            display: "flex",
-            justifyContent: "center",
-            bottom: 40,
-            left: 0,
+            position: "relative",
             width: videoWidth,
-            zIndex: 4,
-            pointerEvents: "none", // passthrough of hover and click
+            height: videoHeight,
           }}
         >
-          {captionChars}
+          <video
+            ref={videoRef}
+            width={videoWidth}
+            height={videoHeight}
+            controls={true}
+            onMouseMove={handleMouseMove}
+          />
+          <InfoBox
+            x={translationPos[0]}
+            y={translationPos[1]}
+            hide={!translationBox}
+            borderColor={transColor}
+            ref={translationRef}
+          >
+            <div style={{ display: "flex" }}>
+              <div>
+                <span
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 30,
+                    color: tinycolor(transColor).darken(20),
+                  }}
+                >
+                  {translationText.original}
+                </span>
+                <div
+                  style={{ fontFamily: "Arial", fontSize: 14, marginTop: 10 }}
+                >
+                  {translationText.translatedText}
+                </div>
+              </div>
+              <div style={{ paddingLeft: 10, paddingTop: 10 }}>
+                <img
+                  src="/turtle.svg"
+                  alt="slow"
+                  style={{
+                    width: 20,
+                    height: 20,
+                    cursor: "pointer",
+                    marginBottom: 5,
+                  }}
+                  onClick={() => {
+                    speak(
+                      voiceRef,
+                      translationText.original,
+                      translationText.detectedSourceLanguage,
+                      true
+                    );
+                  }}
+                />
+                <img
+                  src="/rabbit.svg"
+                  alt="fast"
+                  style={{ width: 20, height: 20, cursor: "pointer" }}
+                  onClick={() => {
+                    speak(
+                      voiceRef,
+                      translationText.original,
+                      translationText.detectedSourceLanguage,
+                      false
+                    );
+                  }}
+                />
+                <div>
+                  <FontAwesomeIcon
+                    icon={faCopy}
+                    style={{ cursor: "pointer", marginTop: 10 }}
+                    onClick={() => {
+                      copyToClipboard(translationText.original);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </InfoBox>
+          {showControls && (
+            <>
+              {!playing && (
+                <ToolTips
+                  annotations={annotations}
+                  videoRef={videoRef}
+                  setTransColor={setTransColor}
+                  drawTranslation={drawTranslation}
+                />
+              )}
+            </>
+          )}
+          <div
+            style={{
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              bottom: 40,
+              left: 0,
+              width: videoWidth,
+              zIndex: 4,
+              pointerEvents: "none", // passthrough of hover and click
+            }}
+          >
+            {captionChars}
+          </div>
         </div>
+      </div>
+      <div className="ml-5">
+        <h2>Your Snippets</h2>
+        {snippets.map(({ original, translation }, i) => (
+          <div
+            key={i}
+            className="border-2 rounded-md py-3 px-4 my-2 border-primary-300"
+          >
+            <span className="text-xl text-gray-700">{original}</span> <br />{" "}
+            {translation}{" "}
+          </div>
+        ))}
       </div>
     </div>
   );

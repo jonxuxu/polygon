@@ -44,16 +44,17 @@ model spatial_ref_sys {
 }
 
 model users {
-  id             Int       @id @default(autoincrement())
-  name           String?   @db.VarChar(255)
-  email          String?   @unique @db.VarChar(255)
-  email_verified DateTime? @db.Timestamptz(6)
+  id             Int        @id @default(autoincrement())
+  name           String?    @db.VarChar(255)
+  email          String?    @unique @db.VarChar(255)
+  email_verified DateTime?  @db.Timestamptz(6)
   image          String?
-  created_at     DateTime  @default(now()) @db.Timestamptz(6)
-  updated_at     DateTime  @default(now()) @db.Timestamptz(6)
-  language       String    @default("en-US")
-  videos         videos[]  @relation("VideoCreator")
-  savedVideos    videos[]  @relation("SavedVideo")
+  created_at     DateTime   @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime   @default(now()) @db.Timestamptz(6)
+  language       String     @default("en-US")
+  snippets       snippets[]
+  videos         videos[]   @relation("VideoCreator")
+  savedVideos    videos[]   @relation("SavedVideo")
 }
 
 model verification_requests {
@@ -87,6 +88,15 @@ model videos {
   useSubtitles      Boolean  @default(true)
   user              users    @relation("VideoCreator", fields: [creator], references: [id])
   savedBy           users[]  @relation("SavedVideo")
+}
+
+model snippets {
+  id          Int      @id @default(autoincrement())
+  user_id     Int
+  created     DateTime @default(now()) @db.Timestamptz(6)
+  original    String
+  translation String
+  user        users    @relation(fields: [user_id], references: [id])
 }
 
 model waitlist {
