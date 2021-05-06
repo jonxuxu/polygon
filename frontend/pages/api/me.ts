@@ -6,7 +6,7 @@ export default async (req, res) => {
   if (!session) return res.json(null);
   const user = await prisma.users.findUnique({
     where: { email: session.user.email },
-    include: { videos: { orderBy: { created: "desc" } } },
+    include: { snippets: true, videos: { orderBy: { created: "desc" } } },
   });
 
   res.json(user);
