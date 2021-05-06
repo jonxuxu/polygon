@@ -132,14 +132,10 @@ export default function VideoPlayer({
   const drawTranslation = async (word, zoom, endx, endy) => {
     const text = word.text;
     console.log("lang:", targetLang);
-    var res;
-    try {
-      res = await axios.get("/api/translate", {
-        params: { text: text, target: targetLang },
-      });
-    } catch (error) {
-      console.log("error translating", error);
-    }
+
+    const res = await axios.get("/api/translate", {
+      params: { text: text, target: targetLang },
+    });
 
     setTranslationText({ ...res.data.translation, original: word.text });
 
@@ -322,13 +318,14 @@ const ToolTips = ({
       videoRef.current.height
     );
 
-    tooltips = annotations[millis].map((word) => {
+    tooltips = annotations[millis].map((word, i) => {
       const x = word.boundingBox[0].x * videoWidth;
       const y = word.boundingBox[0].y * videoHeight;
       const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
       return (
         <div
+          key={i}
           style={{
             width: 20,
             height: 20,
