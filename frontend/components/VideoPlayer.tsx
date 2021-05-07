@@ -241,6 +241,10 @@ export default function VideoPlayer({
               <TranslationActionIcons
                 voiceRef={voiceRef}
                 translationText={translationText}
+                video={videoRow}
+                time={
+                  videoRef.current ? videoRef.current.currentTime : undefined
+                }
               />
             </div>
           </InfoBox>

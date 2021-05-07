@@ -88,15 +88,19 @@ model videos {
   useSubtitles      Boolean  @default(true)
   user              users    @relation("VideoCreator", fields: [creator], references: [id])
   savedBy           users[]  @relation("SavedVideo")
+  snippets       snippets[]
 }
 
 model snippets {
   id          Int      @id @default(autoincrement())
   user_id     Int
+  video_id     Int
+  time        Float?
   created     DateTime @default(now()) @db.Timestamptz(6)
   original    String
   translation String
   user        users    @relation(fields: [user_id], references: [id])
+  video        videos    @relation(fields: [video_id], references: [id])
 }
 
 model waitlist {
