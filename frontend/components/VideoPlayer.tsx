@@ -54,21 +54,18 @@ export default function VideoPlayer({
     // @ts-ignore
     document.fonts.load('900 48px "Font Awesome 5 Free"');
 
-    // Fetch Video URL
-    // const hlsUrl =
-    //   "https://storage.googleapis.com/video-world-source/test-speech.mp4";
-    // const hlsUrl = `https://dq86krv8mpwpa.cloudfront.net/f5cc4e0a-292e-4e5d-b838-2911cc154f18/hls/Laptop Repair.m3u8`;
-    // const hlsUrl = `https://storage.googleapis.com/video-world-transcode/test-speech/manifest.m3u8`;
     if (!videoRow || !videoRow.url) return;
     const hlsUrl = videoRow ? videoRow.url : null;
     const video = videoRef.current;
-    // video.src = hlsUrl;
+
     if (video.canPlayType("application/vnd.apple.mpegURL")) {
       console.log("natively supported");
+
       // If HLS is natively supported, let the browser do the work!
       video.src = hlsUrl;
     } else if (Hls.isSupported()) {
       console.log("not natively supported");
+
       // If the browser supports MSE, use hls.js to play the video
       var hls = new Hls();
       hls.loadSource(hlsUrl);
@@ -279,7 +276,14 @@ export default function VideoPlayer({
                 <br />
                 {t.translatedText}
               </span>
-              <TranslationActionIcons voiceRef={voiceRef} translationText={t} />
+              <TranslationActionIcons
+                voiceRef={voiceRef}
+                translationText={t}
+                video={videoRow}
+                time={
+                  videoRef.current ? videoRef.current.currentTime : undefined
+                }
+              />
             </div>
           ))}
         </div>
