@@ -1,7 +1,4 @@
 import Topbar from "../components/Topbar";
-import VideoPlayer from "../components/VideoPlayer";
-import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
 
 const Page = () => {
   return (

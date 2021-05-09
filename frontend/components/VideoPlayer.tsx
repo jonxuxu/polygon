@@ -21,6 +21,7 @@ export interface Transcription {
   original: string;
   translatedText: string;
   detectedSourceLanguage?: string;
+  color: string;
 }
 
 export default function VideoPlayer({
@@ -36,6 +37,7 @@ export default function VideoPlayer({
 
   const [playing, setPlaying] = useState(false);
   const [showControls, setShowControls] = useState(false);
+  const [holdTooltips, setHoldTooltips] = useState(false);
 
   const [translationBox, setTranslationBox] = useState(false);
   const [translationPos, setTranslationPos] = useState([0, 0]);
@@ -43,8 +45,8 @@ export default function VideoPlayer({
     translatedText: null,
     original: null,
     detectedSourceLanguage: null,
+    color: null,
   });
-  const [transColor, setTransColor] = useState("#000000");
   const [snippets, setSnippets] = useState<Transcription[]>([]);
 
   useEffect(() => {
@@ -121,6 +123,15 @@ export default function VideoPlayer({
     }
   }, [playing]);
 
+  // Add to snippets if translation text has not been added
+  useEffect(() => {
+    if (translationText.original !== null) {
+      if (snippets.indexOf(translationText) === -1) {
+        setSnippets([...snippets, translationText]);
+      }
+    }
+  }, [translationText]);
+
   // Mouse move function
   function handleMouseMove() {
     setShowControls(true);
@@ -132,7 +143,7 @@ export default function VideoPlayer({
     }, 1000);
   }
 
-  const drawTranslation = async (word, zoom, endx, endy) => {
+  const drawTranslation = async (word, color) => {
     const text = word.text;
     console.log("lang:", targetLang);
 
@@ -143,17 +154,17 @@ export default function VideoPlayer({
     } = await axios.get("/api/translate", {
       params: { text: text, target: targetLang },
     });
-    console.log(
-      "transation:",
-      res.data.translation,
-      res.data.translation.translatedText
-    );
+    // console.log(
+    //   "transation:",
+    //   res.data.translation,
+    //   res.data.translation.translatedText
+    // );
 
-    setTranslationText({ ...res.data.translation, original: word.text });
-    setSnippets([
-      ...snippets,
-      { ...res.data.translation, original: word.text },
-    ]);
+    setTranslationText({
+      ...res.data.translation,
+      original: word.text,
+      color: color,
+    });
 
     setTranslationBox(true);
 
@@ -162,9 +173,9 @@ export default function VideoPlayer({
 
     const width = translationRef.current.offsetWidth;
     const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
-    const translateStartX = (word.boundingBox[0].x * videoWidth - endx) * zoom;
-    const translateEndX = (word.boundingBox[2].x * videoWidth - endx) * zoom;
-    const translateStartY = (word.boundingBox[0].y * videoHeight - endy) * zoom;
+    const translateStartX = word.boundingBox[0].x * videoWidth;
+    const translateEndX = word.boundingBox[2].x * videoWidth;
+    const translateStartY = word.boundingBox[0].y * videoHeight;
     const rectX = isLeft ? translateStartX - width - 30 : translateEndX + 30;
     const rectY = translateStartY;
 
@@ -193,7 +204,7 @@ export default function VideoPlayer({
 
   return (
     <div className="flex" style={{ width: "100%" }}>
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1 }} className="mt-10 ml-10 mr-5">
         {/* Video controls */}
         <audio ref={voiceRef} />
         <div
@@ -202,12 +213,12 @@ export default function VideoPlayer({
             width: "100%",
           }}
         >
-          {showControls && !playing && (
+          {(holdTooltips || showControls) && !playing && (
             <ToolTips
               annotations={annotations}
               videoRef={videoRef}
-              setTransColor={setTransColor}
               drawTranslation={drawTranslation}
+              setHoldTooltips={setHoldTooltips}
             />
           )}
           <video ref={videoRef} controls={true} onMouseMove={handleMouseMove} />
@@ -215,7 +226,7 @@ export default function VideoPlayer({
             x={translationPos[0]}
             y={translationPos[1]}
             hide={!translationBox}
-            borderColor={transColor}
+            borderColor={translationText.color}
             ref={translationRef}
           >
             <div style={{ display: "flex" }}>
@@ -224,7 +235,7 @@ export default function VideoPlayer({
                   style={{
                     fontFamily: "Arial",
                     fontSize: 30,
-                    color: tinycolor(transColor).darken(20),
+                    color: tinycolor(translationText.color).darken(20),
                   }}
                 >
                   {translationText.original}
@@ -263,18 +274,34 @@ export default function VideoPlayer({
         </div>
       </div>
       {
-        <div className="ml-5 w-60">
-          {snippets.length > 0 && <h2>Your Snippets</h2>}
+        <div
+          style={{
+            overflowY: "scroll",
+            backgroundColor: "#F9F9F9",
+            borderRadius: 10,
+            width: 300,
+          }}
+          className="mt-10 pl-10 pt-5"
+        >
+          <h2>Your Snippets</h2>
+          {snippets.length === 0 && <div>You have no snippets</div>}
           {snippets.map((t, i) => (
             <div
               key={i}
               className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
-              style={{ borderColor: transColor }}
+              style={{ borderColor: t.color }}
             >
-              <span className="text-xl text-gray-700">
-                {t.original}
+              <span style={{ fontFamily: "Arial" }}>
+                <span
+                  style={{
+                    fontSize: 18,
+                    color: tinycolor(translationText.color).darken(20),
+                  }}
+                >
+                  {t.original}
+                </span>
                 <br />
-                {t.translatedText}
+                <span style={{ fontSize: 12 }}>{t.translatedText}</span>
               </span>
               <TranslationActionIcons
                 voiceRef={voiceRef}
@@ -295,8 +322,8 @@ export default function VideoPlayer({
 const ToolTips = ({
   annotations,
   videoRef,
-  setTransColor,
   drawTranslation,
+  setHoldTooltips,
 }) => {
   if (videoRef.current === undefined) {
     return <div></div>;
@@ -322,23 +349,18 @@ const ToolTips = ({
       const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
       return (
-        <div
+        <TipCircle
           key={i}
-          style={{
-            width: 20,
-            height: 20,
-            borderRadius: 20,
-            border: "3px solid white",
-            backgroundColor: hex,
-            position: "absolute",
-            top: y,
-            left: x,
-            cursor: "pointer",
-            zIndex: 4,
-          }}
+          hex={hex}
+          style={{ position: "absolute", top: y, left: x }}
           onClick={() => {
-            setTransColor(hex);
-            drawTranslation(word, 1, 0, 0);
+            drawTranslation(word, hex);
+          }}
+          onMouseEnter={() => {
+            setHoldTooltips(true);
+          }}
+          onMouseLeave={() => {
+            setHoldTooltips(false);
           }}
         />
       );
@@ -370,4 +392,20 @@ const InfoBox = styled.div`
   border-radius: 10px;
   padding: 15px;
   border: 2px solid ${(props) => props.borderColor};
+`;
+
+const TipCircle = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  border: 3px solid white;
+  background-color: ${(props) => props.hex};
+  cursor: pointer;
+  z-index: 4;
+  transition-timing-function: ease;
+  transition-duration: 0.5s;
+
+  &:hover {
+    transform: scale(1.5, 1.5);
+  }
 `;

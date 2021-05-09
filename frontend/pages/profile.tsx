@@ -1,5 +1,4 @@
 import Topbar from "../components/Topbar";
-import VideoPlayer from "../components/VideoPlayer";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Skeleton from "react-loading-skeleton";
 import languages from "constants/speechLanguages.json";
