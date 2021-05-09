@@ -22,6 +22,7 @@ export interface Transcription {
   translatedText: string;
   detectedSourceLanguage?: string;
   color: string;
+  time: number;
 }
 
 export default function VideoPlayer({
@@ -46,6 +47,7 @@ export default function VideoPlayer({
     original: null,
     detectedSourceLanguage: null,
     color: null,
+    time: null,
   });
   const [snippets, setSnippets] = useState<Transcription[]>([]);
 
@@ -127,7 +129,17 @@ export default function VideoPlayer({
   useEffect(() => {
     if (translationText.original !== null) {
       if (snippets.indexOf(translationText) === -1) {
-        setSnippets([...snippets, translationText]);
+        const newSnippets = [...snippets, translationText];
+        newSnippets.sort((a, b) => {
+          if (a.time < b.time) {
+            return -1;
+          }
+          if (a.time > b.time) {
+            return 1;
+          }
+          return 0;
+        });
+        setSnippets(newSnippets);
       }
     }
   }, [translationText]);
@@ -145,7 +157,6 @@ export default function VideoPlayer({
 
   const drawTranslation = async (word, color) => {
     const text = word.text;
-    console.log("lang:", targetLang);
 
     const res: {
       data: {
@@ -160,10 +171,13 @@ export default function VideoPlayer({
     //   res.data.translation.translatedText
     // );
 
+    console.log("poggies", videoRef.current.currentTime);
+
     setTranslationText({
       ...res.data.translation,
       original: word.text,
       color: color,
+      time: videoRef.current.currentTime,
     });
 
     setTranslationBox(true);
@@ -273,29 +287,56 @@ export default function VideoPlayer({
           </div>
         </div>
       </div>
-      {
-        <div
-          style={{
-            overflowY: "scroll",
-            backgroundColor: "#F9F9F9",
-            borderRadius: 10,
-            width: 300,
-          }}
-          className="mt-10 pl-10 pt-5"
-        >
-          <h2>Your Snippets</h2>
-          {snippets.length === 0 && <div>You have no snippets</div>}
-          {snippets.map((t, i) => (
+
+      <div
+        style={{
+          overflowY: "scroll",
+          backgroundColor: "#F9F9F9",
+          borderRadius: 10,
+          width: 400,
+          maxHeight: "100%",
+        }}
+        className="mt-10 pt-5"
+      >
+        <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
+        {snippets.length === 0 && <div>You have no snippets</div>}
+
+        {snippets.map((t, i) => (
+          <div style={{ display: "flex" }}>
+            <div>
+              <div
+                style={{
+                  border: "1px solid #EE3699",
+                  width: 50,
+                  borderRadius: 10,
+                  fontSize: 10,
+                  textAlign: "center",
+                  marginLeft: 10,
+                  marginRight: 10,
+                  marginTop: 8,
+                  visibility:
+                    i === 0 || snippets[i - 1].time !== snippets[i].time
+                      ? "initial"
+                      : "hidden",
+                }}
+              >
+                {new Date(t.time * 1000).toISOString().substr(11, 8)}
+              </div>
+            </div>
             <div
               key={i}
               className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
-              style={{ borderColor: t.color }}
+              style={{
+                borderColor: t.color,
+                flexGrow: 1,
+                backgroundColor: "white",
+              }}
             >
               <span style={{ fontFamily: "Arial" }}>
                 <span
                   style={{
                     fontSize: 18,
-                    color: tinycolor(translationText.color).darken(20),
+                    color: tinycolor(t.color).darken(20),
                   }}
                 >
                   {t.original}
@@ -312,9 +353,9 @@ export default function VideoPlayer({
                 }
               />
             </div>
-          ))}
-        </div>
-      }
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

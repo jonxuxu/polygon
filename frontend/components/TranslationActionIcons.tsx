@@ -20,7 +20,7 @@ export const TranslationActionIcons = ({
 }) => {
   const [added, setAdded] = React.useState(false);
   return (
-    <div style={{ paddingLeft: 10, paddingTop: 3 }}>
+    <div style={{ paddingLeft: 10, paddingTop: 3, color: "#454545" }}>
       <img
         src="/turtle.svg"
         alt="slow"
