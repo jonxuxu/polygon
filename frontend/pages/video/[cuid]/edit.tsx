@@ -53,8 +53,14 @@ const App = () => {
               }}
             >
               <div className="space-y-6 sm:space-y-5 mb-10">
-                <EditField state={title} setState={setTitle} label="Title" />
                 <EditField
+                  state={title}
+                  setState={setTitle}
+                  label="Title"
+                  multiline={false}
+                />
+                <EditField
+                  multiline
                   state={description}
                   setState={setDescription}
                   label="Description"

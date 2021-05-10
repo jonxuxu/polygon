@@ -19,7 +19,7 @@ const App = () => {
   const [description, setDescription] = useState("");
   const [video, setVideo] = useState(null);
   const [language, setLanguage] = useState("");
-  const [useSubtitles, setUseSubtitles] = useState(true);
+  const [useSubtitles, setUseSubtitles] = useState(false);
   const [file, setFile] = useState(null);
   const [uploadPercent, setUploadPercent] = useState(0);
   const [thumbnail, setThumbnail] = useState(null);
@@ -125,8 +125,14 @@ const App = () => {
               </p>
             </div>
             <div className="space-y-6 sm:space-y-5">
-              <EditField state={title} setState={setTitle} label="Title" />
               <EditField
+                state={title}
+                setState={setTitle}
+                label="Title"
+                multiline={false}
+              />
+              <EditField
+                multiline
                 state={description}
                 setState={setDescription}
                 label="Description"

@@ -1,4 +1,4 @@
-const EditField = ({ state, setState, label }) => (
+const EditField = ({ state, setState, label, multiline }) => (
   <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
     <label
       htmlFor="title"
@@ -7,15 +7,26 @@ const EditField = ({ state, setState, label }) => (
       {label}
     </label>
     <div className="mt-1 sm:mt-0 sm:col-span-2">
-      <input
-        value={state}
-        onChange={(e) => setState(e.target.value)}
-        type="text"
-        name="title"
-        id="title"
-        // autoComplete="title"
-        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-      />
+      {multiline ? (
+        <textarea
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          rows={3}
+          name={label}
+          id={label}
+          className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+        />
+      ) : (
+        <input
+          value={state}
+          onChange={(e) => setState(e.target.value)}
+          type="text"
+          name={label}
+          id={label}
+          // autoComplete="title"
+          className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-300 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+        />
+      )}
     </div>
   </div>
 );
