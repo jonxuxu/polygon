@@ -49,7 +49,8 @@ const App = () => {
                   isPublic,
                   id: video.id,
                 });
-                mutate("/api/video/" + video.cuid);
+                await mutate("/api/video/" + video.cuid);
+                Router.push("/uploads");
               }}
             >
               <div className="space-y-6 sm:space-y-5 mb-10">
