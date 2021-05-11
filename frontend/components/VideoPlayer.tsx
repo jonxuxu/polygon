@@ -31,11 +31,11 @@ export default function VideoPlayer({
   targetLang,
   snippets,
   setSnippets,
+  videoRef,
 }: {
   videoRow: videos;
   targetLang: string;
 }) {
-  const videoRef = useRef(null);
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
 

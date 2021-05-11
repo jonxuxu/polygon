@@ -1,29 +1,58 @@
 import React, { useEffect, useRef } from "react";
 import tinycolor from "tinycolor2";
 import { TranslationActionIcons } from "./TranslationActionIcons";
+import styled from "styled-components";
 
-export function SnippetPreview({ snippets, videoRow }) {
+export function SnippetPreview({ snippets, videoRow, videoRef }) {
   return (
     <div
       style={{
         overflowY: "scroll",
         backgroundColor: "#F9F9F9",
         width: 400,
+        position: "relative",
+        marginBottom: 30,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
       }}
       className="mt-10 pt-5"
     >
-      <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
-      {snippets.length === 0 && <div>You have no snippets</div>}
+      <div
+        style={{
+          position: "absolute",
+          borderLeft: "3px solid #EE3699",
+          height: "100%",
+          top: 0,
+          left: 35,
+        }}
+      />
+      <div style={{ zIndex: 1, position: "absolute" }}>
+        <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
+        {snippets.length === 0 && (
+          <div style={{ paddingLeft: 70 }}>
+            You have no snippets. Click on any bubbles to add to your
+            collection.
+          </div>
+        )}
 
-      {snippets.map((t, i) => {
-        const isFirst = i === 0 || snippets[i - 1].time !== snippets[i].time;
-        return <Snippet t={t} isFirst={isFirst} key={i} videoRow={videoRow} />;
-      })}
+        {snippets.map((t, i) => {
+          const isFirst = i === 0 || snippets[i - 1].time !== snippets[i].time;
+          return (
+            <Snippet
+              t={t}
+              isFirst={isFirst}
+              key={i}
+              videoRow={videoRow}
+              videoRef={videoRef}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }
 
-const Snippet = ({ t, isFirst, videoRow }) => {
+const Snippet = ({ t, isFirst, videoRow, videoRef }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -47,21 +76,14 @@ const Snippet = ({ t, isFirst, videoRow }) => {
   return (
     <div style={{ display: "flex" }}>
       <div>
-        <div
-          style={{
-            border: "1px solid #EE3699",
-            width: 50,
-            borderRadius: 10,
-            fontSize: 10,
-            textAlign: "center",
-            marginLeft: 10,
-            marginRight: 10,
-            marginTop: 8,
-            visibility: isFirst ? "initial" : "hidden",
+        <TimeBubble
+          isFirst={isFirst}
+          onClick={() => {
+            videoRef.current.currentTime = t.time;
           }}
         >
           {new Date(t.time * 1000).toISOString().substr(11, 8)}
-        </div>
+        </TimeBubble>
       </div>
       <div
         className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
@@ -100,3 +122,22 @@ const Snippet = ({ t, isFirst, videoRow }) => {
     </div>
   );
 };
+
+const TimeBubble = styled.div`
+  border: 1px solid #ee3699;
+  background-color: white;
+  width: 50px;
+  border-radius: 10px;
+  font-size: 10px;
+  text-align: center;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 8px;
+  visibility: ${(props) => (props.isFirst ? "initial" : "hidden")};
+  cursor: pointer;
+  transition-duration: 0.25s;
+  &:hover {
+    background-color: #ee3699;
+    color: white;
+  }
+`;

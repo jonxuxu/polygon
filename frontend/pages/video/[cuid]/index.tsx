@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
@@ -17,6 +17,7 @@ dayjs.extend(relativeTime);
 
 const App = () => {
   const router = useRouter();
+  const videoRef = useRef(null);
 
   const { video } = useVideo({ cuid: router.query?.cuid });
   const { me } = useMe();
@@ -61,6 +62,7 @@ const App = () => {
                 targetLang={targetLang}
                 snippets={snippets}
                 setSnippets={setSnippets}
+                videoRef={videoRef}
               />
               <div className="mx-10">
                 <div className="my-2 text-xl text-gray-700">
@@ -133,7 +135,11 @@ const App = () => {
             </div>
           )}
         </div>
-        <SnippetPreview snippets={snippets} videoRow={video} />
+        <SnippetPreview
+          snippets={snippets}
+          videoRow={video}
+          videoRef={videoRef}
+        />
       </div>
     </div>
   );
