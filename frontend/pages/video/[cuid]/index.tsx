@@ -63,11 +63,11 @@ const App = () => {
                 setSnippets={setSnippets}
               />
               <div className="mx-10">
-                <div className="my-2 text-2xl text-gray-700 ">
+                <div className="my-2 text-xl text-gray-700">
                   {video.title}{" "}
                   {me && (
                     <button
-                      className="primary mt-2"
+                      className="primary mt-2 flex "
                       onClick={async () => {
                         const savedBy = video.savedBy.find(
                           (u) => u.id === me.id
@@ -81,9 +81,21 @@ const App = () => {
                         await mutate("/api/video/" + video.cuid);
                       }}
                     >
-                      {video.savedBy.find((u) => u.id === me.id)
-                        ? "Unsave"
-                        : "Save"}
+                      <img
+                        src="/add-list.svg"
+                        alt="save"
+                        style={{
+                          width: 20,
+                          height: 20,
+                          cursor: "pointer",
+                          marginRight: 10,
+                        }}
+                      />
+                      <span className="text-gray-500">
+                        {video.savedBy.find((u) => u.id === me.id)
+                          ? "Unsave"
+                          : "Save"}
+                      </span>
                     </button>
                   )}
                   {me && me.id === video.creator && (
