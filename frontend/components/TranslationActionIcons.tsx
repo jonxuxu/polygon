@@ -7,19 +7,18 @@ import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { Transcription } from "./VideoPlayer";
 import { fetcher } from "utils/fetcher";
+import { useRouter } from "next/router";
 
 export const TranslationActionIcons = ({
   translationText,
-  video,
   time,
 }: {
   translationText: Transcription;
-  video: videos;
   time: number;
 }) => {
   const [added, setAdded] = React.useState(false);
   const voiceRef = useRef(null);
-
+  const router = useRouter();
   return (
     <div style={{ paddingLeft: 10, paddingTop: 3, color: "#454545" }}>
       <audio ref={voiceRef} />
@@ -64,24 +63,26 @@ export const TranslationActionIcons = ({
         />
       </div>
       <div>
-        <FontAwesomeIcon
-          icon={added ? faCheck : faPlus}
-          style={{ cursor: "pointer", marginTop: 10, height: "15px" }}
-          onClick={async () => {
-            if (added) return;
-            setAdded(true);
-            await fetcher("/api/user/update", {
-              snippets: {
-                create: {
-                  time,
-                  video_id: video.id,
-                  original: translationText.original,
-                  translation: translationText.translatedText,
+        {router.query.cuid && (
+          <FontAwesomeIcon
+            icon={added ? faCheck : faPlus}
+            style={{ cursor: "pointer", marginTop: 10, height: "15px" }}
+            onClick={async () => {
+              if (added) return;
+              setAdded(true);
+              await fetcher("/api/user/update", {
+                snippets: {
+                  create: {
+                    time,
+                    video: { connect: { cuid: router.query.cuid } },
+                    original: translationText.original,
+                    translation: translationText.translatedText,
+                  },
                 },
-              },
-            });
-          }}
-        />
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );

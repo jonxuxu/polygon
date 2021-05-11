@@ -49,12 +49,19 @@ const App = () => {
                   isPublic,
                   id: video.id,
                 });
-                mutate("/api/video/" + video.cuid);
+                await mutate("/api/video/" + video.cuid);
+                Router.push("/uploads");
               }}
             >
               <div className="space-y-6 sm:space-y-5 mb-10">
-                <EditField state={title} setState={setTitle} label="Title" />
                 <EditField
+                  state={title}
+                  setState={setTitle}
+                  label="Title"
+                  multiline={false}
+                />
+                <EditField
+                  multiline
                   state={description}
                   setState={setDescription}
                   label="Description"

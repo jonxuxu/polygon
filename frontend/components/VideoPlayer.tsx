@@ -9,6 +9,7 @@ import { speak } from "../utils/sounds";
 import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
+import { SnippetPreview } from "./SnippetPreview";
 
 // Content variables
 var annotations = [];
@@ -20,7 +21,7 @@ var controlTimeout = null;
 export interface Transcription {
   original: string;
   translatedText: string;
-  detectedSourceLanguage?: string;
+  detectedSourceLanguage: string;
   color: string;
   time: number;
 }
@@ -166,11 +167,6 @@ export default function VideoPlayer({
     } = await axios.get("/api/translate", {
       params: { text: text, target: targetLang },
     });
-    // console.log(
-    //   "transation:",
-    //   res.data.translation,
-    //   res.data.translation.translatedText
-    // );
 
     console.log("poggies", videoRef.current.currentTime);
 

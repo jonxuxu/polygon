@@ -12,6 +12,7 @@ const Topbar = () => {
     session
       ? { route: "/uploads", label: "Upload" }
       : { route: "/api/auth/signin/google", label: "Login" },
+    { route: "/how-it-works", label: "How It Works" },
   ];
   const router = useRouter();
   // const { session } = useSession();
