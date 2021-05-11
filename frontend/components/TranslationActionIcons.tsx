@@ -1,26 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCopy, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { videos } from ".prisma/client";
+
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { Transcription } from "./VideoPlayer";
 import { fetcher } from "utils/fetcher";
-import { videos } from ".prisma/client";
 
 export const TranslationActionIcons = ({
-  voiceRef,
   translationText,
   video,
   time,
 }: {
-  voiceRef: React.MutableRefObject<any>;
   translationText: Transcription;
   video: videos;
   time: number;
 }) => {
   const [added, setAdded] = React.useState(false);
+  const voiceRef = useRef(null);
+
   return (
     <div style={{ paddingLeft: 10, paddingTop: 3, color: "#454545" }}>
+      <audio ref={voiceRef} />
       <img
         src="/turtle.svg"
         alt="slow"

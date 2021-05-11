@@ -28,6 +28,8 @@ export interface Transcription {
 export default function VideoPlayer({
   videoRow,
   targetLang,
+  snippets,
+  setSnippets,
 }: {
   videoRow: videos;
   targetLang: string;
@@ -49,7 +51,6 @@ export default function VideoPlayer({
     color: null,
     time: null,
   });
-  const [snippets, setSnippets] = useState<Transcription[]>([]);
 
   useEffect(() => {
     // increment views
@@ -217,144 +218,68 @@ export default function VideoPlayer({
   }
 
   return (
-    <div className="flex" style={{ width: "100%" }}>
-      <div style={{ flex: 1 }} className="mt-10 ml-10 mr-5">
-        {/* Video controls */}
-        <audio ref={voiceRef} />
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
-          }}
-        >
-          {(holdTooltips || showControls) && !playing && (
-            <ToolTips
-              annotations={annotations}
-              videoRef={videoRef}
-              drawTranslation={drawTranslation}
-              setHoldTooltips={setHoldTooltips}
-            />
-          )}
-          <video ref={videoRef} controls={true} onMouseMove={handleMouseMove} />
-          <InfoBox
-            x={translationPos[0]}
-            y={translationPos[1]}
-            hide={!translationBox}
-            borderColor={translationText.color}
-            ref={translationRef}
-          >
-            <div style={{ display: "flex" }}>
-              <div>
-                <span
-                  style={{
-                    fontFamily: "Arial",
-                    fontSize: 30,
-                    color: tinycolor(translationText.color).darken(20),
-                  }}
-                >
-                  {translationText.original}
-                </span>
-                <div
-                  style={{ fontFamily: "Arial", fontSize: 14, marginTop: 10 }}
-                >
-                  {translationText.translatedText}
-                </div>
-              </div>
-              <TranslationActionIcons
-                voiceRef={voiceRef}
-                translationText={translationText}
-                video={videoRow}
-                time={
-                  videoRef.current ? videoRef.current.currentTime : undefined
-                }
-              />
-            </div>
-          </InfoBox>
-
-          <div
-            style={{
-              position: "absolute",
-              display: "flex",
-              justifyContent: "center",
-              bottom: 40,
-              left: 0,
-              width: "100%",
-              zIndex: 4,
-              pointerEvents: "none", // passthrough of hover and click
-            }}
-          >
-            {captionChars}
-          </div>
-        </div>
-      </div>
-
+    <div className="mt-10 ml-10 mr-5">
+      {/* Video controls */}
+      <audio ref={voiceRef} />
       <div
         style={{
-          overflowY: "scroll",
-          backgroundColor: "#F9F9F9",
-          borderRadius: 10,
-          width: 400,
-          maxHeight: "100%",
+          position: "relative",
+          width: "100%",
         }}
-        className="mt-10 pt-5"
       >
-        <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
-        {snippets.length === 0 && <div>You have no snippets</div>}
-
-        {snippets.map((t, i) => (
+        {(holdTooltips || showControls) && !playing && (
+          <ToolTips
+            annotations={annotations}
+            videoRef={videoRef}
+            drawTranslation={drawTranslation}
+            setHoldTooltips={setHoldTooltips}
+          />
+        )}
+        <video ref={videoRef} controls={true} onMouseMove={handleMouseMove} />
+        <InfoBox
+          x={translationPos[0]}
+          y={translationPos[1]}
+          hide={!translationBox}
+          borderColor={translationText.color}
+          ref={translationRef}
+        >
           <div style={{ display: "flex" }}>
             <div>
-              <div
+              <span
                 style={{
-                  border: "1px solid #EE3699",
-                  width: 50,
-                  borderRadius: 10,
-                  fontSize: 10,
-                  textAlign: "center",
-                  marginLeft: 10,
-                  marginRight: 10,
-                  marginTop: 8,
-                  visibility:
-                    i === 0 || snippets[i - 1].time !== snippets[i].time
-                      ? "initial"
-                      : "hidden",
+                  fontFamily: "Arial",
+                  fontSize: 30,
+                  color: tinycolor(translationText.color).darken(20),
                 }}
               >
-                {new Date(t.time * 1000).toISOString().substr(11, 8)}
+                {translationText.original}
+              </span>
+              <div style={{ fontFamily: "Arial", fontSize: 14, marginTop: 10 }}>
+                {translationText.translatedText}
               </div>
             </div>
-            <div
-              key={i}
-              className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
-              style={{
-                borderColor: t.color,
-                flexGrow: 1,
-                backgroundColor: "white",
-              }}
-            >
-              <span style={{ fontFamily: "Arial" }}>
-                <span
-                  style={{
-                    fontSize: 18,
-                    color: tinycolor(t.color).darken(20),
-                  }}
-                >
-                  {t.original}
-                </span>
-                <br />
-                <span style={{ fontSize: 12 }}>{t.translatedText}</span>
-              </span>
-              <TranslationActionIcons
-                voiceRef={voiceRef}
-                translationText={t}
-                video={videoRow}
-                time={
-                  videoRef.current ? videoRef.current.currentTime : undefined
-                }
-              />
-            </div>
+            <TranslationActionIcons
+              translationText={translationText}
+              video={videoRow}
+              time={videoRef.current ? videoRef.current.currentTime : undefined}
+            />
           </div>
-        ))}
+        </InfoBox>
+
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "center",
+            bottom: 40,
+            left: 0,
+            width: "100%",
+            zIndex: 4,
+            pointerEvents: "none", // passthrough of hover and click
+          }}
+        >
+          {captionChars}
+        </div>
       </div>
     </div>
   );
