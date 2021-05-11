@@ -9,6 +9,7 @@ import { speak } from "../utils/sounds";
 import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
+import { SnippetPreview } from "./SnippetPreview";
 
 // Content variables
 var annotations = [];
@@ -20,7 +21,7 @@ var controlTimeout = null;
 export interface Transcription {
   original: string;
   translatedText: string;
-  detectedSourceLanguage?: string;
+  detectedSourceLanguage: string;
   color: string;
   time: number;
 }
@@ -165,11 +166,6 @@ export default function VideoPlayer({
     } = await axios.get("/api/translate", {
       params: { text: text, target: targetLang },
     });
-    // console.log(
-    //   "transation:",
-    //   res.data.translation,
-    //   res.data.translation.translatedText
-    // );
 
     console.log("poggies", videoRef.current.currentTime);
 
@@ -263,7 +259,6 @@ export default function VideoPlayer({
               <TranslationActionIcons
                 voiceRef={voiceRef}
                 translationText={translationText}
-                video={videoRow}
                 time={
                   videoRef.current ? videoRef.current.currentTime : undefined
                 }
@@ -298,62 +293,22 @@ export default function VideoPlayer({
         }}
         className="mt-10 pt-5"
       >
-        <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
-        {snippets.length === 0 && <div>You have no snippets</div>}
+        <h2 className="pl-8 text-lg">Your Snippets</h2>
+        {snippets.length === 0 && (
+          <div className="pl-8">
+            Click words in the video to add translations here.
+          </div>
+        )}
 
         {snippets.map((t, i) => (
-          <div style={{ display: "flex" }}>
-            <div>
-              <div
-                style={{
-                  border: "1px solid #EE3699",
-                  width: 50,
-                  borderRadius: 10,
-                  fontSize: 10,
-                  textAlign: "center",
-                  marginLeft: 10,
-                  marginRight: 10,
-                  marginTop: 8,
-                  visibility:
-                    i === 0 || snippets[i - 1].time !== snippets[i].time
-                      ? "initial"
-                      : "hidden",
-                }}
-              >
-                {new Date(t.time * 1000).toISOString().substr(11, 8)}
-              </div>
-            </div>
-            <div
-              key={i}
-              className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
-              style={{
-                borderColor: t.color,
-                flexGrow: 1,
-                backgroundColor: "white",
-              }}
-            >
-              <span style={{ fontFamily: "Arial" }}>
-                <span
-                  style={{
-                    fontSize: 18,
-                    color: tinycolor(t.color).darken(20),
-                  }}
-                >
-                  {t.original}
-                </span>
-                <br />
-                <span style={{ fontSize: 12 }}>{t.translatedText}</span>
-              </span>
-              <TranslationActionIcons
-                voiceRef={voiceRef}
-                translationText={t}
-                video={videoRow}
-                time={
-                  videoRef.current ? videoRef.current.currentTime : undefined
-                }
-              />
-            </div>
-          </div>
+          <SnippetPreview
+            key={i}
+            i={i}
+            snippets={snippets}
+            t={t}
+            voiceRef={voiceRef}
+            videoRef={videoRef}
+          />
         ))}
       </div>
     </div>

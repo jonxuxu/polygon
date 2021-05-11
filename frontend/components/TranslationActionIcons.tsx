@@ -6,19 +6,20 @@ import { speak } from "../utils/sounds";
 import { Transcription } from "./VideoPlayer";
 import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
+import { useRouter } from "next/router";
 
 export const TranslationActionIcons = ({
   voiceRef,
   translationText,
-  video,
   time,
 }: {
   voiceRef: React.MutableRefObject<any>;
   translationText: Transcription;
-  video: videos;
   time: number;
 }) => {
   const [added, setAdded] = React.useState(false);
+  const router = useRouter();
+  console.log(router.query);
   return (
     <div style={{ paddingLeft: 10, paddingTop: 3, color: "#454545" }}>
       <img
@@ -62,24 +63,26 @@ export const TranslationActionIcons = ({
         />
       </div>
       <div>
-        <FontAwesomeIcon
-          icon={added ? faCheck : faPlus}
-          style={{ cursor: "pointer", marginTop: 10, height: "15px" }}
-          onClick={async () => {
-            if (added) return;
-            setAdded(true);
-            await fetcher("/api/user/update", {
-              snippets: {
-                create: {
-                  time,
-                  video_id: video.id,
-                  original: translationText.original,
-                  translation: translationText.translatedText,
+        {router.query.cuid && (
+          <FontAwesomeIcon
+            icon={added ? faCheck : faPlus}
+            style={{ cursor: "pointer", marginTop: 10, height: "15px" }}
+            onClick={async () => {
+              if (added) return;
+              setAdded(true);
+              await fetcher("/api/user/update", {
+                snippets: {
+                  create: {
+                    time,
+                    video: { connect: { cuid: router.query.cuid } },
+                    original: translationText.original,
+                    translation: translationText.translatedText,
+                  },
                 },
-              },
-            });
-          }}
-        />
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );
