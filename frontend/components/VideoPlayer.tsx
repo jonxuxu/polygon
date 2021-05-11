@@ -9,7 +9,6 @@ import { speak } from "../utils/sounds";
 import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
-import { SnippetPreview } from "./SnippetPreview";
 
 // Content variables
 var annotations = [];
