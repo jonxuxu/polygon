@@ -3,6 +3,9 @@ import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import Image from "next/image";
 import dayjs from "dayjs";
+import styled from "styled-components";
+
+import SpeechLanguages from "../constants/speechLanguages.json";
 
 export function ExploreVideoList() {
   const { feed } = useFeed();
@@ -19,7 +22,10 @@ export function ExploreVideoList() {
               <div className="flex-1 min-w-0">
                 <Link href={`/video/${video.cuid}`}>
                   <a className="focus:outline-none">
-                    <div className="h-100 w-100">
+                    <div
+                      className="h-100 w-100"
+                      style={{ position: "relative" }}
+                    >
                       <Image
                         width={500}
                         height={300}
@@ -29,6 +35,33 @@ export function ExploreVideoList() {
                         }
                         alt="Thumbnail"
                       />
+                      {video.language &&
+                        SpeechLanguages.some(
+                          (lang) => lang.code === video.language
+                        ) && (
+                          <GreyPill
+                            style={{
+                              position: "absolute",
+                              bottom: 10,
+                              left: 7,
+                            }}
+                          >
+                            {
+                              SpeechLanguages.filter(
+                                (lang) => lang.code === video.language
+                              )[0].name
+                            }
+                          </GreyPill>
+                        )}
+                      {video.duration && (
+                        <GreyPill
+                          style={{ position: "absolute", bottom: 10, right: 7 }}
+                        >
+                          {new Date(video.duration * 1000)
+                            .toISOString()
+                            .substr(11, 8)}
+                        </GreyPill>
+                      )}
                     </div>
                     <span className="absolute inset-0" aria-hidden="true" />
                     <p className="text-xl font-medium text-gray-700 mt-2">
@@ -63,3 +96,11 @@ export function ExploreVideoList() {
     </div>
   );
 }
+
+const GreyPill = styled.div`
+  background-color: rgba(40, 40, 40, 0.8);
+  color: white;
+  border-radius: 3px;
+  font-size: 11px;
+  padding: 2px 6px;
+`;
