@@ -23,6 +23,7 @@ export interface Transcription {
   detectedSourceLanguage: string;
   color: string;
   time: number;
+  image: any;
 }
 
 export default function VideoPlayer({
@@ -44,12 +45,13 @@ export default function VideoPlayer({
 
   const [translationBox, setTranslationBox] = useState(false);
   const [translationPos, setTranslationPos] = useState([0, 0]);
-  const [translationText, setTranslationText] = useState<Transcription>({
+  const [translationData, setTranslationData] = useState<Transcription>({
     translatedText: null,
     original: null,
     detectedSourceLanguage: null,
     color: null,
     time: null,
+    image: null,
   });
 
   useEffect(() => {
@@ -128,22 +130,25 @@ export default function VideoPlayer({
 
   // Add to snippets if translation text has not been added
   useEffect(() => {
-    if (translationText.original !== null) {
-      if (snippets.indexOf(translationText) === -1) {
-        const newSnippets = [...snippets, translationText];
-        newSnippets.sort((a, b) => {
-          if (a.time < b.time) {
-            return -1;
-          }
-          if (a.time > b.time) {
-            return 1;
-          }
-          return 0;
-        });
-        setSnippets(newSnippets);
+    if (translationData.original !== null) {
+      for (var i = 0; i < snippets.length; i++) {
+        if (snippets[i].original === translationData.original) {
+          return;
+        }
       }
+      const newSnippets = [...snippets, translationData];
+      newSnippets.sort((a, b) => {
+        if (a.time < b.time) {
+          return -1;
+        }
+        if (a.time > b.time) {
+          return 1;
+        }
+        return 0;
+      });
+      setSnippets(newSnippets);
     }
-  }, [translationText]);
+  }, [translationData]);
 
   // Mouse move function
   function handleMouseMove() {
@@ -156,7 +161,7 @@ export default function VideoPlayer({
     }, 1000);
   }
 
-  const drawTranslation = async (word, color) => {
+  const drawTranslation = async (word, color, image) => {
     const text = word.text;
 
     const res: {
@@ -167,13 +172,12 @@ export default function VideoPlayer({
       params: { text: text, target: targetLang },
     });
 
-    console.log("poggies", videoRef.current.currentTime);
-
-    setTranslationText({
+    setTranslationData({
       ...res.data.translation,
       original: word.text,
       color: color,
       time: videoRef.current.currentTime,
+      image: image,
     });
 
     setTranslationBox(true);
@@ -235,7 +239,7 @@ export default function VideoPlayer({
           x={translationPos[0]}
           y={translationPos[1]}
           hide={!translationBox}
-          borderColor={translationText.color}
+          borderColor={translationData.color}
           ref={translationRef}
         >
           <div style={{ display: "flex" }}>
@@ -244,17 +248,17 @@ export default function VideoPlayer({
                 style={{
                   fontFamily: "Arial",
                   fontSize: 30,
-                  color: tinycolor(translationText.color).darken(20),
+                  color: tinycolor(translationData.color).darken(20),
                 }}
               >
-                {translationText.original}
+                {translationData.original}
               </span>
               <div style={{ fontFamily: "Arial", fontSize: 14, marginTop: 10 }}>
-                {translationText.translatedText}
+                {translationData.translatedText}
               </div>
             </div>
             <TranslationActionIcons
-              translationText={translationText}
+              translationText={translationData}
               video={videoRow}
               time={videoRef.current ? videoRef.current.currentTime : undefined}
             />
@@ -307,15 +311,24 @@ const ToolTips = ({
     tooltips = annotations[millis].map((word, i) => {
       const x = word.boundingBox[0].x * videoWidth;
       const y = word.boundingBox[0].y * videoHeight;
+      const x2 = word.boundingBox[2].x * videoWidth;
+      const y2 = word.boundingBox[2].y * videoHeight;
+
       const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
+      const image = canvasContext.getImageData(
+        x - 10,
+        y - 10,
+        x2 - x + 20,
+        y2 - y + 20
+      );
       return (
         <TipCircle
           key={i}
           hex={hex}
           style={{ position: "absolute", top: y, left: x }}
           onClick={() => {
-            drawTranslation(word, hex);
+            drawTranslation(word, hex, image);
           }}
           onMouseEnter={() => {
             setHoldTooltips(true);
