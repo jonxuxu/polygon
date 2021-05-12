@@ -35,9 +35,6 @@ export default function VideoPlayer({
   const translationRef = useRef(null);
 
   const [playing, setPlaying] = useState(false);
-  const [showControls, setShowControls] = useState(false);
-  const [holdTooltips, setHoldTooltips] = useState(false);
-
   const [translationBox, setTranslationBox] = useState(false);
   const [translationPos, setTranslationPos] = useState([0, 0]);
   const [translationData, setTranslationData] = useState<Transcription>({
@@ -81,6 +78,7 @@ export default function VideoPlayer({
     video.addEventListener(
       "play",
       () => {
+        setTranslationBox(false);
         setPlaying(true);
       },
       false
@@ -112,17 +110,6 @@ export default function VideoPlayer({
     })();
   }, []);
 
-  useEffect(() => {
-    if (playing) {
-      console.log("playing");
-      // videoRef.current.play();
-      setTranslationBox(false);
-    } else {
-      console.log("pausing");
-      // videoRef.current.pause();
-    }
-  }, [playing]);
-
   // Add to snippets if translation text has not been added
   useEffect(() => {
     if (translationData.original !== null) {
@@ -144,17 +131,6 @@ export default function VideoPlayer({
       setSnippets(newSnippets);
     }
   }, [translationData]);
-
-  // Mouse move function
-  function handleMouseMove() {
-    setShowControls(true);
-    if (controlTimeout) {
-      clearTimeout(controlTimeout);
-    }
-    controlTimeout = setTimeout(function () {
-      setShowControls(false);
-    }, 1000);
-  }
 
   const drawTranslation = async (word, color, image) => {
     const text = word.text;
@@ -221,15 +197,13 @@ export default function VideoPlayer({
           width: "100%",
         }}
       >
-        {(holdTooltips || showControls) && !playing && (
-          <ToolTips
-            annotations={annotations}
-            videoRef={videoRef}
-            drawTranslation={drawTranslation}
-            setHoldTooltips={setHoldTooltips}
-          />
-        )}
-        <video ref={videoRef} controls={true} onMouseMove={handleMouseMove} />
+        {videoRef.current &&
+          videoRef.current.hasAttribute("controls") &&
+          !playing && (
+            <ToolTips videoRef={videoRef} drawTranslation={drawTranslation} />
+          )}
+
+        <video ref={videoRef} controls={true} />
         <InfoBox
           x={translationPos[0]}
           y={translationPos[1]}
@@ -278,12 +252,7 @@ export default function VideoPlayer({
   );
 }
 
-const ToolTips = ({
-  annotations,
-  videoRef,
-  drawTranslation,
-  setHoldTooltips,
-}) => {
+const ToolTips = ({ videoRef, drawTranslation }) => {
   if (videoRef.current === undefined) {
     return <div></div>;
   }
@@ -323,12 +292,6 @@ const ToolTips = ({
           style={{ position: "absolute", top: y, left: x }}
           onClick={() => {
             drawTranslation(word, hex, image);
-          }}
-          onMouseEnter={() => {
-            setHoldTooltips(true);
-          }}
-          onMouseLeave={() => {
-            setHoldTooltips(false);
           }}
         />
       );
