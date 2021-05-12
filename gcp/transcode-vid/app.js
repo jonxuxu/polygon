@@ -77,19 +77,25 @@ const checkExists = async (cuid) => {
   return res.rows[0].count === "1";
 };
 
-const getLanguage = async (cuid) => {
-  const res = await pool.query("SELECT language FROM videos WHERE cuid = $1", [
-    cuid,
-  ]);
-  return res.rows[0].language;
+const getRow = async (cuid) => {
+  const res = await pool.query(
+    `SELECT language, "useSubtitles" FROM videos WHERE cuid = $1`,
+    [cuid]
+  );
+  return res.rows[0];
 };
 
 // Runs speech to text to get the captions of video
 const transcribe = async (cuid, res) => {
-  const languageCode = await getLanguage(cuid);
+  const videoRow = await getRow(cuid);
+  const languageCode = videoRow.language;
   console.log("the language is " + languageCode);
 
-  if (languageCode === null) {
+  if (
+    languageCode === null ||
+    languageCode.length === 0 ||
+    !videoRow.useSubtitles
+  ) {
     await setTranscribeState(cuid, "not computed");
     return res.status(200).send(`successfully processed and uploaded ${cuid}`);
   }

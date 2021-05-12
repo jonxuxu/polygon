@@ -1,47 +1,32 @@
 # Transcode Vid
 
-This project runs on Google App Engine
+This project runs on AWS lightsail, previously on Google App Engine
 
 It listens for videos uploaded to our video-world-source bucket, then:
 
 - converts the videos to hls using ffmpeg and uploads to video-world-transcoded
 - converts the videos to wav using ffmpeg and uploads to video-world-audio
 
-# Quickstart for Node.js in the App Engine standard environment
-
-This is the sample application for the
-[Quickstart for Node.js in the App Engine standard environment][tutorial]
-tutorial found in the [Google App Engine Node.js standard environment][appengine]
-documentation.
+# Quickstart for Node.js with AWS Lightsail
 
 - [Setup](#setup)
 - [Running locally](#running-locally)
-- [Deploying to App Engine](#deploying-to-app-engine)
-- [Running the tests](#running-the-tests)
-
-## Setup
-
-Before you can run or deploy the sample, you need to do the following:
-
-1.  Refer to the [appengine/README.md][readme] file for instructions on
-    running and deploying.
-1.  Install dependencies:
-
-        npm install
+- [Deploying to Lightsail](#deploying-to-lightsail)
 
 ## Running locally
 
     npm start
 
-## Deploying to App Engine
+## Deploying to Lightsail
 
-    gcloud app deploy
+- open the ssh to terminal to the lightsail instance
+- git pull, or use Filezilla to transfer the relevant files over
 
-## Running the tests
+**Creating a screen**
+`screen -S your_session_name`
 
-See [Contributing][contributing].
+**Exiting from a screen**
+press and hold: ctrl a d
 
-[appengine]: https://cloud.google.com/appengine/docs/standard/nodejs
-[tutorial]: https://cloud.google.com/appengine/docs/standard/nodejs/quickstart
-[readme]: ../../README.md
-[contributing]: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/CONTRIBUTING.md
+**Closing all screens**
+`pkill screen`
