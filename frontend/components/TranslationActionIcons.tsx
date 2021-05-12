@@ -8,29 +8,34 @@ import { speak } from "../utils/sounds";
 import { Transcription } from "../utils/types";
 import { fetcher } from "utils/fetcher";
 import { useRouter } from "next/router";
+import styled from "styled-components";
 
 export const TranslationActionIcons = ({
   translationText,
   time,
+  hide,
 }: {
   translationText: Transcription;
   time: number;
+  hide?: boolean;
 }) => {
   const [added, setAdded] = React.useState(false);
   const voiceRef = useRef(null);
   const router = useRouter();
   return (
-    <div style={{ paddingLeft: 10, paddingTop: 3, color: "#454545" }}>
+    <div
+      style={{
+        paddingLeft: 10,
+        paddingTop: 3,
+        color: "#454545",
+        visibility: hide ? "hidden" : "visible",
+      }}
+    >
       <audio ref={voiceRef} />
-      <img
+      <ImageIcon
         src="/turtle.svg"
         alt="slow"
-        style={{
-          width: 20,
-          height: 20,
-          cursor: "pointer",
-          marginBottom: 5,
-        }}
+        style={{ marginBottom: 5 }}
         onClick={() => {
           speak(
             voiceRef,
@@ -40,10 +45,9 @@ export const TranslationActionIcons = ({
           );
         }}
       />
-      <img
+      <ImageIcon
         src="/rabbit.svg"
         alt="fast"
-        style={{ width: 20, height: 20, cursor: "pointer" }}
         onClick={() => {
           speak(
             voiceRef,
@@ -54,9 +58,8 @@ export const TranslationActionIcons = ({
         }}
       />
       <div>
-        <FontAwesomeIcon
+        <InteractiveIcon
           icon={faCopy}
-          style={{ cursor: "pointer", marginTop: 10, height: "15px" }}
           onClick={() => {
             copyToClipboard(translationText.original);
           }}
@@ -64,9 +67,8 @@ export const TranslationActionIcons = ({
       </div>
       <div>
         {router.query.cuid && (
-          <FontAwesomeIcon
+          <InteractiveIcon
             icon={added ? faCheck : faPlus}
-            style={{ cursor: "pointer", marginTop: 10, height: "15px" }}
             onClick={async () => {
               if (added) return;
               setAdded(true);
@@ -87,3 +89,25 @@ export const TranslationActionIcons = ({
     </div>
   );
 };
+
+const ImageIcon = styled.img`
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+
+  &:hover {
+    filter: invert(43%) sepia(93%) saturate(4644%) hue-rotate(307deg)
+      brightness(97%) contrast(92%);
+  }
+`;
+
+const InteractiveIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  margin-top: 10px;
+  height: 12px;
+  color: black;
+
+  &:hover {
+    color: #ee3699;
+  }
+`;

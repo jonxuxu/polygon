@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import tinycolor from "tinycolor2";
 import { TranslationActionIcons } from "./TranslationActionIcons";
 import styled from "styled-components";
@@ -12,50 +12,44 @@ export function SnippetPreview({
   snippets: Transcription[];
   videoRef?: React.MutableRefObject<any>;
 }) {
-  return (
-    <div
-      style={{
-        overflowY: "scroll",
-        backgroundColor: "#F9F9F9",
-        width: 400,
-        position: "relative",
-        marginBottom: 30,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
-      }}
-      className="mt-10 pt-5"
-    >
-      <div
-        style={{
-          position: "absolute",
-          borderLeft: "3px solid #EE3699",
-          height: "100%",
-          top: 0,
-          left: 35,
-        }}
-      />
-      <div style={{ zIndex: 1, position: "absolute" }}>
-        <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
-        {snippets.length === 0 && (
-          <div style={{ paddingLeft: 70 }}>
-            You have no snippets. Click on any bubbles to add to your
-            collection.
-          </div>
-        )}
+  const sidebarRef = useRef(null);
 
-        {snippets.map((t, i) => {
-          const isFirst = i === 0 || snippets[i - 1].time !== snippets[i].time;
-          return (
-            <Snippet t={t} isFirst={isFirst} key={i} videoRef={videoRef} />
-          );
-        })}
+  return (
+    <SidebarDiv>
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            borderRight: "3px solid #EE3699",
+            top: 0,
+            left: 35,
+            width: 30,
+          }}
+        />
+        <div style={{ flexGrow: 1 }} ref={sidebarRef}>
+          <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
+          {snippets.length === 0 && (
+            <div style={{ paddingLeft: 70 }}>
+              You have no snippets. Click on any bubbles to add to your
+              collection.
+            </div>
+          )}
+
+          {snippets.map((t, i) => {
+            const isFirst =
+              i === 0 || snippets[i - 1].time !== snippets[i].time;
+            return (
+              <Snippet t={t} isFirst={isFirst} key={i} videoRef={videoRef} />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </SidebarDiv>
   );
 }
 
 const Snippet = ({ t, isFirst, videoRef }) => {
   const canvasRef = useRef(null);
+  const [showControls, setShowControls] = useState(false);
 
   useEffect(() => {
     if (t.image) {
@@ -91,12 +85,13 @@ const Snippet = ({ t, isFirst, videoRef }) => {
           {new Date(t.time * 1000).toISOString().substr(11, 8)}
         </TimeBubble>
       </div>
-      <div
-        className="border-2 rounded-md py-3 px-4 my-2 flex justify-between"
-        style={{
-          borderColor: t.color,
-          flexGrow: 1,
-          backgroundColor: "white",
+      <SnippetCard
+        color={t.color}
+        onMouseEnter={() => {
+          setShowControls(true);
+        }}
+        onMouseLeave={() => {
+          setShowControls(false);
         }}
       >
         <div className="flex">
@@ -114,11 +109,28 @@ const Snippet = ({ t, isFirst, videoRef }) => {
             <span style={{ fontSize: 12 }}>{t.translatedText}</span>
           </span>
         </div>
-        <TranslationActionIcons translationText={t} time={t.time} />
-      </div>
+        <TranslationActionIcons
+          translationText={t}
+          time={t.time}
+          hide={!showControls}
+        />
+      </SnippetCard>
     </div>
   );
 };
+
+const SidebarDiv = styled.div`
+  overflow-y: scroll;
+  background-color: #f9f9f9;
+  width: 400px;
+  position: relative;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding-top: 1.25rem;
+  height: 80vh;
+`;
 
 const TimeBubble = styled.div`
   border: 1px solid #ee3699;
@@ -133,8 +145,26 @@ const TimeBubble = styled.div`
   visibility: ${(props) => (props.isFirst ? "initial" : "hidden")};
   cursor: pointer;
   transition-duration: 0.25s;
+  position: absolute;
+  left: -10px;
+
   &:hover {
     background-color: #ee3699;
     color: white;
   }
+`;
+
+const SnippetCard = styled.div`
+  border: 2px solid ${(props) => props.color};
+  border-right: none;
+  flex-grow: 1;
+  background-color: white;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 50px;
 `;
