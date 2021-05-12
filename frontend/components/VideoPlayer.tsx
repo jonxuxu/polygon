@@ -5,6 +5,7 @@ import styled from "styled-components";
 import tinycolor from "tinycolor2";
 
 import { speak } from "../utils/sounds";
+import { Transcription } from "../utils/types";
 
 import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
@@ -17,15 +18,6 @@ var transcriptions = [];
 // Video player variables
 var controlTimeout = null;
 
-export interface Transcription {
-  original: string;
-  translatedText: string;
-  detectedSourceLanguage: string;
-  color: string;
-  time: number;
-  image: any;
-}
-
 export default function VideoPlayer({
   videoRow,
   targetLang,
@@ -35,6 +27,9 @@ export default function VideoPlayer({
 }: {
   videoRow: videos;
   targetLang: string;
+  snippets: Transcription[];
+  setSnippets: any;
+  videoRef: React.MutableRefObject<any>;
 }) {
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
@@ -259,7 +254,6 @@ export default function VideoPlayer({
             </div>
             <TranslationActionIcons
               translationText={translationData}
-              video={videoRow}
               time={videoRef.current ? videoRef.current.currentTime : undefined}
             />
           </div>

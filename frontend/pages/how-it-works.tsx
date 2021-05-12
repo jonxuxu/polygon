@@ -2,7 +2,7 @@ import Topbar from "../components/Topbar";
 import Image from "next/image";
 import { useRef } from "react";
 import { SnippetPreview } from "components/SnippetPreview";
-import { Transcription } from "components/VideoPlayer";
+import { Transcription } from "../utils/types";
 
 const Page = () => {
   const voiceRef = useRef(null);
@@ -32,12 +32,7 @@ const Page = () => {
         </div>
         <Image src={`/jiufen-screenshot.png`} width={1000} height={700} />
         Use the icons on the right of the snippet overlay to interact with it.
-        <SnippetPreview
-          i={0}
-          snippets={[snippet]}
-          t={snippet}
-          voiceRef={voiceRef}
-        />
+        <SnippetPreview snippets={[snippet]} />
         <div className="my-4">Built by Jonathan Xu and Kunal Shah</div>
       </div>
     </div>

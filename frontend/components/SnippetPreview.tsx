@@ -3,7 +3,15 @@ import tinycolor from "tinycolor2";
 import { TranslationActionIcons } from "./TranslationActionIcons";
 import styled from "styled-components";
 
-export function SnippetPreview({ snippets, videoRow, videoRef }) {
+import { Transcription } from "../utils/types";
+
+export function SnippetPreview({
+  snippets,
+  videoRef,
+}: {
+  snippets: Transcription[];
+  videoRef?: React.MutableRefObject<any>;
+}) {
   return (
     <div
       style={{
@@ -38,13 +46,7 @@ export function SnippetPreview({ snippets, videoRow, videoRef }) {
         {snippets.map((t, i) => {
           const isFirst = i === 0 || snippets[i - 1].time !== snippets[i].time;
           return (
-            <Snippet
-              t={t}
-              isFirst={isFirst}
-              key={i}
-              videoRow={videoRow}
-              videoRef={videoRef}
-            />
+            <Snippet t={t} isFirst={isFirst} key={i} videoRef={videoRef} />
           );
         })}
       </div>
@@ -52,25 +54,27 @@ export function SnippetPreview({ snippets, videoRow, videoRef }) {
   );
 }
 
-const Snippet = ({ t, isFirst, videoRow, videoRef }) => {
+const Snippet = ({ t, isFirst, videoRef }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    const canvasCtx = canvasRef.current.getContext("2d");
-    // console.log(t.image);
-    // console.log(t.image.width);
-    // canvasCtx.drawImage(
-    //   t.image,
-    //   0,
-    //   0,
-    //   t.image.width,
-    //   t.image.height,
-    //   0,
-    //   0,
-    //   canvasCtx.width,
-    //   canvasCtx.height
-    // );
-    canvasCtx.putImageData(t.image, 0, 0);
+    if (t.image) {
+      const canvasCtx = canvasRef.current.getContext("2d");
+      // console.log(t.image);
+      // console.log(t.image.width);
+      // canvasCtx.drawImage(
+      //   t.image,
+      //   0,
+      //   0,
+      //   t.image.width,
+      //   t.image.height,
+      //   0,
+      //   0,
+      //   canvasCtx.width,
+      //   canvasCtx.height
+      // );
+      canvasCtx.putImageData(t.image, 0, 0);
+    }
   }, []);
 
   return (
@@ -79,7 +83,9 @@ const Snippet = ({ t, isFirst, videoRow, videoRef }) => {
         <TimeBubble
           isFirst={isFirst}
           onClick={() => {
-            videoRef.current.currentTime = t.time;
+            if (videoRef) {
+              videoRef.current.currentTime = t.time;
+            }
           }}
         >
           {new Date(t.time * 1000).toISOString().substr(11, 8)}
@@ -94,12 +100,7 @@ const Snippet = ({ t, isFirst, videoRow, videoRef }) => {
         }}
       >
         <div className="flex">
-          <canvas
-            ref={canvasRef}
-            width={80}
-            height={80}
-            style={{ borderRadius: 10 }}
-          />
+          {t.image && <canvas ref={canvasRef} width={80} height={80} />}
           <span style={{ fontFamily: "Arial" }}>
             <span
               style={{
@@ -113,11 +114,7 @@ const Snippet = ({ t, isFirst, videoRow, videoRef }) => {
             <span style={{ fontSize: 12 }}>{t.translatedText}</span>
           </span>
         </div>
-        <TranslationActionIcons
-          translationText={t}
-          video={videoRow}
-          time={t.time}
-        />
+        <TranslationActionIcons translationText={t} time={t.time} />
       </div>
     </div>
   );

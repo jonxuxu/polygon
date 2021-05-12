@@ -5,7 +5,7 @@ import { videos } from ".prisma/client";
 
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
-import { Transcription } from "./VideoPlayer";
+import { Transcription } from "../utils/types";
 import { fetcher } from "utils/fetcher";
 import { useRouter } from "next/router";
 

@@ -6,9 +6,10 @@ import { mutate } from "swr";
 import dayjs from "dayjs";
 
 import { fetcher, useMe, useVideo } from "utils/fetcher";
+import { Transcription } from "utils/types";
 
 import Topbar from "components/Topbar";
-import VideoPlayer, { Transcription } from "components/VideoPlayer";
+import VideoPlayer from "components/VideoPlayer";
 import languages from "constants/translateLanguages.json";
 import { SnippetPreview } from "components/SnippetPreview";
 
@@ -135,11 +136,7 @@ const App = () => {
             </div>
           )}
         </div>
-        <SnippetPreview
-          snippets={snippets}
-          videoRow={video}
-          videoRef={videoRef}
-        />
+        <SnippetPreview snippets={snippets} videoRef={videoRef} />
       </div>
     </div>
   );
