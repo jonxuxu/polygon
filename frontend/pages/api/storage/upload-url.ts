@@ -2,16 +2,11 @@ require("dotenv").config();
 import { Storage } from "@google-cloud/storage";
 import prisma from "prisma/client";
 import cuid from "cuid";
+import { sendLog } from "utils/sendLog";
 
 export default async function handler(req, res) {
-  const {
-    title,
-    description,
-    email,
-    duration,
-    language,
-    useSubtitles,
-  } = req.body;
+  const { title, description, email, duration, language, useSubtitles } =
+    req.body;
   if (!req.body.email)
     return res.json({
       error: "Must specify a user email.",
@@ -41,6 +36,10 @@ export default async function handler(req, res) {
       },
     },
   });
+
+  sendLog(
+    `${email} uploaded video <https://polygon.video/video/${video.cuid}|${video.title}>`
+  );
 
   const bucket = storage.bucket("video-world-source");
   const file = bucket.file(video.cuid); // instead of req.query.file

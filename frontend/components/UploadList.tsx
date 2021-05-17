@@ -1,123 +1,109 @@
 import { useMe } from "utils/fetcher";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
+import Image from "next/image";
+import dayjs from "dayjs";
+import { ImagePreview } from "./ImagePreview";
 
 export function UploadList() {
   // const { feed } = useFeed();
   const { me } = useMe();
+  const duration = (duration: number) => {
+    if (!duration) return "Unknown";
+    const hours = Math.floor(duration / 60 / 60) ?? "00";
+    const minutes = Math.floor((duration % 3600) / 60) ?? "00";
+    return hours + ":" + minutes + ":" + Math.floor(duration % 60);
+  };
   return (
     <div className="">
-      <div className="flex mb-3">
-        <h1 className="text-xl text-gray-700 mb-4">Uploads</h1>
-        <Link href="/uploads/new">
-          <button className="primary  ml-5 ">Upload New Video</button>
-        </Link>
+      <div className=" mb-4">
+        <div className="flex justify-between">
+          <h1 className="text-xl text-gray-700 mb-4">Upload Center</h1>
+          <Link href="/uploads/new">
+            <button className="bg-black text-white text-sm rounded-lg px-3 py-1  ">
+              Upload a Video
+            </button>
+          </Link>
+        </div>
+
+        <p className="text-sm ">
+          Upload, manage and track your videos here. <br />
+          Congrats on being part of the Polygon early access circle!{" "}
+        </p>
       </div>
       <div className="flex flex-col">
-        <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            {me ? (
-              <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      {[
-                        "Title",
-                        "Description",
-                        "Duration (sec)",
-                        "Thumbnail",
-                        "Subtitles",
-                        "Upload State",
-                        "Transcode State",
-                        "Transcribe State",
-                        "Annotate State",
-                      ].map((title) => (
-                        <th
-                          key={title}
-                          scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        {me ? (
+          <div className="">
+            {me.videos.map((video, videoIdx) => (
+              <div
+                key={videoIdx}
+                className={"bg-white shadow-md my-4 rounded-md p-4"}
+              >
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-12 sm:col-span-9 md:col-span-3">
+                    <ImagePreview video={video} />
+                  </div>
+
+                  {/* Title and description  */}
+                  <div className="col-span-12 md:col-span-6 md:flex md:flex-col ">
+                    <h1 className="text-xl ">
+                      <Link href={`/video/${video.cuid}`}>
+                        <a href="#" className="link">
+                          {video.title}
+                        </a>
+                      </Link>
+                    </h1>
+                    <h2 className="text-md text-gray-600 my-4 min-h-6  md:flex-grow">
+                      {video.description}
+                    </h2>
+                    <div className="flex justify-between text-gray-700 float-bottom">
+                      <div>{video.isPublic ? "Public" : "Private"}</div>
+                      <div className="">
+                        Uploaded {dayjs(video.created).format("MMM d, YYYY")}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 md:col-span-3">
+                    <Link href={`/video/${video.cuid}/edit`}>
+                      <button className="button primary float-right">
+                        Edit
+                      </button>
+                    </Link>
+                    {[
+                      { label: "Upload", state: video.upload_state },
+                      { label: "Transcode", state: video.transcode_state },
+                      { label: "Transcribe", state: video.transcribe_state },
+                      { label: "Annotate", state: video.annotate_state },
+                    ].map(({ state, label }, i) => (
+                      <div className="my-2 flex gap-1 items-center text-sm">
+                        <div
+                          key={i}
+                          className={
+                            state === "failed"
+                              ? "bg-red-500 rounded-full p-1 h-2 w-2"
+                              : state === "success"
+                              ? "bg-green-500 rounded-full p-1 h-2 w-2"
+                              : state === "processing" || state == "pending"
+                              ? "bg-yellow-400 rounded-full p-1 h-2 w-2"
+                              : "bg-gray-400 rounded-full p-1 h-2 w-2"
+                          }
                         >
-                          {title}
-                        </th>
-                      ))}
-
-                      <th scope="col" className="relative px-6 py-3">
-                        <span className="sr-only">Edit</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {me.videos.map((video, videoIdx) => (
-                      <tr
-                        key={videoIdx}
-                        className={
-                          videoIdx % 2 === 0 ? "bg-white" : "bg-gray-50"
-                        }
-                      >
-                        {[
-                          video.transcode_state === "success" ? (
-                            <Link href={`/video/${video.cuid}`}>
-                              <a href="#" className="link">
-                                {video.title}
-                              </a>
-                            </Link>
-                          ) : (
-                            video.title
-                          ),
-                          video.description,
-                          video.duration
-                            ? Math.ceil(video.duration) + " s"
-                            : "Unknown",
-                          video.thumbnail_url,
-                          video.useSubtitles ? "Yes" : "No",
-                          video.upload_state,
-                          video.transcode_state,
-                          video.transcribe_state,
-                          video.annotate_state,
-                        ].map((state, i) => (
-                          <td
-                            key={i}
-                            className={`px-6 py-4 whitespace-nowrap text-sm ${
-                              i == 0
-                                ? "font-medium text-gray-900 "
-                                : "text-gray-500"
-                            }`}
-                          >
-                            <span
-                              className={
-                                state === "failed"
-                                  ? "bg-red-50 text-red-700 rounded-md p-2"
-                                  : state === "success"
-                                  ? "bg-green-50 text-green-700 rounded-md p-2"
-                                  : state === "processing" || state == "pending"
-                                  ? "bg-yellow-50 text-yellow-700 rounded-md p-2"
-                                  : ""
-                              }
-                            >
-                              {state}
-                            </span>
-                          </td>
-                        ))}
-
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <Link href={`/video/${video.cuid}/edit`}>
-                            <a href="#" className="link">
-                              Edit
-                            </a>
-                          </Link>
-                        </td>
-                      </tr>
+                          {" "}
+                        </div>{" "}
+                        {label} {state}
+                      </div>
                     ))}
-                  </tbody>
-                </table>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <div className="p-3">
-                <Skeleton count={5} />
-              </div>
-            )}
+            ))}
           </div>
-        </div>
+        ) : (
+          <div className="p-3">
+            <Skeleton count={5} />
+          </div>
+        )}
       </div>
     </div>
   );
