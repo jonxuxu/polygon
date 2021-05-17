@@ -24,6 +24,8 @@ const pool = new Pool({ connectionString });
 var fs = require("fs");
 const fsPromises = fs.promises;
 
+const languages = require("./languages.json");
+
 const storage = new Storage({
   projectId: process.env.GCP_PROJECT_ID,
   credentials: {
@@ -88,7 +90,7 @@ const getRow = async (cuid) => {
 // Runs speech to text to get the captions of video
 const transcribe = async (cuid, res) => {
   const videoRow = await getRow(cuid);
-  const languageCode = videoRow.language;
+  const languageCode = languages[videoRow.language].listen;
   console.log("the language is " + languageCode);
 
   if (
@@ -103,7 +105,7 @@ const transcribe = async (cuid, res) => {
   console.log("Converting to wav...");
   setTranscribeState(cuid, "processing");
   ffmpeg(`https://storage.googleapis.com/video-world-source/${cuid}`)
-    .outputOptions(["-ac 1", "-f wav"])
+    .outputOptions(["-ac 1", "-ar 16000", "-map_metadata 0"])
     .output("./audio.wav")
     .on("end", function () {
       console.log("conversion to wav done");
@@ -125,6 +127,8 @@ const transcribe = async (cuid, res) => {
             enableWordTimeOffsets: true,
             enableAutomaticPunctuation: true,
             model: "default",
+            audioChannelCount: 0,
+            sampleRateHertz: 16000,
           },
           audio: {
             uri: `gs://video-world-audio/${cuid}`,
@@ -134,8 +138,8 @@ const transcribe = async (cuid, res) => {
           },
         };
         // Detects text in a video
-        speechClient.longRunningRecognize(request);
-        console.log("transcription request sent");
+        const [operation] = await speechClient.longRunningRecognize(request);
+        console.log("transcription request sent: " + operation.name);
         return res
           .status(200)
           .send(`successfully processed and uploaded ${cuid}`);

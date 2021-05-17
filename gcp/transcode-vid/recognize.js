@@ -18,12 +18,13 @@ const request = {
     enableAutomaticPunctuation: true,
     model: "default",
     audioChannelCount: 0,
+    sampleRateHertz: 16000,
   },
   audio: {
-    uri: "gs://video-world-audio/ckokxczrz000009kua3j1eu0l",
+    uri: "gs://video-world-audio/pogchamp.wav",
   },
   outputConfig: {
-    gcsUri: "gs://video-world-transcription-raw/ckokxczrz000009kua3j1eu0l",
+    gcsUri: "gs://video-world-transcription-raw/pogchamp",
   },
 };
 

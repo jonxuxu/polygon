@@ -39,12 +39,20 @@ exports.parseTranscribe = async (event) => {
       if (transcriptions) {
         transcriptions.forEach((result) => {
           if (result.alternatives[0].transcript) {
-            const entry = {
-              text: result.alternatives[0].transcript,
-            };
-            timedTranscriptions[
-              result.alternatives[0].words[0].start_offset.seconds
-            ] = entry;
+            result.alternatives[0].words.forEach((word) => {
+              var second =
+                word.start_offset.seconds - (word.start_offset.seconds % 3);
+              if (isNaN(second)) {
+                second = 0;
+              }
+              if (timedTranscriptions[second]) {
+                timedTranscriptions[second] = timedTranscriptions[
+                  second
+                ].concat(word.word);
+              } else {
+                timedTranscriptions[second] = word.word;
+              }
+            });
           }
         });
       }

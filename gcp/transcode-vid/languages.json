@@ -1,0 +1,18 @@
+{
+    "Arabic": {"text": "ar", "speak": "ar-EG", "listen": "ar-EG"},
+    "Chinese Simplified": {"text": "zh-CN", "speak": "cmn-CN", "listen":"zh"},
+    "Chinese Traditional": {"text": "zh-TW", "speak": "cmn-TW", "listen": "zh-TW"},
+    "Danish": {"text": "da", "speak": "da-DK", "listen": "da-DK"},
+    "English": {"text": "en", "speak": "en-US", "listen" : "en-US"},
+    "French": {"text": "fr", "speak": "fr-FR", "listen": "fr-FR"},
+    "German": {"text": "de", "speak": "de-DE", "listen" : "de-DE"},
+    "Italian": {"text": "it", "speak": "it-IT", "listen": "it-IT"},
+    "Japanese": {"text": "ja", "speak": "ja-JP", "listen": "ja-JP"},
+    "Korean": {"text": "ko", "speak": "ko-KR", "listen": "ko-KR"},
+    "Portuguese": {"text": "pt", "speak": "pt-BR", "listen": "pt-BR"},
+    "Russian": {"text": "ru", "speak": "ru-RU", "listen": "ru-RU"},
+    "Spanish": {"text": "es", "speak": "es-US", "listen": "es-US"},
+    "Swedish": {"text": "sv", "speak": "sv-SE", "listen": "sv-SE"},
+    "Turkish": {"text": "tr", "speak": "tr-TR", "listen": "tr-TR"}
+  }
+  
