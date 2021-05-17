@@ -7,6 +7,7 @@ import tinycolor from "tinycolor2";
 import { speak } from "utils/sounds";
 import { Transcription } from "utils/types";
 import { fetcher, useMe } from "utils/fetcher";
+import { positionTranslation } from "utils/positions";
 import languages from "constants/languages.json";
 
 import { videos } from ".prisma/client";
@@ -74,7 +75,6 @@ export default function VideoPlayer({
     }
 
     // Connect video to progress bar
-    // video.addEventListener("timeupdate", updateProgressBar, false);
     video.addEventListener(
       "play",
       () => {
@@ -126,6 +126,25 @@ export default function VideoPlayer({
         transcriptions = res.data;
       }
     })();
+
+    // Keyboard listeners
+    function handlekeydownEvent(event) {
+      event.preventDefault();
+      const { keyCode } = event;
+      // Space
+      if (keyCode === 32) {
+        if (videoRef.current.paused) {
+          videoRef.current.play();
+        } else {
+          videoRef.current.pause();
+        }
+      }
+    }
+
+    document.addEventListener("keydown", handlekeydownEvent);
+    return () => {
+      document.removeEventListener("keydown", handlekeydownEvent);
+    };
   }, []);
 
   useEffect(() => {
@@ -175,18 +194,9 @@ export default function VideoPlayer({
 
     setTranslationBox(true);
 
-    const videoWidth = videoRef.current.offsetWidth;
-    const videoHeight = videoRef.current.offsetHeight;
+    const position = positionTranslation(videoRef, translationRef, word);
 
-    const width = translationRef.current.offsetWidth;
-    const isLeft = word.boundingBox[0].x > 1 - word.boundingBox[2].x;
-    const translateStartX = word.boundingBox[0].x * videoWidth;
-    const translateEndX = word.boundingBox[2].x * videoWidth;
-    const translateStartY = word.boundingBox[0].y * videoHeight;
-    const rectX = isLeft ? translateStartX - width - 30 : translateEndX + 30;
-    const rectY = translateStartY;
-
-    setTranslationPos([rectX, rectY]);
+    setTranslationPos(position);
   };
 
   return (
