@@ -51,7 +51,7 @@ model users {
   image          String?
   created_at     DateTime   @default(now()) @db.Timestamptz(6)
   updated_at     DateTime   @default(now()) @db.Timestamptz(6)
-  language       String     @default("en-US")
+  language       String     @default("English")
   snippets       snippets[]
   videos         videos[]   @relation("VideoCreator")
   savedVideos    videos[]   @relation("SavedVideo")
@@ -67,40 +67,40 @@ model verification_requests {
 }
 
 model videos {
-  id                Int      @id @default(autoincrement())
+  id                Int        @id @default(autoincrement())
   creator           Int
   title             String
   description       String?
-  created           DateTime @default(now()) @db.Timestamptz(6)
+  created           DateTime   @default(now()) @db.Timestamptz(6)
   transcription_url String?
   annotation_url    String?
   url               String?
-  transcribe_state  String   @default("pending")
-  annotate_state    String   @default("pending")
-  cuid              String   @unique
-  transcode_state   String   @default("pending")
-  upload_state      String   @default("pending")
-  views             Int      @default(0)
+  transcribe_state  String     @default("pending")
+  annotate_state    String     @default("pending")
+  cuid              String     @unique
+  transcode_state   String     @default("pending")
+  upload_state      String     @default("pending")
+  views             Int        @default(0)
   language          String?
   duration          Float?
   thumbnail_url     String?
-  isPublic          Boolean  @default(true)
-  useSubtitles      Boolean  @default(true)
-  user              users    @relation("VideoCreator", fields: [creator], references: [id])
-  savedBy           users[]  @relation("SavedVideo")
-  snippets       snippets[]
+  isPublic          Boolean    @default(true)
+  useSubtitles      Boolean    @default(true)
+  user              users      @relation("VideoCreator", fields: [creator], references: [id])
+  snippets          snippets[]
+  savedBy           users[]    @relation("SavedVideo")
 }
 
 model snippets {
   id          Int      @id @default(autoincrement())
   user_id     Int
-  video_id     Int
-  time        Float?
   created     DateTime @default(now()) @db.Timestamptz(6)
   original    String
   translation String
+  video_id    Int
+  time        Float?
   user        users    @relation(fields: [user_id], references: [id])
-  video        videos    @relation(fields: [video_id], references: [id])
+  video       videos   @relation(fields: [video_id], references: [id])
 }
 
 model waitlist {

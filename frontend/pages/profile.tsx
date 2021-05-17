@@ -1,14 +1,14 @@
-import Topbar from "../components/Topbar";
+import Topbar from "components/Topbar";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Skeleton from "react-loading-skeleton";
-import languages from "constants/speechLanguages.json";
+import languages from "constants/languages.json";
 import { useEffect, useState } from "react";
 import { fetcher, useMe } from "utils/fetcher";
 
 const App = () => {
   const [session, loading] = useSession();
   const { me } = useMe();
-  const [language, setLanguage] = useState("en-US");
+  const [language, setLanguage] = useState("English");
   useEffect(() => {
     if (me) setLanguage(me.language);
   }, [me]);
@@ -40,25 +40,23 @@ const App = () => {
                     >
                       User Language
                     </label>
-                    {languages && (
-                      <select
-                        value={language}
-                        onChange={(e) => {
-                          setLanguage(e.target.value);
-                          fetcher("/api/user/update", {
-                            language: e.target.value,
-                          });
-                        }}
-                        // autoComplete="title"
-                        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                      >
-                        {languages.map((lang) => (
-                          <option key={lang.code} value={lang.code}>
-                            {lang.name}
-                          </option>
-                        ))}
-                      </select>
-                    )}
+                    <select
+                      value={language}
+                      onChange={(e) => {
+                        setLanguage(e.target.value);
+                        fetcher("/api/user/update", {
+                          language: e.target.value,
+                        });
+                      }}
+                      // autoComplete="title"
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      {Object.keys(languages).map((lang) => (
+                        <option key={lang} value={lang}>
+                          {lang}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div>

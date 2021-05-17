@@ -4,10 +4,11 @@ import axios from "axios";
 import styled from "styled-components";
 import tinycolor from "tinycolor2";
 
-import { speak } from "../utils/sounds";
-import { Transcription } from "../utils/types";
+import { speak } from "utils/sounds";
+import { Transcription } from "utils/types";
+import { fetcher, useMe } from "utils/fetcher";
+import languages from "constants/languages.json";
 
-import { fetcher } from "utils/fetcher";
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
 
@@ -15,22 +16,19 @@ import { TranslationActionIcons } from "./TranslationActionIcons";
 var annotations = [];
 var transcriptions = [];
 
-// Video player variables
-var controlTimeout = null;
-
 export default function VideoPlayer({
   videoRow,
-  targetLang,
   snippets,
   setSnippets,
   videoRef,
 }: {
   videoRow: videos;
-  targetLang: string;
   snippets: Transcription[];
   setSnippets: any;
   videoRef: React.MutableRefObject<any>;
 }) {
+  const { me } = useMe();
+
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
 
@@ -46,6 +44,7 @@ export default function VideoPlayer({
     image: null,
   });
   const [captionChars, setCaptionChars] = useState([]);
+  const [targetLang, setTargetLang] = useState("English");
 
   useEffect(() => {
     // increment views
@@ -129,6 +128,10 @@ export default function VideoPlayer({
     })();
   }, []);
 
+  useEffect(() => {
+    if (me) setTargetLang(me.language);
+  }, [me]);
+
   // Add to snippets if translation text has not been added
   useEffect(() => {
     if (translationData.original !== null) {
@@ -159,7 +162,7 @@ export default function VideoPlayer({
         translation: { translatedText: string; detectedSourceLanguage: string };
       };
     } = await axios.get("/api/translate", {
-      params: { text: text, target: targetLang },
+      params: { text: text, target: languages[targetLang].text },
     });
 
     setTranslationData({
@@ -248,7 +251,7 @@ export default function VideoPlayer({
             <Caption
               key={i}
               onClick={() => {
-                speak(voiceRef, c, "zh", true);
+                speak(voiceRef, c, languages[videoRow.language].speak, false);
               }}
             >
               {c}

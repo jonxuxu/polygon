@@ -5,7 +5,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import styled from "styled-components";
 
-import SpeechLanguages from "../constants/speechLanguages.json";
+import languages from "../constants/languages.json";
 
 export function ExploreVideoList() {
   const { feed } = useFeed();
@@ -36,8 +36,8 @@ export function ExploreVideoList() {
                         alt="Thumbnail"
                       />
                       {video.language &&
-                        SpeechLanguages.some(
-                          (lang) => lang.code === video.language
+                        Object.keys(languages).some(
+                          (lang) => lang === video.language
                         ) && (
                           <GreyPill
                             style={{
@@ -47,9 +47,9 @@ export function ExploreVideoList() {
                             }}
                           >
                             {
-                              SpeechLanguages.filter(
-                                (lang) => lang.code === video.language
-                              )[0].name
+                              Object.keys(languages).filter(
+                                (lang) => lang === video.language
+                              )[0]
                             }
                           </GreyPill>
                         )}

@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCopy, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { videos } from ".prisma/client";
 
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";

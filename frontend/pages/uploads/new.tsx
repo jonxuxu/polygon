@@ -9,7 +9,7 @@ import Topbar from "components/Topbar";
 import EditField from "components/EditField";
 import { UploadList } from "components/UploadList";
 import axios from "axios";
-import languages from "constants/speechLanguages.json";
+import languages from "constants/languages.json";
 import { uploadThumbnail, validateFile } from "utils/upload-util";
 
 const App = () => {
@@ -145,23 +145,21 @@ const App = () => {
                   Language
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
-                  {languages && (
-                    <select
-                      value={language}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                        setLanguage(e.target.value);
-                      }}
-                      // autoComplete="title"
-                      className="max-w-lg block w-full shadow-sm focus:ring-primary-300 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                    >
-                      {languages.map((lang) => (
-                        <option key={lang.code} value={lang.code}>
-                          {lang.name}
-                        </option>
-                      ))}
-                    </select>
-                  )}
+                  <select
+                    value={language}
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                      setLanguage(e.target.value);
+                    }}
+                    // autoComplete="title"
+                    className="max-w-lg block w-full shadow-sm focus:ring-primary-300 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                  >
+                    {Object.keys(languages).map((lang) => (
+                      <option key={lang} value={lang}>
+                        {lang}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">

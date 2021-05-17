@@ -10,7 +10,6 @@ import { Transcription } from "utils/types";
 
 import Topbar from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
-import languages from "constants/translateLanguages.json";
 import { SnippetPreview } from "components/SnippetPreview";
 
 var relativeTime = require("dayjs/plugin/relativeTime");
@@ -23,32 +22,7 @@ const App = () => {
   const { video } = useVideo({ cuid: router.query?.cuid });
   const { me } = useMe();
 
-  const [targetLang, setTargetLang] = useState("en");
   const [snippets, setSnippets] = useState<Transcription[]>([]);
-
-  const Dropdown = () => {
-    return (
-      <div className="mt-1 sm:mt-0 sm:col-span-2">
-        {languages && (
-          <select
-            value={targetLang}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setTargetLang(e.target.value);
-            }}
-            // autoComplete="title"
-            className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-          >
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-    );
-  };
 
   return (
     <div>
@@ -60,7 +34,6 @@ const App = () => {
             <div>
               <VideoPlayer
                 videoRow={video}
-                targetLang={targetLang}
                 snippets={snippets}
                 setSnippets={setSnippets}
                 videoRef={videoRef}
