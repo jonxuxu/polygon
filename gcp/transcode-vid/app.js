@@ -103,7 +103,7 @@ const transcribe = async (cuid, res) => {
   console.log("Converting to wav...");
   setTranscribeState(cuid, "processing");
   ffmpeg(`https://storage.googleapis.com/video-world-source/${cuid}`)
-    .outputOptions(["-ac 1"])
+    .outputOptions(["-ac 1", "-f wav"])
     .output("./audio.wav")
     .on("end", function () {
       console.log("conversion to wav done");

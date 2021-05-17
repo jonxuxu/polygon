@@ -29,17 +29,18 @@ const request = {
 
 async function quickstart() {
   const [operation] = await speechClient.longRunningRecognize(request);
-  operation.on("progress", (metadata, apiResponse) => {
-    console.log("> New progress:");
-    console.log(metadata);
-    if (apiResponse.done && !apiResponse.response) {
-      operation.emit("error");
-    }
-  });
-  operation.on("error", (err) => {
-    console.log("error");
-    console.log(err);
-  });
+  console.log(operation);
+  // operation.on("progress", (metadata, apiResponse) => {
+  //   console.log("> New progress:");
+  //   console.log(metadata);
+  //   if (apiResponse.done && !apiResponse.response) {
+  //     operation.emit("error");
+  //   }
+  // });
+  // operation.on("error", (err) => {
+  //   console.log("error");
+  //   console.log(err);
+  // });
   const [response] = await operation.promise();
   const transcription = response.results
     .map((result) => result.alternatives[0].transcript)

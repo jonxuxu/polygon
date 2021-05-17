@@ -45,6 +45,7 @@ export default function VideoPlayer({
     time: null,
     image: null,
   });
+  const [captionChars, setCaptionChars] = useState([]);
 
   useEffect(() => {
     // increment views
@@ -87,6 +88,24 @@ export default function VideoPlayer({
       "pause",
       () => {
         setPlaying(false);
+      },
+      false
+    );
+    video.addEventListener(
+      "timeupdate",
+      () => {
+        if (transcriptions) {
+          const currentText =
+            transcriptions[
+              videoRef.current.currentTime - (videoRef.current.currentTime % 3)
+            ];
+          // @ts-ignore
+          if (currentText) {
+            setCaptionChars(currentText.split(""));
+          } else {
+            setCaptionChars([]);
+          }
+        }
       },
       false
     );
@@ -167,26 +186,6 @@ export default function VideoPlayer({
     setTranslationPos([rectX, rectY]);
   };
 
-  const captionChars = [];
-  // todo
-  if ("0" in transcriptions) {
-    // @ts-ignore
-    for (var i = 0; i < transcriptions["0"].text.length; i++) {
-      //@ts-ignore
-      const word = transcriptions["0"].text.charAt(i);
-      captionChars.push(
-        <Caption
-          key={i}
-          onClick={() => {
-            speak(voiceRef, word, "zh", true);
-          }}
-        >
-          {word}
-        </Caption>
-      );
-    }
-  }
-
   return (
     <div className="mt-10 ml-10 mr-5">
       {/* Video controls */}
@@ -245,7 +244,16 @@ export default function VideoPlayer({
             pointerEvents: "none", // passthrough of hover and click
           }}
         >
-          {captionChars}
+          {captionChars.map((c, i) => (
+            <Caption
+              key={i}
+              onClick={() => {
+                speak(voiceRef, c, "zh", true);
+              }}
+            >
+              {c}
+            </Caption>
+          ))}
         </div>
       </div>
     </div>
