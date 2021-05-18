@@ -61,11 +61,12 @@ const App = () => {
                 </div>
                 <div>
                   <h2 className="text-lg text-gray-700">Your Snippets</h2>
-                  {me.snippets.map((t) => (
-                    <div>
-                      {t.original} - {t.translation}
-                    </div>
-                  ))}
+                  {me &&
+                    me.snippets.map((t) => (
+                      <div>
+                        {t.original} - {t.translation}
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
