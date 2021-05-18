@@ -29,10 +29,19 @@ progress {
 button.primary {
   @apply rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 sm:mt-0 sm:col-start-1 sm:text-sm;
 }
+button.save {
+  @apply flex float-right border-none rounded-md border px-2 py-2  bg-white text-base text-sm text-gray-700 hover:bg-gray-50 focus:outline-none  focus:ring-primary-300 sm:mt-0 sm:col-start-1 sm:text-sm transition ease-in;
+}
 button.danger {
   @apply rounded-md border border-red-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-red-700 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:col-start-1 sm:text-sm;
 }
 
 a.link {
   @apply text-primary-600 hover:text-primary-800;
+}
+
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }

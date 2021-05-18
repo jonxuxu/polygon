@@ -2,15 +2,16 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
-import { mutate } from "swr";
 import dayjs from "dayjs";
 
-import { fetcher, useMe, useVideo } from "utils/fetcher";
+import { useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
 
 import Topbar from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
 import { SnippetPreview } from "components/SnippetPreview";
+import { ShareButton } from "./ShareButton";
+import { SaveButton } from "./SaveButton";
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -40,52 +41,24 @@ const App = () => {
               />
               <div className="mx-10">
                 <div className="my-2 text-xl text-gray-700">
-                  {video.title}{" "}
-                  {me && (
-                    <button
-                      className="primary mt-2 flex "
-                      onClick={async () => {
-                        const savedBy = video.savedBy.find(
-                          (u) => u.id === me.id
-                        )
-                          ? { disconnect: { email: me.email } }
-                          : { connect: { email: me.email } };
-                        await fetcher("/api/video/update", {
-                          id: video.id,
-                          savedBy,
-                        });
-                        await mutate("/api/video/" + video.cuid);
-                      }}
-                    >
-                      <img
-                        src="/add-list.svg"
-                        alt="save"
-                        style={{
-                          width: 20,
-                          height: 20,
-                          cursor: "pointer",
-                          marginRight: 10,
-                        }}
-                      />
-                      <span className="text-gray-500">
-                        {video.savedBy.find((u) => u.id === me.id)
-                          ? "Unsave"
-                          : "Save"}
-                      </span>
-                    </button>
-                  )}
+                  {video.title}
                   {me && me.id === video.creator && (
                     <Link href={`/video/${video.cuid}/edit`}>
                       <a className="link text-sm ml-2">Edit </a>
                     </Link>
                   )}
                 </div>
-                <span className="text-gray-500">
-                  {" "}
-                  {video.views + video.viewBoost} views - {/* @ts-ignore */}
-                  {dayjs(video.created).from(dayjs())}
-                </span>
-                <hr className="my-4" />
+                <div className="text-gray-500 text-sm flex flex-row items-center justify-between mt-3">
+                  <span className="">
+                    {video.views + video.viewBoost} views - {/* @ts-ignore */}
+                    {dayjs(video.created).from(dayjs())}
+                  </span>
+                  <div>
+                    <SaveButton />
+                    <ShareButton />
+                  </div>
+                </div>
+                <hr className="mb-4" />
 
                 <div className="mb text-md text-gray-700 mb-2 flex">
                   <img

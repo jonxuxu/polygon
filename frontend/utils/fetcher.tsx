@@ -21,10 +21,13 @@ export function useFeed() {
 export function useMe() {
   const {
     data: me,
-  }: { data?: users & { snippets: snippets[]; videos: videos[] } } = useSWR(
-    "/api/me",
-    fetcher
-  );
+  }: {
+    data?: users & {
+      snippets: snippets[];
+      videos: videos[];
+      savedVideos: videos[];
+    };
+  } = useSWR("/api/me", fetcher);
   return { me };
 }
 export function useVideo({ cuid }) {
