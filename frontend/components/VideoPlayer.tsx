@@ -344,11 +344,12 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
 
       const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
+
       const image = canvasContext.getImageData(
         x - 10,
         y - 10,
         x2 - x + 20,
-        y2 - y + 20
+        y2 - y + 20 > 0 ? y2 - y + 20 : 1
       );
       return (
         <TipCircle
