@@ -243,8 +243,6 @@ export default function VideoPlayer({
 
   return (
     <div className="mt-10 ml-10 mr-5">
-      <div>Poggers</div>
-
       {/* Video controls */}
       <audio ref={voiceRef} />
       <div

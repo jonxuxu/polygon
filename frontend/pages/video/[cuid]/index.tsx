@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
@@ -24,11 +24,27 @@ const App = () => {
   const { me } = useMe();
 
   const [snippets, setSnippets] = useState<Transcription[]>([]);
+  const [mobile, setMobile] = useState(false);
+
+  useEffect(() => {
+    // if (navigator.userAgent) setMobile(true);
+    const toMatch = [/Android/i, /iPhone/i, /iPad/i, /iPod/i, /Windows Phone/i];
+    const isMobile = toMatch.some((toMatchItem) => {
+      return navigator.userAgent.match(toMatchItem);
+    });
+    if (isMobile) setMobile(true);
+  }, []);
 
   return (
     <div>
       {/* {video && video.url && <VideoPlayer videoRow={video} />} */}
       <Topbar />
+      {mobile && (
+        <div className="bg-yellow-50 text-yellow-700 flex items-center text-center rounded-md m-3 p-1">
+          NOTE: Polygon's interactive video player does not yet support mobile
+          devices.
+        </div>
+      )}
       <div className="flex" style={{ width: "100%" }}>
         <div style={{ flex: 1 }}>
           {video && video.url ? (
