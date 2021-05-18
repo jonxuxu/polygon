@@ -8,7 +8,7 @@ const App = () => {
   return (
     <div>
       <Topbar />
-      <div className="m-10">
+      <div className="m-10 mt-8">
         <ExploreVideoList />
       </div>
     </div>
