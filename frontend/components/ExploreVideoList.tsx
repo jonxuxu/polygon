@@ -60,7 +60,8 @@ export function ExploreVideoList() {
                         <p className="text-sm text-gray-500 truncate">
                           {video.user.name}
                           <br />
-                          {video.views} views | {/* @ts-ignore */}
+                          {video.views + video.viewBoost} views |{" "}
+                          {/* @ts-ignore */}
                           {dayjs(video.created).from(dayjs())}
                         </p>
                       </div>

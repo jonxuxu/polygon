@@ -2,7 +2,7 @@ import prisma from "../../../prisma/client";
 
 export default async (req, res) => {
   const video = await prisma.videos.findMany({
-    orderBy: { created: "desc" },
+    orderBy: { views: "desc" },
     include: { user: true },
   });
 
