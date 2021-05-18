@@ -86,6 +86,7 @@ model videos {
   thumbnail_url     String?
   isPublic          Boolean    @default(true)
   useSubtitles      Boolean    @default(true)
+  viewBoost         Int        @default(0)
   user              users      @relation("VideoCreator", fields: [creator], references: [id])
   snippets          snippets[]
   savedBy           users[]    @relation("SavedVideo")

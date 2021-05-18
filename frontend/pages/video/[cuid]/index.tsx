@@ -82,7 +82,7 @@ const App = () => {
                 </div>
                 <span className="text-gray-500">
                   {" "}
-                  {video.views} views - {/* @ts-ignore */}
+                  {video.views + video.viewBoost} views - {/* @ts-ignore */}
                   {dayjs(video.created).from(dayjs())}
                 </span>
                 <hr className="my-4" />
