@@ -41,7 +41,7 @@ const App = () => {
                   <div className="mt-5">
                     {me &&
                       me.snippets.map((t) => (
-                        <div>
+                        <div className="border-2 border-primary-400 rounded-md my-3 p-2">
                           {t.original} - {t.translation}
                         </div>
                       ))}
