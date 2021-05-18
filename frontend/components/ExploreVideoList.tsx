@@ -45,7 +45,7 @@ export function ExploreVideoList() {
                     <a className="focus:outline-none">
                       <ImagePreview video={video}></ImagePreview>
                       <span className="absolute inset-0" aria-hidden="true" />
-                      <p className="text-xl font-medium text-gray-700 mt-2">
+                      <p className="text-lg md:text-xl font-medium text-gray-700 mt-2 line-clamp overflow-hidden">
                         {video.title}
                       </p>
                       <p className="text-sm text-gray-500 truncate">
