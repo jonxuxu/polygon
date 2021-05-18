@@ -16,6 +16,7 @@ import { TranslationActionIcons } from "./TranslationActionIcons";
 // Content variables
 var annotations = [];
 var transcriptions = [];
+var mouseTimeout;
 
 export default function VideoPlayer({
   videoRow,
@@ -46,6 +47,7 @@ export default function VideoPlayer({
   });
   const [captionChars, setCaptionChars] = useState([]);
   const [targetLang, setTargetLang] = useState("English");
+  const [showTooltips, setShowTooltips] = useState(false);
 
   useEffect(() => {
     // increment views
@@ -86,6 +88,11 @@ export default function VideoPlayer({
     video.addEventListener(
       "pause",
       () => {
+        // setShowTooltips(true);
+        // clearTimeout(mouseTimeout);
+        // mouseTimeout = setTimeout(function () {
+        //   setShowTooltips(false);
+        // }, 500);
         setPlaying(false);
       },
       false
@@ -108,6 +115,15 @@ export default function VideoPlayer({
       },
       false
     );
+    video.addEventListener("mousemove", () => {
+      if (video.paused) {
+        // setShowTooltips(true);
+        // clearTimeout(mouseTimeout);
+        // mouseTimeout = setTimeout(function () {
+        //   setShowTooltips(false);
+        // }, 500);
+      }
+    });
 
     // Fetch annotations
     const annotationUrl = videoRow ? videoRow.annotation_url : null;
@@ -124,6 +140,8 @@ export default function VideoPlayer({
       if (transcriptionUrl) {
         const res = await axios.get(transcriptionUrl);
         transcriptions = res.data;
+      } else {
+        transcriptions = [];
       }
     })();
 
@@ -134,9 +152,9 @@ export default function VideoPlayer({
       if (event.target.tagName === "VIDEO") {
         return;
       }
-      event.preventDefault();
       // Space
       if (keyCode === 32) {
+        event.preventDefault();
         if (videoRef.current.paused) {
           videoRef.current.play();
         } else {
@@ -225,6 +243,8 @@ export default function VideoPlayer({
 
   return (
     <div className="mt-10 ml-10 mr-5">
+      <div>Poggers</div>
+
       {/* Video controls */}
       <audio ref={voiceRef} />
       <div
