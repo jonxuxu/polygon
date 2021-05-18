@@ -71,7 +71,7 @@ export function ExploreVideoList() {
               </div>
             ))
         ) : (
-          <div className="p-3 col-span-6">
+          <div className="p-3 col-span-12">
             <Skeleton count={5} />
           </div>
         )}
