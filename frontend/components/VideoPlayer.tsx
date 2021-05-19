@@ -271,7 +271,7 @@ export default function VideoPlayer({
                 style={{
                   fontFamily: "Arial",
                   fontSize: 30,
-                  color: tinycolor(translationData.color).darken(20),
+                  color: tinycolor(translationData.color).darken(40),
                 }}
               >
                 {translationData.original}
@@ -382,7 +382,7 @@ const InfoBox = styled.div`
   top: ${(props) => props.y}px;
   left: ${(props) => props.x}px;
   display: ${(props) => (props.hide ? "none" : "inline-block")};
-  z-index: 2;
+  z-index: 20;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 10px;
   padding: 15px;
