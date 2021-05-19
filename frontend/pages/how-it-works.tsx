@@ -22,7 +22,17 @@ const Page = () => {
       <HeroSection />
       <audio ref={voiceRef} />
       <div className="">
-        <div className="m-10 md:w-4/5 flex">
+        <div className="relative my-16">
+          <h2 className="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            Learn through immersion
+          </h2>
+          <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
+            Learn a foreign language by being there. [Pause] the video to
+            interact with signs and speech. Translate, copy, and listen, all
+            within the player.
+          </p>
+        </div>
+        {/* <div className="m-10 md:w-4/5 flex">
           <div className="mb-8 text-3xl text-gray-700 w-1/2">
             Learn through immersion
           </div>
@@ -31,7 +41,7 @@ const Page = () => {
             interact with signs and speech. Translate, copy, and listen, all
             within the player.
           </div>
-        </div>
+        </div> */}
         <div className="flex gap-6">
           <Image src="/how-it-works/player1.png" height={281} width={499} />
           <Image src="/how-it-works/player2.png" height={281} width={499} />
@@ -51,14 +61,15 @@ const Page = () => {
             <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
               Add snippets to your card deck, and review them at your own time.
             </p>
+            <SnippetPreview snippets={[snippet]} />
           </div>
         </div>
       </div>
       {/* Interactive Captions  */}
-      <div className="bg-white py-4 px-8 flex items-center justify-center">
+      <div className="bg-white p-8 flex items-center justify-center">
         <div className="bg-gradient-to-br from-primary-400 to-fuchsia-400 rounded-lg w-4/5">
           <div
-            className="max-w-7xl mx-auto pt-16 px-4 "
+            className="max-w-7xl mx-auto py-16 px-4 "
             style={{ paddingBottom: -10 }}
           >
             <div className="text-left">
@@ -76,7 +87,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      {/* Interactive Captions  */}
+      {/* BG-black  */}
       <Conclusion />
     </div>
   );
@@ -84,62 +95,57 @@ const Page = () => {
 
 function Conclusion() {
   return (
-    <div className="min-h-screen">
-      <div className="relative overflow-hidden">
-        <main>
-          <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
-            <div className="mx-auto max-w-7xl lg:px-8">
-              <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
-                  <div className="lg:py-24">
-                    <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
-                      <span className="block">Join the video</span>
-                      <span className="block bg-gradient-to-br from-primary-400 to-purple-500 text-transparent bg-clip-text">
-                        <h1>revolution</h1>
-                      </span>
-                    </h1>
-                    <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                      Apply to be an insider creator to upload your own videos.
-                      Be the first to enjoy our upcoming monetization and
-                      influencer features.
-                    </p>
-                    <div className="mt-10 sm:mt-12">
-                      <form
-                        action="#"
-                        className="sm:max-w-xl sm:mx-auto lg:mx-0"
-                      >
-                        <div className="flex items-center justify-center">
-                          <div className="p-1 bg-gradient-to-br from-primary-400 to-purple-700 rounded-md">
-                            <button
-                              type="submit"
-                              className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
-                            >
-                              Apply
-                            </button>
-                          </div>
+    <div className="">
+      <div className="relative overflow-hidden ">
+        <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
+          <div className="mx-auto max-w-7xl lg:px-8">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+                <div className="lg:py-24">
+                  <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
+                    <span className="block">Join the video</span>
+                    <span className="block bg-gradient-to-br from-primary-400 to-purple-500 text-transparent bg-clip-text">
+                      <h1>revolution</h1>
+                    </span>
+                  </h1>
+                  <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                    Apply to be an insider creator to upload your own videos. Be
+                    the first to enjoy our upcoming monetization and influencer
+                    features.
+                  </p>
+                  <div className="mt-10 sm:mt-12">
+                    <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
+                      <div className="flex items-center justify-center">
+                        <div className="p-1 bg-gradient-to-br from-primary-400 to-purple-700 rounded-md">
+                          <button
+                            type="submit"
+                            className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
+                          >
+                            Apply
+                          </button>
                         </div>
-                      </form>
-                    </div>
+                      </div>
+                    </form>
                   </div>
                 </div>
-                <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
-                  <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
-                    {/* Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ */}
-                    <img
-                      className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                      src="/how-it-works/hero-pattern.png"
-                      alt=""
-                    />
-                  </div>
+              </div>
+              <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
+                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
+                  {/* Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ */}
+                  <img
+                    className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
+                    src="/how-it-works/hero-pattern.png"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
           </div>
-          {/* More main page content here... */}
-          <div className="bg-primary-400 text-white h-40 flex items-center p-20 text-xl">
-            <img src="/logo.png" className="h-10" />
-          </div>
-        </main>
+        </div>
+        {/* More main page content here... */}
+        <div className="bg-primary-400 text-white h-40 flex items-center p-20 text-xl">
+          <img src="/logo.png" className="h-10" />
+        </div>
       </div>
     </div>
   );
