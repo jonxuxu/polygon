@@ -1,7 +1,7 @@
 import Topbar from "../components/Topbar";
 import Image from "next/image";
 import { useRef } from "react";
-import { SnippetPreview } from "components/SnippetPreview";
+import { SnippetPreview, Snippet } from "components/SnippetPreview";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
 
@@ -61,7 +61,14 @@ const Page = () => {
             <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
               Add snippets to your card deck, and review them at your own time.
             </p>
-            <SnippetPreview snippets={[snippet]} />
+            <div className="w-80 animate-bounce">
+              <Snippet
+                t={snippet}
+                isFirst={false}
+                videoRef={null}
+                isPreview={true}
+              />
+            </div>
           </div>
         </div>
       </div>

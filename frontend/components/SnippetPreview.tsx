@@ -38,7 +38,13 @@ export function SnippetPreview({
             const isFirst =
               i === 0 || snippets[i - 1].time !== snippets[i].time;
             return (
-              <Snippet t={t} isFirst={isFirst} key={i} videoRef={videoRef} />
+              <Snippet
+                t={t}
+                isFirst={isFirst}
+                key={i}
+                videoRef={videoRef}
+                isPreview={false}
+              />
             );
           })}
         </div>
@@ -47,7 +53,7 @@ export function SnippetPreview({
   );
 }
 
-const Snippet = ({ t, isFirst, videoRef }) => {
+export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
   const canvasRef = useRef(null);
   const [showControls, setShowControls] = useState(false);
 
@@ -86,6 +92,7 @@ const Snippet = ({ t, isFirst, videoRef }) => {
         </TimeBubble>
       </div>
       <SnippetCard
+        isPreview={isPreview}
         color={t.color}
         onMouseEnter={() => {
           setShowControls(true);
@@ -156,7 +163,9 @@ const TimeBubble = styled.div`
 
 const SnippetCard = styled.div`
   border: 2px solid ${(props) => props.color};
-  border-right: none;
+  border-right: ${(props) =>
+    props.isPreview ? `2px solid ${props.color}` : "none"};
+  border-radius: ${(props) => (props.isPreview ? `10px` : "0px")};
   flex-grow: 1;
   background-color: white;
   border-top-left-radius: 10px;
