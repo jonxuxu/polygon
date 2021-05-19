@@ -8,13 +8,29 @@ import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
 const Page = () => {
   const voiceRef = useRef(null);
 
-  const snippet: Transcription = {
-    original: "芋圓現做品質看得到",
-    color: "red",
-    translatedText: "You can see the quality of taro balls freshly made",
-    time: 18,
-    detectedSourceLanguage: "zh",
-  };
+  const snippets: Transcription[] = [
+    {
+      original: "芋圓現做品質看得到",
+      color: "red",
+      translatedText: "You can see the quality of taro balls freshly made",
+      time: 18,
+      detectedSourceLanguage: "zh",
+    },
+    {
+      original: "我們喜歡珍珠奶茶",
+      color: "blue",
+      translatedText: "We all enjoy bubble milk tea",
+      time: 18,
+      detectedSourceLanguage: "zh",
+    },
+    {
+      original: "Один билет, пожалуйста",
+      color: "green",
+      translatedText: "One ticket, please.",
+      time: 18,
+      detectedSourceLanguage: "ru",
+    },
+  ];
 
   return (
     <div>
@@ -61,13 +77,40 @@ const Page = () => {
             <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
               Add snippets to your card deck, and review them at your own time.
             </p>
-            <div className="w-80 animate-bounce">
-              <Snippet
-                t={snippet}
-                isFirst={false}
-                videoRef={null}
-                isPreview={true}
-              />
+            <div className="flex flex-row mt-8">
+              <div
+                className="w-80 animate-bounce"
+                style={{ animation: "bounce 1.4s infinite" }}
+              >
+                <Snippet
+                  t={snippets[0]}
+                  isFirst={false}
+                  videoRef={null}
+                  isPreview={true}
+                />
+              </div>
+              <div
+                className="w-80 animate-bounce"
+                style={{ animation: "bounce 1.5s infinite" }}
+              >
+                <Snippet
+                  t={snippets[1]}
+                  isFirst={false}
+                  videoRef={null}
+                  isPreview={true}
+                />
+              </div>
+              <div
+                className="w-80 animate-bounce"
+                style={{ animation: "bounce 1.3s infinite" }}
+              >
+                <Snippet
+                  t={snippets[2]}
+                  isFirst={false}
+                  videoRef={null}
+                  isPreview={true}
+                />
+              </div>
             </div>
           </div>
         </div>
