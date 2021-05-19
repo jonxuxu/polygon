@@ -3,15 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
 import dayjs from "dayjs";
-
 import { useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
 
 import Topbar from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
 import { SnippetPreview } from "components/SnippetPreview";
-import { ShareButton } from "./ShareButton";
-import { SaveButton } from "./SaveButton";
+import { ShareButton } from "../../../components/ShareButton";
+import { SaveButton } from "../../../components/SaveButton";
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
