@@ -4,15 +4,8 @@ import { useRef } from "react";
 import { SnippetPreview, Snippet } from "components/SnippetPreview";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
+
 import Link from "next/link";
-import {
-  CloudUploadIcon,
-  CogIcon,
-  LockClosedIcon,
-  RefreshIcon,
-  ServerIcon,
-  ShieldCheckIcon,
-} from "@heroicons/react/outline";
 
 const features = [
   {
@@ -80,8 +73,8 @@ function FeaturesGrid() {
                       <span className="inline-flex items-center justify-center p-3">
                         <Image
                           src={"/icons/" + feature.icon}
-                          height={35}
-                          width={35}
+                          height={45}
+                          width={45}
                         />
                       </span>
                     </div>
@@ -221,7 +214,7 @@ function Conclusion() {
           <div className="mx-auto max-w-7xl lg:px-8">
             <div className="lg:grid lg:grid-cols-2 lg:gap-8">
               <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
-                <div className="lg:py-24">
+                <div className="lg:py-24 pb-20">
                   <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
                     <span className="block">Join the video</span>
                     <span className="block bg-gradient-to-br from-primary-400 to-purple-500 text-transparent bg-clip-text">
@@ -235,7 +228,7 @@ function Conclusion() {
                   </p>
                   <div className="mt-10 sm:mt-12">
                     <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center lg:justify-start">
                         <div className="p-1 bg-gradient-to-br from-primary-400 to-purple-700 rounded-md">
                           <button
                             type="submit"
@@ -249,13 +242,11 @@ function Conclusion() {
                   </div>
                 </div>
               </div>
-              <div className="mt-12 -mb-16 sm:-mb-48 lg:m-0 lg:relative">
+              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
                 <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
-                  {/* Illustration taken from Lucid Illustrations: https://lucid.pixsellz.io/ */}
                   <img
                     className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
                     src="/how-it-works/hero-pattern.png"
-                    alt=""
                   />
                 </div>
               </div>
@@ -298,12 +289,14 @@ function HeroSection() {
               </div>
               <form action="#" className="mt-12 sm:max-w-lg sm:w-full sm:flex">
                 <div className="mt-4 sm:mt-0 sm:ml-3">
-                  <button
-                    type="submit"
-                    className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient-to-r from-purple-500 via-primary-400-400 to-primary-500 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
-                  >
-                    Explore
-                  </button>
+                  <Link href="/explore">
+                    <button
+                      type="submit"
+                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient-to-r from-purple-500 via-primary-400-400 to-primary-500 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                    >
+                      Explore
+                    </button>
+                  </Link>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-3">
                   <Link href="/manifesto">
