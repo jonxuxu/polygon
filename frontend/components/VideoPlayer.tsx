@@ -347,7 +347,7 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
         x - 10,
         y - 10,
         x2 - x + 20,
-        y2 - y + 20 > 0 ? y2 - y + 20 : 1
+        y2 - y + 20 >= 1 ? y2 - y + 20 : 1
       );
       return (
         <TipCircle
