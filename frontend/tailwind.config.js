@@ -11,6 +11,7 @@ module.exports = {
         cyan: colors.cyan,
         primary: colors.pink,
         secondary: colors.rose,
+        fuchsia: colors.fuchsia,
       },
     },
   },
