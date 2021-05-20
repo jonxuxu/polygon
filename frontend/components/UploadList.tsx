@@ -18,7 +18,9 @@ export function UploadList() {
     <div className="">
       <div className=" mb-4">
         <div className="flex justify-between">
-          <h1 className="text-xl text-gray-700 mb-4">Upload Center</h1>
+          <h1 className="text-xl text-gray-700 dark:text-gray-300 mb-4">
+            Upload Center
+          </h1>
           <Link href="/uploads/new">
             <button className="bg-black text-white text-sm rounded-lg px-3 py-1  ">
               Upload a Video
@@ -26,7 +28,7 @@ export function UploadList() {
           </Link>
         </div>
 
-        <p className="text-sm ">
+        <p className="text-sm text-primary">
           Upload, manage and track your videos here. <br />
           Congrats on being part of the Polygon early access circle!{" "}
         </p>
@@ -37,7 +39,9 @@ export function UploadList() {
             {me.videos.map((video, videoIdx) => (
               <div
                 key={videoIdx}
-                className={"bg-white shadow-md my-4 rounded-md p-4"}
+                className={
+                  "bg-primary shadow-md my-4 rounded-md p-4 dark:border-2 dark:border-gray-400"
+                }
               >
                 <div className="grid grid-cols-12 gap-4">
                   <div className="col-span-12 sm:col-span-9 md:col-span-3">
@@ -53,10 +57,10 @@ export function UploadList() {
                         </a>
                       </Link>
                     </h1>
-                    <h2 className="text-md text-gray-600 my-4 min-h-6  md:flex-grow">
+                    <h2 className="text-md text-gray-600 my-4 min-h-6  md:flex-grow text-primary">
                       {video.description}
                     </h2>
-                    <div className="flex justify-between text-gray-700 float-bottom">
+                    <div className="flex justify-between text-gray-700 float-bottom text-primary">
                       <div>{video.isPublic ? "Public" : "Private"}</div>
                       <div className="">
                         Uploaded {dayjs(video.created).format("MMM d, YYYY")}
@@ -76,7 +80,7 @@ export function UploadList() {
                       { label: "Transcribe", state: video.transcribe_state },
                       { label: "Annotate", state: video.annotate_state },
                     ].map(({ state, label }, i) => (
-                      <div className="my-2 flex gap-1 items-center text-sm">
+                      <div className="my-2 flex gap-1 items-center text-sm text-primary">
                         <div
                           key={i}
                           className={

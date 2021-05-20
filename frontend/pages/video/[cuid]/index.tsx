@@ -55,7 +55,7 @@ const App = () => {
                 videoRef={videoRef}
               />
               <div className="mx-10">
-                <div className="my-2 text-xl text-gray-700">
+                <div className="my-2 text-xl text-primary">
                   {video.title}
                   {me && me.id === video.creator && (
                     <Link href={`/video/${video.cuid}/edit`}>
@@ -63,7 +63,7 @@ const App = () => {
                     </Link>
                   )}
                 </div>
-                <div className="text-gray-500 text-sm flex flex-row items-center justify-between mt-3">
+                <div className="text-primary text-sm flex flex-row items-center justify-between mt-3">
                   <span className="">
                     {video.views + video.viewBoost} views - {/* @ts-ignore */}
                     {dayjs(video.created).from(dayjs())}
@@ -84,7 +84,7 @@ const App = () => {
                   {video.user.name}
                   <br />
                 </div>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-primary">
                   {video.description}
                 </span>
                 {/* Save button */}

@@ -5,15 +5,17 @@ import Head from "next/head";
 function MyApp({ Component, pageProps }) {
   useAnalytics();
   return (
-    <>
+    <div className="bg-primary">
       <Head>
         <title>Polygon Video</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <Provider session={pageProps.session}>
-        <Component {...pageProps} />
+        <div className="dark bg-primary min-h-screen">
+          <Component {...pageProps} />
+        </div>
       </Provider>
-    </>
+    </div>
   );
 }
 

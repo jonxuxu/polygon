@@ -6,7 +6,7 @@ dayjs.extend(relativeTime);
 
 const App = () => {
   return (
-    <div>
+    <div className="bg-primary">
       <Topbar />
       <div className="m-10 mt-8">
         <ExploreVideoList />

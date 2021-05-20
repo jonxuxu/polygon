@@ -11,13 +11,13 @@ export function ExploreVideoList() {
   const { feed } = useFeed();
   const [search, setSearch] = useState("");
   return (
-    <div>
+    <div className="bg-primary">
       <div className="mb-4">
         <input
           type="text"
           name="search"
           id="search"
-          className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-400 rounded-md dark:bg-gray-900"
           placeholder="Search Videos... "
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -41,17 +41,17 @@ export function ExploreVideoList() {
               .map((video) => (
                 <div
                   key={video.id}
-                  className="col-span-6 md:col-span-4 xl:col-span-3 p-2 relative rounded-lg bg-white  flex space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-300"
+                  className="col-span-6 md:col-span-4 xl:col-span-3 p-2 relative rounded-lg bg-primary  flex space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-300"
                 >
                   <div className="flex-1 min-w-0">
                     <Link href={`/video/${video.cuid}`}>
                       <a className="focus:outline-none">
                         <ImagePreview video={video}></ImagePreview>
                         <span className="absolute inset-0" aria-hidden="true" />
-                        <p className="text-lg md:text-xl font-medium text-gray-700 mt-2 line-clamp overflow-hidden">
+                        <p className="text-lg md:text-xl font-medium text-gray-100 mt-2 line-clamp overflow-hidden">
                           {video.title}
                         </p>
-                        <p className="text-sm text-gray-500 truncate">
+                        <p className="text-sm text-gray-300 truncate">
                           {video.description}
                         </p>
                         <div className="flex items-center align-middle mt-4">
@@ -60,7 +60,7 @@ export function ExploreVideoList() {
                             src={video.user.image}
                             alt="User creator"
                           />
-                          <p className="text-sm text-gray-500 truncate">
+                          <p className="text-sm text-gray-300 truncate">
                             {video.user.name}
                             <br />
                             {video.views + video.viewBoost} views |{" "}

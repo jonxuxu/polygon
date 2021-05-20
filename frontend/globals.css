@@ -45,3 +45,10 @@ a.link {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
+.bg-primary {
+  @apply bg-white dark:bg-gray-800;
+}
+.text-primary {
+  @apply dark:text-gray-200 text-gray-500;
+}

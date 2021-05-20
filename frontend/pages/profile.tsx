@@ -17,7 +17,7 @@ const App = () => {
   }, [me]);
   // console.log(session);
   return (
-    <div>
+    <div className="bg-primary min-h-screen">
       <Topbar />
       <div className="">
         <div className="">
@@ -33,15 +33,17 @@ const App = () => {
                   src={session.user.image}
                   alt=""
                 />
-                <h1 className="text-xl text-gray-700">{session.user.name}</h1>
-                <div>{session.user.email}</div>
+                <h1 className="text-xl text-gray-700 dark:text-gray-400">
+                  {session.user.name}
+                </h1>
+                <div className="text-primary">{session.user.email}</div>
 
                 <ProfileTabs tab={tab} setTab={setTab} />
                 {tab === "Snippets" ? (
                   <div className="mt-5">
                     {me &&
                       me.snippets.map((t) => (
-                        <div className="border-2 border-primary-400 rounded-md my-3 p-2">
+                        <div className="border-2 border-primary-400 rounded-md my-3 p-2 text-primary">
                           {t.original} - {t.translation}
                         </div>
                       ))}
@@ -51,7 +53,7 @@ const App = () => {
                     <div className="mt-1 col-span-2 col-start-2">
                       <label
                         htmlFor="language"
-                        className="block text-sm font-medium text-gray-700 mb-3"
+                        className="block text-sm font-medium text-gray-700 mb-3 text-primary"
                       >
                         User Language
                       </label>
@@ -112,7 +114,7 @@ function ProfileTabs({ tab, setTab }) {
   const tabs = ["Snippets", "Saved Videos", "Settings"];
 
   return (
-    <div>
+    <div className="bg-primary">
       <div className="sm:hidden">
         <label htmlFor="tabs" className="sr-only">
           Select a tab

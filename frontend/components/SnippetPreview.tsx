@@ -15,8 +15,8 @@ export function SnippetPreview({
   const sidebarRef = useRef(null);
 
   return (
-    <SidebarDiv>
-      <div style={{ display: "flex" }}>
+    <SidebarDiv className="bg-primary">
+      <div style={{ display: "flex" }} className="bg-primary">
         <div
           style={{
             borderRight: "3px solid #EE3699",
@@ -25,7 +25,7 @@ export function SnippetPreview({
             width: 30,
           }}
         />
-        <div style={{ flexGrow: 1 }} ref={sidebarRef}>
+        <div style={{ flexGrow: 1 }} ref={sidebarRef} className="text-primary">
           <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
           {snippets.length === 0 && (
             <div style={{ paddingLeft: 70 }}>
@@ -128,7 +128,7 @@ export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
 
 const SidebarDiv = styled.div`
   overflow-y: scroll;
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   width: 400px;
   position: relative;
   margin-top: 40px;
