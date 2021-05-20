@@ -1,0 +1,11 @@
+<svg width="75" height="75" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="live_tv_24px">
+<path id="icon/notification/live_tv_24px" fill-rule="evenodd" clip-rule="evenodd" d="M65.625 18.75H41.9375L52.2188 8.46875L50 6.25L37.5 18.75H37.4062L24.9062 6.25L22.75 8.46875L33 18.75H9.375C5.9375 18.75 3.125 21.5625 3.125 25V62.5C3.125 65.9375 5.9375 68.75 9.375 68.75H65.625C69.0625 68.75 71.875 65.9375 71.875 62.5V25C71.875 21.5625 69.0625 18.75 65.625 18.75ZM28.125 56.25L50 43.75L28.125 31.25V56.25ZM9.375 62.5H65.625V25H9.375V62.5Z" fill="url(#paint0_linear)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear" x1="33.1046" y1="-15.3387" x2="-11.821" y2="17.6444" gradientUnits="userSpaceOnUse">
+<stop stop-color="#EE3699"/>
+<stop offset="1" stop-color="#8036DF"/>
+</linearGradient>
+</defs>
+</svg>

@@ -4,6 +4,103 @@ import { useRef } from "react";
 import { SnippetPreview, Snippet } from "components/SnippetPreview";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
+import Link from "next/link";
+import {
+  CloudUploadIcon,
+  CogIcon,
+  LockClosedIcon,
+  RefreshIcon,
+  ServerIcon,
+  ShieldCheckIcon,
+} from "@heroicons/react/outline";
+
+const features = [
+  {
+    name: "Definitions",
+    sub: "Look up the meaning of words and phrases.",
+    icon: "translate_outlined.svg",
+  },
+  {
+    name: "Caption Highlighting",
+    sub: "The current word gets highlighted in speech.",
+    icon: "speaker_notes_outlined.svg",
+  },
+  {
+    name: "Bubble Navigation",
+    sub: "Jump to the right sign bubble using keyboard shortcuts only.",
+    icon: "navigation_outlined.svg",
+  },
+  {
+    name: "Comments",
+    sub: "Comment and discuss inside and outside the video.",
+    icon: "sort.svg",
+  },
+  {
+    name: "Spaced Repitition",
+    sub: "Create flashcards on mobile and desktop so you remember for life.",
+    icon: "repeat.svg",
+  },
+  {
+    name: "Live Streaming",
+    sub: "All the features of Polygon applied to live video.",
+    icon: "live_tv.svg",
+  },
+  {
+    name: "GPS Integration",
+    sub: "Scroll through a video based on geography instead of time.",
+    icon: "gps_fixed.svg",
+  },
+  {
+    name: "Timeline Sharing",
+    sub: "Discover strangers and friends on your video timeline.",
+    icon: "timeline.svg",
+  },
+  {
+    name: "Influencer Collab",
+    sub: "Limited drops, exclusive followings, and hype festivals.",
+    icon: "whatshot.svg",
+  },
+];
+
+function FeaturesGrid() {
+  return (
+    <div className="relative bg-white py-16 sm:py-24 lg:py-32">
+      <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
+        <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
+          Incoming Features
+        </p>
+
+        <div className="mt-12">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+            {features.map((feature) => (
+              <div key={feature.name} className="pt-6">
+                <div className="flow-root bg-white rounded-lg shadow-lg px-6 pb-8">
+                  <div className="mt-6">
+                    <div>
+                      <span className="inline-flex items-center justify-center p-3">
+                        <Image
+                          src={"/icons/" + feature.icon}
+                          height={35}
+                          width={35}
+                        />
+                      </span>
+                    </div>
+                    <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">
+                      {feature.name}
+                    </h3>
+                    <p className="mt-5 text-base text-gray-500">
+                      {feature.sub}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const Page = () => {
   const voiceRef = useRef(null);
@@ -48,16 +145,7 @@ const Page = () => {
             within the player.
           </p>
         </div>
-        {/* <div className="m-10 md:w-4/5 flex">
-          <div className="mb-8 text-3xl text-gray-700 w-1/2">
-            Learn through immersion
-          </div>
-          <div className="my-4 w-1/2">
-            Learn a foreign language by being there. [Pause] the video to
-            interact with signs and speech. Translate, copy, and listen, all
-            within the player.
-          </div>
-        </div> */}
+
         <div className="flex gap-6">
           <Image src="/how-it-works/player1.png" height={281} width={499} />
           <Image src="/how-it-works/player2.png" height={281} width={499} />
@@ -77,40 +165,20 @@ const Page = () => {
             <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
               Add snippets to your card deck, and review them at your own time.
             </p>
-            <div className="flex flex-row mt-8">
-              <div
-                className="w-80 animate-bounce"
-                style={{ animation: "bounce 1.4s infinite" }}
-              >
-                <Snippet
-                  t={snippets[0]}
-                  isFirst={false}
-                  videoRef={null}
-                  isPreview={true}
-                />
-              </div>
-              <div
-                className="w-80 animate-bounce"
-                style={{ animation: "bounce 1.5s infinite" }}
-              >
-                <Snippet
-                  t={snippets[1]}
-                  isFirst={false}
-                  videoRef={null}
-                  isPreview={true}
-                />
-              </div>
-              <div
-                className="w-80 animate-bounce"
-                style={{ animation: "bounce 1.3s infinite" }}
-              >
-                <Snippet
-                  t={snippets[2]}
-                  isFirst={false}
-                  videoRef={null}
-                  isPreview={true}
-                />
-              </div>
+            <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8">
+              {snippets.map((snippet, i) => (
+                <div
+                  className="md:w-80 animate-object"
+                  style={{ animation: `bounce 3.${i * 3}s infinite` }}
+                >
+                  <Snippet
+                    t={snippet}
+                    isFirst={false}
+                    videoRef={null}
+                    isPreview={true}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -137,6 +205,7 @@ const Page = () => {
           </div>
         </div>
       </div>
+      <FeaturesGrid />
       {/* BG-black  */}
       <Conclusion />
     </div>
@@ -230,18 +299,20 @@ function HeroSection() {
                 <div className="mt-4 sm:mt-0 sm:ml-3">
                   <button
                     type="submit"
-                    className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                    className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient-to-r from-purple-500 via-primary-400-400 to-primary-500 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
                   >
-                    Notify me
+                    Explore
                   </button>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-3">
-                  <button
-                    type="submit"
-                    className="block w-full rounded-md border border-transparent px-5 py-3 bg-white text-base font-medium text-black shadow  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"
-                  >
-                    Manifesto
-                  </button>
+                  <Link href="/manifesto">
+                    <button
+                      type="submit"
+                      className="block w-full rounded-md border-2 border-black px-5 py-3 bg-white text-base font-medium text-black shadow  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"
+                    >
+                      Manifesto
+                    </button>
+                  </Link>
                 </div>
               </form>
             </div>
@@ -251,7 +322,7 @@ function HeroSection() {
         <div className="sm:mx-auto sm:max-w-3xl sm:px-6">
           <div className="py-12 sm:relative sm:mt-12 sm:py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
             <div className="hidden sm:block">
-              <div className="absolute inset-y-0 left-1/2 w-screen bg-primary-50 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
+              <div className="absolute inset-y-0 left-1/2 w-screen bg-primary-400 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
               <svg
                 className="absolute top-8 right-1/2 -mr-3 lg:m-0 lg:left-0"
                 width={404}

@@ -175,5 +175,5 @@ const SnippetCard = styled.div`
   margin-bottom: 0.5rem;
   display: flex;
   justify-content: space-between;
-  margin-left: 50px;
+  margin-left: ${(props) => (props.isPreview ? `0px` : "50px")};
 `;
