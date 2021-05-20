@@ -168,6 +168,7 @@ const Page = () => {
             <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8">
               {snippets.map((snippet, i) => (
                 <div
+                  key={i}
                   className="md:w-80 animate-object"
                   style={{ animation: `bounce 3.${i * 3}s infinite` }}
                 >
