@@ -3,8 +3,8 @@ import React from "react";
 
 const Manifesto = () => (
   <div>
-    {/* <Topbar /> */}
-    <div className="bg-gradient-to-tr from-purple-500 to-primary-500 h-48 flex items-center justify-center">
+    <Topbar />
+    <div className="bg-gradient-to-tr from-purple-500 to-primary-500 h-60 flex items-center justify-center">
       <h1 className="text-white text-3xl">Manifesto</h1>
 
       {/* <p className="text-white text-md">Bringing real interaction to video</p> */}
