@@ -142,7 +142,9 @@ const transcribe = async (cuid, res) => {
         console.log("transcription request sent: " + operation.name);
         return res
           .status(200)
-          .send(`successfully processed and uploaded ${cuid}`);
+          .send(
+            `successfully processed and uploaded ${cuid}. operation name ${operation.name}`
+          );
       });
     })
     .on("error", function (err) {

@@ -340,15 +340,39 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
       const x2 = word.boundingBox[2].x * videoWidth;
       const y2 = word.boundingBox[2].y * videoHeight;
 
+      // Calculate tooltip color
       const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
 
-      const image = canvasContext.getImageData(
-        x - 10,
-        y - 10,
-        x2 - x + 20,
-        y2 - y + 20 >= 1 ? y2 - y + 20 : 1
-      );
+      // Compute cropped image
+      // canvas.width = 80;
+      // canvas.height = 80;
+      const textWidth = word.boundingBox[2].x - word.boundingBox[0].x;
+      const textHeight = word.boundingBox[2].y - word.boundingBox[0].y;
+      const centerx =
+        word.boundingBox[0].x < 0.5
+          ? word.boundingBox[0].x * videoWidth
+          : word.boundingBox[2].x * videoWidth;
+      const centery =
+        word.boundingBox[0].y < 0.5
+          ? word.boundingBox[0].y * videoHeight
+          : word.boundingBox[2].y * videoHeight;
+      const zoom = textWidth > textHeight ? 80 / videoWidth : 80 / videoHeight;
+      console.log(zoom);
+      canvasContext.scale(zoom, zoom);
+      const transX = -(centerx / zoom - centerx);
+      const transY = -(centery / zoom - centery);
+      canvasContext.translate(transX, transY);
+      canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+      const image = canvas.toDataURL("image/png");
+      // console.log(image);
+
+      // const image = canvasContext.getImageData(
+      //   x - 10,
+      //   y - 10,
+      //   x2 - x + 20,
+      //   y2 - y + 20 >= 1 ? y2 - y + 20 : 1
+      // );
       return (
         <TipCircle
           key={i}

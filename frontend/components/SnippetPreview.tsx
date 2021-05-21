@@ -51,25 +51,12 @@ const Snippet = ({ t, isFirst, videoRef }) => {
   const canvasRef = useRef(null);
   const [showControls, setShowControls] = useState(false);
 
-  useEffect(() => {
-    if (t.image) {
-      const canvasCtx = canvasRef.current.getContext("2d");
-      // console.log(t.image);
-      // console.log(t.image.width);
-      // canvasCtx.drawImage(
-      //   t.image,
-      //   0,
-      //   0,
-      //   t.image.width,
-      //   t.image.height,
-      //   0,
-      //   0,
-      //   canvasCtx.width,
-      //   canvasCtx.height
-      // );
-      canvasCtx.putImageData(t.image, 0, 0);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (t.image) {
+  //     const canvasCtx = canvasRef.current.getContext("2d");
+  //     canvasCtx.putImageData(t.image, 0, 0);
+  //   }
+  // }, []);
 
   return (
     <div style={{ display: "flex" }}>
@@ -95,7 +82,7 @@ const Snippet = ({ t, isFirst, videoRef }) => {
         }}
       >
         <div className="flex">
-          {t.image && <canvas ref={canvasRef} width={80} height={80} />}
+          {t.image && <img src={t.image} />}
           <span style={{ fontFamily: "Arial" }}>
             <span
               style={{
