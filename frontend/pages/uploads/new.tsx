@@ -209,7 +209,7 @@ const App = () => {
                       </a>
                     </div>
                   ) : (
-                    <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
+                    <div className="max-w-lg flex pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
                       <div className="space-y-1 text-center">
                         <div className="flex text-sm text-gray-600">
                           <button
@@ -275,7 +275,7 @@ const App = () => {
                       </a>
                     </div>
                   ) : (
-                    <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
+                    <div className="max-w-lg flex  pt-5 pb-6 border-0 border-gray-300 border-dashed rounded-md">
                       <div className="space-y-1 text-center">
                         <div className="flex text-sm text-gray-600">
                           <button
@@ -324,7 +324,7 @@ const App = () => {
             <button
               type="button"
               onClick={upload}
-              className="primary mt-10 mb-10"
+              className="secondary mt-10 mb-10 float-right md:mr-28"
             >
               Upload
             </button>

@@ -20,9 +20,7 @@ export function UploadList() {
         <div className="flex justify-between">
           <h1 className="text-xl text-gray-700 mb-4">Upload Center</h1>
           <Link href="/uploads/new">
-            <button className="bg-black text-white text-sm rounded-lg px-3 py-1  ">
-              Upload a Video
-            </button>
+            <button className="secondary   ">Upload a Video</button>
           </Link>
         </div>
 

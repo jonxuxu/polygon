@@ -254,8 +254,12 @@ function Conclusion() {
           </div>
         </div>
         {/* More main page content here... */}
-        <div className="bg-primary-400 text-white h-40 flex items-center p-20 text-xl">
+        <div className="bg-primary-400 text-white h-40 flex items-center justify-between p-20 text-xl">
           <img src="/logo.png" className="h-10" />
+
+          <Link href="/manifesto">
+            <a className=" text-gray-700 text-md">Manifesto</a>
+          </Link>
         </div>
       </div>
     </div>
