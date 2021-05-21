@@ -52,7 +52,7 @@ const Manifesto = () => (
             "We see a huge potential to bring videos to the 2020’s with next-level integrations. Translate foreign text, listen to them and add them to your collection. Search up a character in a show, or buy a piece of clothing you like. Save a lecture whiteboard for later, or jump to the video mentioned as a prerequisite. All within the Polygon player.",
         },
       ].map(({ title, content }) => (
-        <div>
+        <div key={title}>
           <Title>{title}</Title>
           <Section>{content}</Section>
         </div>
