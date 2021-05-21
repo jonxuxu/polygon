@@ -215,7 +215,38 @@ export default function VideoPlayer({
     }
   }, [translationData]);
 
-  const drawTranslation = async (word, color, image) => {
+  const drawTranslation = async (word, color) => {
+    // calculate image
+    const videoWidth = videoRef.current.offsetWidth;
+    const videoHeight = videoRef.current.offsetHeight;
+    const x1 = word.boundingBox[0].x * videoWidth;
+    const y1 = word.boundingBox[0].y * videoHeight;
+
+    var canvas = document.createElement("canvas");
+    var canvasContext = canvas.getContext("2d");
+    // Compute cropped image
+    var pixelRatio = window.devicePixelRatio || 1;
+    canvas.width = 80 * pixelRatio;
+    canvas.height = 80 * pixelRatio;
+    canvas.style.width = "80px";
+    canvas.style.width = "80px";
+
+    const textWidth = word.boundingBox[2].x - word.boundingBox[0].x + 0.05;
+    const textHeight = word.boundingBox[2].y - word.boundingBox[0].y + 0.05;
+    const centerx = x1 - 10;
+    const centery = y1 - 10;
+    const zoom =
+      textWidth > textHeight
+        ? (80 * pixelRatio) / (textWidth * videoWidth)
+        : (80 * pixelRatio) / (textHeight * videoHeight);
+    canvasContext.scale(zoom, zoom);
+    canvasContext.translate(-centerx, -centery);
+    console.log(-centerx, -centery);
+    canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+
+    const image = canvas.toDataURL("image/png");
+
+    // text stuff
     const text = word.text;
 
     const res: {
@@ -347,49 +378,14 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
     tooltips = annotations[millis].map((word, i) => {
       const x1 = word.boundingBox[0].x * videoWidth;
       const y1 = word.boundingBox[0].y * videoHeight;
-      const x2 = word.boundingBox[2].x * videoWidth;
-      const y2 = word.boundingBox[2].y * videoHeight;
-      // Compute cropped image
-      canvas.width = 80;
-      canvas.height = 80;
-      console.log(word.text);
-      const textWidth = word.boundingBox[2].x - word.boundingBox[0].x;
-      const textHeight = word.boundingBox[2].y - word.boundingBox[0].y;
-      console.log(textWidth, textHeight);
-      const centerx = (x1 + x2) / 2 - 50;
-      const centery = (y1 + y2) / 2 - 50;
-      // const zoom = textWidth > textHeight ? 1 / textWidth : 1 / textHeight;
-      // const zoom =
-      //   textWidth > textHeight
-      //     ? 1 - (textHeight - textWidth) / 10
-      //     : 1 - (textWidth - textHeight) / 10;
-      const zoom = 1;
-      console.log("zoom", zoom);
-      canvasContext.save();
-      canvasContext.scale(zoom, zoom);
-      const transX = -(centerx / zoom - centerx);
-      const transY = -(centery / zoom - centery);
-      // canvasContext.translate(-transX, -transY);
-      canvasContext.translate(-centerx, -centery);
-      canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
 
-      const image = canvas.toDataURL("image/png");
-      canvasContext.restore();
-      // console.log(image);
-
-      // const image = canvasContext.getImageData(
-      //   x - 10,
-      //   y - 10,
-      //   x2 - x + 20,
-      //   y2 - y + 20 >= 1 ? y2 - y + 20 : 1
-      // );
       return (
         <TipCircle
           key={i}
           hex={hexColors[i]}
           style={{ position: "absolute", top: y1, left: x1 }}
           onClick={() => {
-            drawTranslation(word, hexColors[i], image);
+            drawTranslation(word, hexColors[i]);
           }}
         />
       );
