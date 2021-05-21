@@ -1,0 +1,11 @@
+<svg width="75" height="75" viewBox="0 0 75 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="navigation_24px">
+<path id="icon/maps/navigation_24px" fill-rule="evenodd" clip-rule="evenodd" d="M14.0625 64.9688L37.5 7.8125L60.9375 64.9688L58.7188 67.1875L37.5 57.8125L16.2812 67.1875L14.0625 64.9688ZM50.875 56.875L37.5 24.2813L24.125 56.875L34.9688 52.0938L37.5 50.9688L40.0312 52.0938L50.875 56.875Z" fill="url(#paint0_linear)"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear" x1="34.5031" y1="-12.6968" x2="-2.39415" y2="6.74502" gradientUnits="userSpaceOnUse">
+<stop stop-color="#EE3699"/>
+<stop offset="1" stop-color="#8036DF"/>
+</linearGradient>
+</defs>
+</svg>
