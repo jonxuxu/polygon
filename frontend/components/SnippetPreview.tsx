@@ -90,7 +90,7 @@ export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
       >
         <div className="flex">
           {t.image && <img src={t.image} width={80} height={80} />}
-          <span style={{ fontFamily: "Arial" }}>
+          <span style={{ fontFamily: "Arial", paddingLeft: 15 }}>
             <span
               style={{
                 fontSize: 18,

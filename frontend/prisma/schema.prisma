@@ -55,6 +55,7 @@ model users {
   snippets       snippets[]
   videos         videos[]   @relation("VideoCreator")
   savedVideos    videos[]   @relation("SavedVideo")
+  approved       Boolean    @default(false)
 }
 
 model verification_requests {
