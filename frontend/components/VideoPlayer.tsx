@@ -334,37 +334,47 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
     var canvasContext = canvas.getContext("2d");
     canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
 
-    tooltips = annotations[millis].map((word, i) => {
+    const hexColors = annotations[millis].map((word) => {
       const x = word.boundingBox[0].x * videoWidth;
       const y = word.boundingBox[0].y * videoHeight;
-      const x2 = word.boundingBox[2].x * videoWidth;
-      const y2 = word.boundingBox[2].y * videoHeight;
 
       // Calculate tooltip color
       const p = canvasContext.getImageData(x, y, 1, 1).data;
       const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
+      return hex;
+    });
 
+    tooltips = annotations[millis].map((word, i) => {
+      const x1 = word.boundingBox[0].x * videoWidth;
+      const y1 = word.boundingBox[0].y * videoHeight;
+      const x2 = word.boundingBox[2].x * videoWidth;
+      const y2 = word.boundingBox[2].y * videoHeight;
       // Compute cropped image
-      // canvas.width = 80;
-      // canvas.height = 80;
+      canvas.width = 80;
+      canvas.height = 80;
+      console.log(word.text);
       const textWidth = word.boundingBox[2].x - word.boundingBox[0].x;
       const textHeight = word.boundingBox[2].y - word.boundingBox[0].y;
-      const centerx =
-        word.boundingBox[0].x < 0.5
-          ? word.boundingBox[0].x * videoWidth
-          : word.boundingBox[2].x * videoWidth;
-      const centery =
-        word.boundingBox[0].y < 0.5
-          ? word.boundingBox[0].y * videoHeight
-          : word.boundingBox[2].y * videoHeight;
-      const zoom = textWidth > textHeight ? 80 / videoWidth : 80 / videoHeight;
-      console.log(zoom);
+      console.log(textWidth, textHeight);
+      const centerx = (x1 + x2) / 2 - 50;
+      const centery = (y1 + y2) / 2 - 50;
+      // const zoom = textWidth > textHeight ? 1 / textWidth : 1 / textHeight;
+      // const zoom =
+      //   textWidth > textHeight
+      //     ? 1 - (textHeight - textWidth) / 10
+      //     : 1 - (textWidth - textHeight) / 10;
+      const zoom = 1;
+      console.log("zoom", zoom);
+      canvasContext.save();
       canvasContext.scale(zoom, zoom);
       const transX = -(centerx / zoom - centerx);
       const transY = -(centery / zoom - centery);
-      canvasContext.translate(transX, transY);
+      // canvasContext.translate(-transX, -transY);
+      canvasContext.translate(-centerx, -centery);
       canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
+
       const image = canvas.toDataURL("image/png");
+      canvasContext.restore();
       // console.log(image);
 
       // const image = canvasContext.getImageData(
@@ -376,10 +386,10 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
       return (
         <TipCircle
           key={i}
-          hex={hex}
-          style={{ position: "absolute", top: y, left: x }}
+          hex={hexColors[i]}
+          style={{ position: "absolute", top: y1, left: x1 }}
           onClick={() => {
-            drawTranslation(word, hex, image);
+            drawTranslation(word, hexColors[i], image);
           }}
         />
       );
