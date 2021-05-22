@@ -299,7 +299,7 @@ function HeroSection() {
                   <Link href="/explore">
                     <button
                       type="submit"
-                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient text-base font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"
                     >
                       Explore
                     </button>
@@ -323,7 +323,7 @@ function HeroSection() {
         <div className="sm:mx-auto sm:max-w-3xl sm:px-6">
           <div className="py-12 sm:relative sm:mt-12 sm:py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
             <div className="hidden sm:block">
-              <div className="absolute inset-y-0 left-1/2 w-screen bg-primary-400 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
+              <div className="absolute inset-y-0 left-1/2 w-screen bg-gradient opacity-50 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
               <svg
                 className="absolute top-8 right-1/2 -mr-3 lg:m-0 lg:left-0"
                 width={404}
