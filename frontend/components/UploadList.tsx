@@ -74,7 +74,10 @@ export function UploadList() {
                       { label: "Transcribe", state: video.transcribe_state },
                       { label: "Annotate", state: video.annotate_state },
                     ].map(({ state, label }, i) => (
-                      <div className="my-2 flex gap-1 items-center text-sm">
+                      <div
+                        key={i}
+                        className="my-2 flex gap-1 items-center text-sm"
+                      >
                         <div
                           key={i}
                           className={

@@ -58,16 +58,16 @@ const features = [
 function FeaturesGrid() {
   return (
     <div className="relative bg-white py-16 sm:py-24 lg:py-32">
-      <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
+      <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-5xl">
         <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
           Incoming Features
         </p>
 
         <div className="mt-12">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-8 grid-cols-2 md:grid-cols-3">
             {features.map((feature) => (
               <div key={feature.name} className="pt-6">
-                <div className="flow-root bg-white rounded-lg shadow-lg px-6 pb-8">
+                <div className="flow-root bg-white rounded-lg shadow-lg px-3 sm:px-6 pb-8">
                   <div className="mt-6">
                     <div>
                       <span className="inline-flex items-center justify-center p-3">
@@ -179,7 +179,7 @@ const Page = () => {
       </div>
       {/* Interactive Captions  */}
       <div className="bg-white p-8 flex items-center justify-center">
-        <div className="bg-gradient-to-br from-primary-400 to-fuchsia-400 rounded-lg w-4/5">
+        <div className="bg-gradient rounded-lg w-4/5">
           <div
             className="max-w-7xl mx-auto py-16 px-4 "
             style={{ paddingBottom: -10 }}
@@ -189,11 +189,14 @@ const Page = () => {
                 <p className="mt-1 text-4xl font-extrabold text-white mb-2">
                   Interactive Captions
                 </p>
-                <Image
-                  src="/how-it-works/caption-screenshot.png"
-                  height={281 * 1.2}
-                  width={499 * 1.2}
-                />
+                <div className="-mb-24">
+                  <Image
+                    className=""
+                    src="/how-it-works/caption-screenshot.png"
+                    height={281 * 1.2}
+                    width={499 * 1.2}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -213,11 +216,19 @@ function Conclusion() {
         <div className="pt-10 bg-black sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
           <div className="mx-auto max-w-7xl lg:px-8">
             <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
+                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
+                  <img
+                    className="w-full max-w-sm mx-auto"
+                    src="/how-it-works/hero-pattern.png"
+                  />
+                </div>
+              </div>
+              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 text-center lg:px-0 lg:text-left lg:flex lg:items-center">
                 <div className="lg:py-24 pb-20">
                   <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
                     <span className="block">Join the video</span>
-                    <span className="block bg-gradient-to-br from-primary-400 to-purple-500 text-transparent bg-clip-text">
+                    <span className="block bg-gradient text-transparent bg-clip-text">
                       <h1>revolution</h1>
                     </span>
                   </h1>
@@ -229,7 +240,7 @@ function Conclusion() {
                   <div className="mt-10 sm:mt-12">
                     <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
                       <div className="flex items-center justify-center lg:justify-start">
-                        <div className="p-1 bg-gradient-to-br from-primary-400 to-purple-700 rounded-md">
+                        <div className="p-1 bg-gradient rounded-md">
                           <button
                             type="submit"
                             className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
@@ -240,14 +251,6 @@ function Conclusion() {
                       </div>
                     </form>
                   </div>
-                </div>
-              </div>
-              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
-                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
-                  <img
-                    className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                    src="/how-it-works/hero-pattern.png"
-                  />
                 </div>
               </div>
             </div>
@@ -296,7 +299,7 @@ function HeroSection() {
                   <Link href="/explore">
                     <button
                       type="submit"
-                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient-to-r from-purple-500 via-primary-400-400 to-primary-500 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient text-base font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"
                     >
                       Explore
                     </button>
@@ -320,7 +323,7 @@ function HeroSection() {
         <div className="sm:mx-auto sm:max-w-3xl sm:px-6">
           <div className="py-12 sm:relative sm:mt-12 sm:py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
             <div className="hidden sm:block">
-              <div className="absolute inset-y-0 left-1/2 w-screen bg-primary-400 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
+              <div className="absolute inset-y-0 left-1/2 w-screen bg-gradient opacity-50 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
               <svg
                 className="absolute top-8 right-1/2 -mr-3 lg:m-0 lg:left-0"
                 width={404}
