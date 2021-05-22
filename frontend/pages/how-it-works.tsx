@@ -179,7 +179,7 @@ const Page = () => {
       </div>
       {/* Interactive Captions  */}
       <div className="bg-white p-8 flex items-center justify-center">
-        <div className="bg-gradient-to-br from-primary-400 to-fuchsia-400 rounded-lg w-4/5">
+        <div className="bg-gradient rounded-lg w-4/5">
           <div
             className="max-w-7xl mx-auto py-16 px-4 "
             style={{ paddingBottom: -10 }}
@@ -217,7 +217,7 @@ function Conclusion() {
                 <div className="lg:py-24 pb-20">
                   <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
                     <span className="block">Join the video</span>
-                    <span className="block bg-gradient-to-br from-primary-400 to-purple-500 text-transparent bg-clip-text">
+                    <span className="block bg-gradient text-transparent bg-clip-text">
                       <h1>revolution</h1>
                     </span>
                   </h1>
@@ -229,7 +229,7 @@ function Conclusion() {
                   <div className="mt-10 sm:mt-12">
                     <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
                       <div className="flex items-center justify-center lg:justify-start">
-                        <div className="p-1 bg-gradient-to-br from-primary-400 to-purple-700 rounded-md">
+                        <div className="p-1 bg-gradient rounded-md">
                           <button
                             type="submit"
                             className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
@@ -296,7 +296,7 @@ function HeroSection() {
                   <Link href="/explore">
                     <button
                       type="submit"
-                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient-to-r from-purple-500 via-primary-400-400 to-primary-500 text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
+                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient text-base font-medium text-white shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:px-10"
                     >
                       Explore
                     </button>

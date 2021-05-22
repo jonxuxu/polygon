@@ -49,3 +49,7 @@ a.link {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
+.bg-gradient {
+  @apply bg-gradient-to-tr from-[#EE3699] to-[#D819F8];
+}
