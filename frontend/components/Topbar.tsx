@@ -2,8 +2,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
+import styled from "styled-components";
 
-const Topbar = () => {
+const Topbar = ({ background = "white", theme = "light", style = {} }) => {
   const [profileMenu, setProfileMenu] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [session, loading] = useSession();
@@ -17,14 +18,14 @@ const Topbar = () => {
   const router = useRouter();
   // const { session } = useSession();
   return (
-    <nav className="bg-white shadow">
+    <nav className="shadow" style={{ backgroundColor: background, ...style }}>
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* <!-- Mobile menu button --> */}
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-secondary-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500  focus:outline-none focus:ring-2 focus:ring-inset focus:text-black"
               aria-controls="mobile-menu"
               aria-expanded="false"
               onClick={() => {
@@ -84,12 +85,12 @@ const Topbar = () => {
               <div className="flex-shrink-0 flex items-center cursor-pointer">
                 <img
                   className="block lg:hidden h-8 w-auto"
-                  src="/logo.png"
+                  src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
                   alt="Polygon"
                 />
                 <img
                   className="hidden lg:block h-8 w-auto"
-                  src="/logo.png"
+                  src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
                   alt="Polygon"
                 />
               </div>
@@ -99,16 +100,14 @@ const Topbar = () => {
               {/* <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" --> */}
               {routes.map((route) => (
                 <Link href={route.route} key={route.route}>
-                  <a
+                  <NavLink
                     href="#"
-                    className={`${
-                      router.pathname === route.route
-                        ? "border-primary-300 text-gray-900"
-                        : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                    selected={router.pathname === route.route}
+                    theme={theme}
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium`}
                   >
                     {route.label}
-                  </a>
+                  </NavLink>
                 </Link>
               ))}
             </div>
@@ -213,3 +212,20 @@ const Topbar = () => {
   );
 };
 export default Topbar;
+
+const NavLink = styled.a`
+  color: ${(params) => {
+    if (params.theme === "light") {
+      return params.selected ? "rgb(17,24,39)" : "rgb(107,114,128)";
+    } else {
+      return params.selected ? "#EE3699" : "rgba(237,237,237,0.7)";
+    }
+  }};
+  &:hover {
+    color: ${(params) => {
+      return params.theme === "light"
+        ? "rgb(55,65,81)"
+        : "rgba(255,255,255,0.8)";
+    }};
+  }
+`;
