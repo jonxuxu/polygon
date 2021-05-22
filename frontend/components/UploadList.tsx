@@ -26,7 +26,7 @@ export function UploadList() {
 
         <p className="text-sm ">
           Upload, manage and track your videos here. <br />
-          Congrats on being part of the Polygon early access circle!{" "}
+          Congrats on being part of the Frame early access circle!
         </p>
       </div>
       <div className="flex flex-col">

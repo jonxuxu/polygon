@@ -86,12 +86,12 @@ const Topbar = ({ background = "white", theme = "light", style = {} }) => {
                 <img
                   className="block lg:hidden h-8 w-auto"
                   src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
-                  alt="Polygon"
+                  alt="Frame"
                 />
                 <img
                   className="hidden lg:block h-8 w-auto"
                   src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
-                  alt="Polygon"
+                  alt="Frame"
                 />
               </div>
             </Link>

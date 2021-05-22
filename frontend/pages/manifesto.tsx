@@ -23,18 +23,18 @@ const Manifesto = () => (
       </Section>
       <div className="border-t-2 border-primary-400 mt-5" />
       <Section>
-        We made Polygon in response to the uncapitalized potential we see in the
+        We made Frame in response to the uncapitalized potential we see in the
         current video ecosystem, and with enthusiasm towards what it can become
         in the future. Below are some of the core idealogies guiding the
-        construction of Polygon. We have a lot planned, and hope you’ll enjoy
-        the experience as much as we do.
+        construction of Frame. We have a lot planned, and hope you’ll enjoy the
+        experience as much as we do.
       </Section>
       <Section>&mdash;Kunal and Jonathan</Section>
       {[
         {
           title: "Full Interaction",
           content:
-            "We believe that all the content in a video should be interactive. There’s so much data and information that sits idle, never to be touched or used. There’s really nothing that should prevent you from clicking on the text, the speech, the objects and the people in a video. Polygon aims to make that happen with smart design, computer vision and speech to text algorithms.",
+            "We believe that all the content in a video should be interactive. There’s so much data and information that sits idle, never to be touched or used. There’s really nothing that should prevent you from clicking on the text, the speech, the objects and the people in a video. Frame aims to make that happen with smart design, computer vision and speech to text algorithms.",
         },
         {
           title: "Adaptive and Fun",
@@ -44,12 +44,12 @@ const Manifesto = () => (
         {
           title: "Social and Collaborative",
           content:
-            "Why has video watching now become the lonely experience of bingeing on content? We have plans to change this through indie content creation, first person footage, timeline sharing and live shows. Polygon will aim to use the discovery experience that comes with greater interactivity to bring some life back into the internet.",
+            "Why has video watching now become the lonely experience of bingeing on content? We have plans to change this through indie content creation, first person footage, timeline sharing and live shows. Frame will aim to use the discovery experience that comes with greater interactivity to bring some life back into the internet.",
         },
         {
           title: "Linking Things Together",
           content:
-            "We see a huge potential to bring videos to the 2020’s with next-level integrations. Translate foreign text, listen to them and add them to your collection. Search up a character in a show, or buy a piece of clothing you like. Save a lecture whiteboard for later, or jump to the video mentioned as a prerequisite. All within the Polygon player.",
+            "We see a huge potential to bring videos to the 2020’s with next-level integrations. Translate foreign text, listen to them and add them to your collection. Search up a character in a show, or buy a piece of clothing you like. Save a lecture whiteboard for later, or jump to the video mentioned as a prerequisite. All within the Frame player.",
         },
       ].map(({ title, content }) => (
         <div key={title}>

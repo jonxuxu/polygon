@@ -35,7 +35,7 @@ const features = [
   },
   {
     name: "Live Streaming",
-    sub: "All the features of Polygon applied to live video.",
+    sub: "All the features of Frame applied to live video.",
     icon: "live_tv.svg",
   },
   {
@@ -289,9 +289,8 @@ function HeroSection() {
                   Be Part of the Experience
                 </h1>
                 <p className="mt-6 text-xl text-gray-500">
-                  We made Polygon to explore new ways we can interact with
-                  videos. Augment your viewing experience and play with the
-                  content.
+                  We made Frame to explore new ways we can interact with videos.
+                  Augment your viewing experience and play with the content.
                 </p>
               </div>
               <form action="#" className="mt-12 sm:max-w-lg sm:w-full sm:flex">

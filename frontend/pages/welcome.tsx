@@ -199,7 +199,7 @@ const Index = () => {
                       </span>
                     </h1>
                     <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                      Polygon adds a layer of rich interactions directly into
+                      Frame adds a layer of rich interactions directly into
                       video, so you can get pulled in like never before.
                     </p>
                     <div className="mt-10 sm:mt-12">
