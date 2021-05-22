@@ -58,16 +58,16 @@ const features = [
 function FeaturesGrid() {
   return (
     <div className="relative bg-white py-16 sm:py-24 lg:py-32">
-      <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl">
+      <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-5xl">
         <p className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl">
           Incoming Features
         </p>
 
         <div className="mt-12">
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-8 grid-cols-2 md:grid-cols-3">
             {features.map((feature) => (
               <div key={feature.name} className="pt-6">
-                <div className="flow-root bg-white rounded-lg shadow-lg px-6 pb-8">
+                <div className="flow-root bg-white rounded-lg shadow-lg px-3 sm:px-6 pb-8">
                   <div className="mt-6">
                     <div>
                       <span className="inline-flex items-center justify-center p-3">
@@ -189,11 +189,14 @@ const Page = () => {
                 <p className="mt-1 text-4xl font-extrabold text-white mb-2">
                   Interactive Captions
                 </p>
-                <Image
-                  src="/how-it-works/caption-screenshot.png"
-                  height={281 * 1.2}
-                  width={499 * 1.2}
-                />
+                <div className="-mb-24">
+                  <Image
+                    className=""
+                    src="/how-it-works/caption-screenshot.png"
+                    height={281 * 1.2}
+                    width={499 * 1.2}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -213,7 +216,15 @@ function Conclusion() {
         <div className="pt-10 bg-gray-900 sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
           <div className="mx-auto max-w-7xl lg:px-8">
             <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 sm:text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
+                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
+                  <img
+                    className="w-full max-w-sm mx-auto"
+                    src="/how-it-works/hero-pattern.png"
+                  />
+                </div>
+              </div>
+              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 text-center lg:px-0 lg:text-left lg:flex lg:items-center">
                 <div className="lg:py-24 pb-20">
                   <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
                     <span className="block">Join the video</span>
@@ -240,14 +251,6 @@ function Conclusion() {
                       </div>
                     </form>
                   </div>
-                </div>
-              </div>
-              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
-                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
-                  <img
-                    className="w-full lg:absolute lg:inset-y-0 lg:left-0 lg:h-full lg:w-auto lg:max-w-none"
-                    src="/how-it-works/hero-pattern.png"
-                  />
                 </div>
               </div>
             </div>
