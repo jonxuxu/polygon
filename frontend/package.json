@@ -41,6 +41,7 @@
     "react-device-detect": "^1.17.0",
     "react-dom": "17.0.1",
     "react-loading-skeleton": "^2.2.0",
+    "react-typeform-embed": "^0.2.1",
     "styled-components": "^5.2.1",
     "swr": "^0.5.5",
     "tailwindcss": "^2.1.1",

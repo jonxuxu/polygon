@@ -2,9 +2,10 @@ import Topbar from "../../components/Topbar";
 import { useMe } from "utils/fetcher";
 import { UploadList } from "../../components/UploadList";
 import { useSession } from "next-auth/client";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Router from "next/router";
 import styled from "styled-components";
+import { ReactTypeformEmbed } from "react-typeform-embed";
 
 const UploadsPage = () => {
   const { me } = useMe();
@@ -39,6 +40,9 @@ const UploadsPage = () => {
 };
 
 const Restricted = () => {
+  const formRef = useRef(null);
+  const [enterCode, setEnterCode] = useState(false);
+
   return (
     <div style={{ position: "relative" }}>
       <Topbar
@@ -83,9 +87,20 @@ const Restricted = () => {
         </span>
         <div style={{ marginTop: 80, display: "flex" }}>
           <SecondaryButton>Enter Code</SecondaryButton>
-          <PrimaryButton>Apply</PrimaryButton>
+          <PrimaryButton
+            onClick={() => {
+              formRef.current.typeform.open();
+            }}
+          >
+            Apply
+          </PrimaryButton>
         </div>
       </div>
+      <ReactTypeformEmbed
+        url="https://form.typeform.com/to/HOmG00SI"
+        popup
+        ref={formRef}
+      />
     </div>
   );
 };
