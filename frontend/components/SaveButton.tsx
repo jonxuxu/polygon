@@ -32,7 +32,7 @@ export function SaveButton() {
           marginRight: 8,
         }}
       />
-      <span className="text-gray-500">
+      <span className="text-[#8a8a8a]">
         {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
       </span>
     </button>
