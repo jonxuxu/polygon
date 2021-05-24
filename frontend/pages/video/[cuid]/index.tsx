@@ -94,6 +94,8 @@ const App = () => {
                 <br />
                 {/* <CommentsSection video={video} /> */}
                 <div>
+                  <h4 className="mt-8 mb-3 text-xl">Comments </h4>
+
                   <form
                     onSubmit={async (e) => {
                       e.preventDefault();
@@ -146,9 +148,8 @@ const App = () => {
                     )}
                   </form>
 
-                  <h4 className="mt-5 mb-3 text-xl">Comments </h4>
                   {video.comments.map((comment) => (
-                    <div key={comment.id} className="flex flex-col mb-5">
+                    <div key={comment.id} className="flex flex-col mb-5 mt-3">
                       <div className="flex flex-row items-center gap-3 text-sm">
                         <UserAvatar user={comment.user} />
                         {comment.user.name}{" "}
