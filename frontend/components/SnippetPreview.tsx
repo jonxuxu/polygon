@@ -44,6 +44,7 @@ export function SnippetPreview({
                 key={i}
                 videoRef={videoRef}
                 isPreview={false}
+                scale={1.0}
               />
             );
           })}
@@ -53,7 +54,7 @@ export function SnippetPreview({
   );
 }
 
-export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
+export const Snippet = ({ t, isFirst, videoRef, isPreview, scale }) => {
   const canvasRef = useRef(null);
   const [showControls, setShowControls] = useState(false);
 
@@ -78,7 +79,9 @@ export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
           {new Date(t.time * 1000).toISOString().substr(11, 8)}
         </TimeBubble>
       </div>
+
       <SnippetCard
+        scale={scale}
         isPreview={isPreview}
         color={t.color}
         onMouseEnter={() => {
@@ -163,4 +166,6 @@ const SnippetCard = styled.div`
   display: flex;
   justify-content: space-between;
   margin-left: ${(props) => (props.isPreview ? `0px` : "50px")};
+  transform: ${(props) => `scale(${props.scale})`};
+  /* transform: scale(0.7); */
 `;

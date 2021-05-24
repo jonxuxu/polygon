@@ -170,6 +170,7 @@ const Page = () => {
                     isFirst={false}
                     videoRef={null}
                     isPreview={true}
+                    scale={i === 0 ? 0.8 : i === 1 ? 1.2 : 0.7}
                   />
                 </div>
               ))}
