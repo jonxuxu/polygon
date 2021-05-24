@@ -149,7 +149,10 @@ const App = () => {
                   </form>
 
                   {video.comments.map((comment) => (
-                    <div key={comment.id} className="flex flex-col mb-5 mt-3">
+                    <div
+                      key={comment.id}
+                      className="flex flex-col mb-5 mt-3 group"
+                    >
                       <div className="flex flex-row items-center gap-3 text-sm">
                         <UserAvatar user={comment.user} />
                         {comment.user.name}{" "}
@@ -159,7 +162,7 @@ const App = () => {
                         </p>
                         {me && me.id === comment.user_id && (
                           <TrashIcon
-                            className="text-red-400 h-5"
+                            className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
                             onClick={() =>
                               fetcher("/api/video/comment/delete", {
                                 id: comment.id,
