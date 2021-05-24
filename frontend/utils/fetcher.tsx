@@ -33,8 +33,14 @@ export function useMe() {
 export function useVideo({ cuid }) {
   const {
     data: video,
+    mutate,
   }: {
-    data?: videos & { user: users; savedBy: users[]; comments: comments[] };
+    mutate: any;
+    data?: videos & {
+      user: users;
+      savedBy: users[];
+      comments: (comments & { user: users })[];
+    };
   } = useSWR(`/api/video/${cuid}`, fetcher);
-  return { video };
+  return { video, mutate };
 }

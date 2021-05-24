@@ -3,14 +3,15 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
 import dayjs from "dayjs";
-import { useMe, useVideo } from "utils/fetcher";
+import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
 
-import Topbar from "components/Topbar";
+import Topbar, { UserAvatar } from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
 import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
+import comment from "pages/api/video/comment";
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -19,10 +20,11 @@ const App = () => {
   const router = useRouter();
   const videoRef = useRef(null);
 
-  const { video } = useVideo({ cuid: router.query?.cuid });
+  const { video, mutate } = useVideo({ cuid: router.query?.cuid });
   const { me } = useMe();
 
   const [snippets, setSnippets] = useState<Transcription[]>([]);
+  const [comment, setComment] = useState("");
   const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
@@ -88,7 +90,62 @@ const App = () => {
                 </span>
                 {/* Save button */}
                 <br />
-                <h4>Comments </h4>Comments
+                {/* <CommentsSection video={video} /> */}
+                <div>
+                  {!me && (
+                    <div>
+                      <Link href="/login">
+                        <a className="link">Log in</a>
+                      </Link>{" "}
+                      to leave a comment
+                    </div>
+                  )}
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      fetcher("/api/video/comment", {
+                        text: comment,
+                        video_id: video.id,
+                      });
+                      mutate(
+                        {
+                          ...video,
+                          comments: [
+                            ...video.comments,
+                            { text: comment, user: me },
+                          ],
+                        },
+                        false
+                      );
+                      setComment("");
+                    }}
+                  >
+                    <input
+                      placeholder="Leave a comment"
+                      className={`text-input mt-5`}
+                      value={comment}
+                      type="text"
+                      disabled={!me}
+                      onChange={(e) => setComment(e.target.value)}
+                    />
+                  </form>
+                  <h4 className="mt-5 mb-3 text-xl">Comments </h4>
+                  {video.comments.map((comment) => (
+                    <div key={comment.id} className="flex flex-col mb-5">
+                      <div className="flex flex-row items-center gap-3 text-sm">
+                        <UserAvatar user={comment.user} />
+                        {comment.user.email}{" "}
+                        <p className="text-sm float-right">
+                          {/* @ts-ignore */}
+                          {dayjs(comment.created).from(dayjs())}
+                        </p>
+                      </div>
+
+                      <p className="text-lg mt-2 ml-11">{comment.text}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           ) : (
@@ -102,5 +159,7 @@ const App = () => {
     </div>
   );
 };
+
+// const CommentsSection({video}) =>
 
 export default App;

@@ -56,3 +56,7 @@ a.link {
 .bg-gradient {
   @apply bg-gradient-to-tr from-[#EE3699] to-[#D819F8];
 }
+
+.text-input {
+  @apply shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-200 rounded-md;
+}

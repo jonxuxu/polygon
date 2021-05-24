@@ -7,7 +7,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Frame Video</title>
+        <title>Polygon Video</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <Provider session={pageProps.session}>

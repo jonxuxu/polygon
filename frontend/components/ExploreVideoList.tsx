@@ -17,7 +17,7 @@ export function ExploreVideoList() {
           type="text"
           name="search"
           id="search"
-          className="shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-200 rounded-md"
+          className="text-input"
           placeholder="Search Videos... "
           value={search}
           onChange={(e) => setSearch(e.target.value)}
