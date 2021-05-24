@@ -11,7 +11,7 @@ import VideoPlayer from "components/VideoPlayer";
 import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
-import comment from "pages/api/video/comment";
+import { TrashIcon } from "@heroicons/react/outline";
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -106,7 +106,7 @@ const App = () => {
                     onSubmit={async (e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      fetcher("/api/video/comment", {
+                      fetcher("/api/video/comment/create", {
                         text: comment,
                         video_id: video.id,
                       });
@@ -123,16 +123,21 @@ const App = () => {
                       setComment("");
                     }}
                   >
-                    <input
-                      placeholder="Leave a comment"
-                      className={`text-input mt-5`}
-                      value={comment}
-                      type="text"
-                      disabled={!me}
-                      onChange={(e) => setComment(e.target.value)}
-                      onFocus={() => setCommentInputFocus(true)}
-                      onBlur={() => setCommentInputFocus(false)}
-                    />
+                    <div className="flex flex-row mt-5">
+                      <input
+                        placeholder="Leave a comment"
+                        className={`text-input `}
+                        value={comment}
+                        type="text"
+                        disabled={!me}
+                        onChange={(e) => setComment(e.target.value)}
+                        onFocus={() => setCommentInputFocus(true)}
+                        onBlur={() => setCommentInputFocus(false)}
+                      />
+                      <button type="submit" className="primary ml-1">
+                        Comment
+                      </button>
+                    </div>
                   </form>
 
                   <h4 className="mt-5 mb-3 text-xl">Comments </h4>
@@ -140,11 +145,21 @@ const App = () => {
                     <div key={comment.id} className="flex flex-col mb-5">
                       <div className="flex flex-row items-center gap-3 text-sm">
                         <UserAvatar user={comment.user} />
-                        {comment.user.email}{" "}
+                        {comment.user.name}{" "}
                         <p className="text-sm float-right">
                           {/* @ts-ignore */}
                           {dayjs(comment.created).from(dayjs())}
                         </p>
+                        {me && me.id === comment.user_id && (
+                          <TrashIcon
+                            className="text-red-400 h-5"
+                            onClick={() =>
+                              fetcher("/api/video/comment/delete", {
+                                id: comment.id,
+                              })
+                            }
+                          />
+                        )}
                       </div>
 
                       <p className="text-lg mt-2 ml-11">{comment.text}</p>
