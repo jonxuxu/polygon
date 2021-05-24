@@ -125,7 +125,7 @@ const Topbar = ({ background = "white", theme = "light", style = {} }) => {
                   onClick={() => setProfileMenu(!profileMenu)}
                 >
                   <span className="sr-only">Open user menu</span>
-                  <UserAvatar user={session.user} />
+                  <UserAvatar user={session ? session.user : undefined} />
                 </button>
               </div>
 
@@ -214,8 +214,8 @@ const NavLink = styled.a`
   }
 `;
 
-export const UserAvatar = ({ user }: { user?: { image: string } }) =>
-  !!user ? (
+export const UserAvatar = ({ user }: { user?: { image?: string } }) => {
+  return !!user ? (
     <img className="h-8 w-8 rounded-full" src={user.image} alt="" />
   ) : (
     <span className="inline-block h-8 w-8 rounded-full overflow-hidden bg-gray-100">
@@ -228,3 +228,4 @@ export const UserAvatar = ({ user }: { user?: { image: string } }) =>
       </svg>
     </span>
   );
+};

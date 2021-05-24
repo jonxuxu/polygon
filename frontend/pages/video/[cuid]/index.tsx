@@ -26,6 +26,7 @@ const App = () => {
   const [snippets, setSnippets] = useState<Transcription[]>([]);
   const [comment, setComment] = useState("");
   const [mobile, setMobile] = useState(false);
+  const [commentInputFocus, setCommentInputFocus] = useState(false);
 
   useEffect(() => {
     // if (navigator.userAgent) setMobile(true);
@@ -55,6 +56,7 @@ const App = () => {
                 snippets={snippets}
                 setSnippets={setSnippets}
                 videoRef={videoRef}
+                commentInputFocus={commentInputFocus}
               />
               <div className="mx-10">
                 <div className="my-2 text-xl text-gray-700">
@@ -128,8 +130,11 @@ const App = () => {
                       type="text"
                       disabled={!me}
                       onChange={(e) => setComment(e.target.value)}
+                      onFocus={() => setCommentInputFocus(true)}
+                      onBlur={() => setCommentInputFocus(false)}
                     />
                   </form>
+
                   <h4 className="mt-5 mb-3 text-xl">Comments </h4>
                   {video.comments.map((comment) => (
                     <div key={comment.id} className="flex flex-col mb-5">
