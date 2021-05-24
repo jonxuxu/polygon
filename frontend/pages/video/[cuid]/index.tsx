@@ -94,14 +94,6 @@ const App = () => {
                 <br />
                 {/* <CommentsSection video={video} /> */}
                 <div>
-                  {!me && (
-                    <div>
-                      <Link href="/login">
-                        <a className="link">Log in</a>
-                      </Link>{" "}
-                      to leave a comment
-                    </div>
-                  )}
                   <form
                     onSubmit={async (e) => {
                       e.preventDefault();
@@ -129,15 +121,29 @@ const App = () => {
                         className={`text-input `}
                         value={comment}
                         type="text"
+                        style={{ cursor: !!me ? "text" : "not-allowed" }}
                         disabled={!me}
                         onChange={(e) => setComment(e.target.value)}
                         onFocus={() => setCommentInputFocus(true)}
                         onBlur={() => setCommentInputFocus(false)}
                       />
-                      <button type="submit" className="primary ml-1">
+
+                      <button
+                        disabled={!me}
+                        type="submit"
+                        className="primary ml-1"
+                      >
                         Comment
                       </button>
                     </div>
+                    {!me && (
+                      <div className="mt-1 text-sm">
+                        <Link href="/login">
+                          <a className="link">Log in</a>
+                        </Link>{" "}
+                        to leave a comment
+                      </div>
+                    )}
                   </form>
 
                   <h4 className="mt-5 mb-3 text-xl">Comments </h4>
