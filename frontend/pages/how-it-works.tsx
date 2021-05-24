@@ -162,8 +162,8 @@ const Page = () => {
               {snippets.map((snippet, i) => (
                 <div
                   key={i}
-                  className="md:w-80 md:animate-bounce"
-                  style={{ animation: `bounce 3.${i * 3}s infinite` }}
+                  className="md:w-80 "
+                  style={{ animation: `mover 1.${i * 3}s infinite alternate` }}
                 >
                   <Snippet
                     t={snippet}
