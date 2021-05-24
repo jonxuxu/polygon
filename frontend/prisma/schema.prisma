@@ -53,6 +53,7 @@ model users {
   updated_at     DateTime   @default(now()) @db.Timestamptz(6)
   language       String     @default("English")
   approved       Boolean    @default(false)
+  comments       comments[]
   snippets       snippets[]
   videos         videos[]   @relation("VideoCreator")
   savedVideos    videos[]   @relation("SavedVideo")
@@ -89,8 +90,19 @@ model videos {
   useSubtitles      Boolean    @default(true)
   viewBoost         Int        @default(0)
   user              users      @relation("VideoCreator", fields: [creator], references: [id])
+  comments          comments[]
   snippets          snippets[]
   savedBy           users[]    @relation("SavedVideo")
+}
+
+model comments {
+  id       Int      @id @default(autoincrement())
+  created  DateTime @default(now()) @db.Timestamptz(6)
+  text     String
+  user_id  Int
+  video_id Int
+  user     users    @relation(fields: [user_id], references: [id])
+  video    videos   @relation(fields: [video_id], references: [id])
 }
 
 model snippets {

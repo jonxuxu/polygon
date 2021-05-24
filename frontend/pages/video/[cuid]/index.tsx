@@ -74,7 +74,6 @@ const App = () => {
                   </div>
                 </div>
                 <hr className="mb-4" />
-
                 <div className="mb text-md text-gray-700 mb-2 flex">
                   <img
                     className="h-8 w-8 rounded-full mr-2"
@@ -89,6 +88,7 @@ const App = () => {
                 </span>
                 {/* Save button */}
                 <br />
+                <h4>Comments </h4>Comments
               </div>
             </div>
           ) : (

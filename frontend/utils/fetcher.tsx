@@ -1,4 +1,4 @@
-import { users, videos, Prisma, snippets } from "@prisma/client";
+import { users, videos, Prisma, snippets, comments } from "@prisma/client";
 import useSWR from "swr";
 
 export const fetcher = (url, data = undefined) =>
@@ -34,7 +34,7 @@ export function useVideo({ cuid }) {
   const {
     data: video,
   }: {
-    data?: videos & { user: users; savedBy: users[] };
+    data?: videos & { user: users; savedBy: users[]; comments: comments[] };
   } = useSWR(`/api/video/${cuid}`, fetcher);
   return { video };
 }
