@@ -6,7 +6,8 @@ import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
 
 import Link from "next/link";
-import { useMe } from "utils/fetcher";
+import { useMe, useVideo } from "utils/fetcher";
+import VideoPlayer from "components/VideoPlayer";
 
 const features = [
   {
@@ -106,6 +107,9 @@ function FeaturesGrid() {
 const Page = () => {
   const voiceRef = useRef(null);
 
+  const { video } = useVideo({ cuid: "ckokxczrz000009kua3j1eu0l" });
+  const videoRef = useRef(null);
+
   const snippets: Transcription[] = [
     {
       original: "芋圓現做品質看得到",
@@ -203,10 +207,10 @@ const Page = () => {
         </div>
       </div>
       {/* Interactive Captions  */}
-      <div className="bg-white p-8 flex items-center justify-center">
-        <div className="bg-gradient rounded-lg w-4/5">
+      <div className="bg-white  flex items-center justify-center">
+        <div className="bg-gradient  w-full md:rounded-lg md:w-3/5 p-8">
           <div
-            className="max-w-7xl mx-auto py-16 px-4 "
+            className="max-w-4xl mx-auto py-16 px-4 "
             style={{ paddingBottom: -10 }}
           >
             <div className="text-left">
@@ -214,13 +218,25 @@ const Page = () => {
                 <p className="mt-1 text-4xl font-extrabold text-white mb-2">
                   Interactive Captions
                 </p>
-                <div className="-mb-24">
-                  <Image
+                <p className="mt-1 text-lg text-white mb-2">
+                  Click on captions to hear their pronunciations
+                </p>
+                <div className="md:-mb-24">
+                  {video && video.url && (
+                    <VideoPlayer
+                      videoRow={video}
+                      snippets={snippets}
+                      setSnippets={() => {}}
+                      videoRef={videoRef}
+                      commentInputFocus={false}
+                    />
+                  )}
+                  {/* <Image
                     className=""
                     src="/how-it-works/caption-screenshot.png"
                     height={281 * 1.2}
                     width={499 * 1.2}
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
