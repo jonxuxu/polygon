@@ -6,6 +6,7 @@ import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
 
 import Link from "next/link";
+import { useMe } from "utils/fetcher";
 
 const features = [
   {
@@ -147,7 +148,22 @@ const Page = () => {
       </div>
       {/* Build your collection  */}
       <div className="bg-white">
-        <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto pt-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+          <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-8 md:mb-16">
+            {snippets.map((snippet, i) => (
+              <div
+                key={i}
+                className={`md:w-80 ${i === 1 && "mb-24"}`}
+                style={{ animation: `mover 2.${i * 3}s infinite alternate` }}
+              >
+                <Image
+                  src={`/how-it-works/snippet${i + 1}.svg`}
+                  height={109}
+                  width={269}
+                />
+              </div>
+            ))}
+          </div>
           <div className="text-center">
             <h2 className="text-base font-semibold text-primary-600 tracking-wide uppercase">
               Then
@@ -158,19 +174,20 @@ const Page = () => {
             <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
               Add snippets to your card deck, and review them at your own time.
             </p>
-            <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8">
+            <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-16">
               {snippets.map((snippet, i) => (
                 <div
                   key={i}
-                  className="md:w-80 "
-                  style={{ animation: `mover 1.${i * 3}s infinite alternate` }}
+                  className={`md:w-80 ${i === 1 && "-mb-24"}`}
+                  style={{
+                    animation: `mover 2.${i * 3}s infinite alternate`,
+                    // marginBottom: "-20px",
+                  }}
                 >
-                  <Snippet
-                    t={snippet}
-                    isFirst={false}
-                    videoRef={null}
-                    isPreview={true}
-                    scale={i === 0 ? 0.8 : i === 1 ? 1.2 : 0.7}
+                  <Image
+                    src={`/how-it-works/snippet${i + 4}.svg`}
+                    height={109}
+                    width={269}
                   />
                 </div>
               ))}
@@ -211,6 +228,7 @@ const Page = () => {
 };
 
 function Conclusion() {
+  const { me } = useMe();
   return (
     <div className="">
       <div className="relative overflow-hidden ">
@@ -242,12 +260,14 @@ function Conclusion() {
                     <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
                       <div className="flex items-center justify-center lg:justify-start">
                         <div className="p-1 bg-gradient rounded-md">
-                          <button
-                            type="submit"
-                            className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
-                          >
-                            Apply
-                          </button>
+                          <Link href={me ? "/uploads" : "/login"}>
+                            <button
+                              type="submit"
+                              className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
+                            >
+                              Apply
+                            </button>
+                          </Link>
                         </div>
                       </div>
                     </form>
@@ -258,11 +278,14 @@ function Conclusion() {
           </div>
         </div>
         {/* More main page content here... */}
-        <div className="bg-primary-400 text-white h-40 flex items-center justify-between p-20 text-xl">
-          <img src="/logo-dark.svg" className="h-10" />
+        <div className="bg-[#EE3699] text-white h-40 flex items-center justify-between p-20 text-xl">
+          <div className="flex flex-row items-center">
+            <img src="/logo/favicon-light.svg" className="h-10 z-10" />
+            <img src="/logo-light.svg" className="h-10 -ml-8" />
+          </div>
 
           <Link href="/manifesto">
-            <a className=" text-gray-700 text-md">Manifesto</a>
+            <a className=" text-white text-md">Manifesto</a>
           </Link>
         </div>
       </div>

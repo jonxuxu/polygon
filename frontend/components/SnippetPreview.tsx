@@ -44,7 +44,6 @@ export function SnippetPreview({
                 key={i}
                 videoRef={videoRef}
                 isPreview={false}
-                scale={1.0}
               />
             );
           })}
@@ -54,16 +53,8 @@ export function SnippetPreview({
   );
 }
 
-export const Snippet = ({ t, isFirst, videoRef, isPreview, scale }) => {
-  const canvasRef = useRef(null);
+export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
   const [showControls, setShowControls] = useState(false);
-
-  // useEffect(() => {
-  //   if (t.image) {
-  //     const canvasCtx = canvasRef.current.getContext("2d");
-  //     canvasCtx.putImageData(t.image, 0, 0);
-  //   }
-  // }, []);
 
   return (
     <div style={{ display: "flex" }}>
@@ -81,7 +72,6 @@ export const Snippet = ({ t, isFirst, videoRef, isPreview, scale }) => {
       </div>
 
       <SnippetCard
-        scale={scale}
         isPreview={isPreview}
         color={t.color}
         onMouseEnter={() => {
@@ -166,6 +156,4 @@ const SnippetCard = styled.div`
   display: flex;
   justify-content: space-between;
   margin-left: ${(props) => (props.isPreview ? `0px` : "50px")};
-  transform: ${(props) => `scale(${props.scale})`};
-  /* transform: scale(0.7); */
 `;
