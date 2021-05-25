@@ -1,6 +1,5 @@
 import { useFeed } from "utils/fetcher";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
 import dayjs from "dayjs";
 
 import { ImagePreview } from "./ImagePreview";

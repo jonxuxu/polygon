@@ -3,7 +3,7 @@
 const VideoLoader = () => {
   const fill = "#ddd";
   return (
-    <div className="col-span-6 md:col-span-4 xl:col-span-3 relative rounded-lg  flex">
+    <div className="col-span-6 md:col-span-4 xl:col-span-3 relative rounded-lg bg-white flex">
       <svg
         width={300}
         height={310}
@@ -12,30 +12,30 @@ const VideoLoader = () => {
         color="gray"
       >
         <rect
-          x="16"
-          y="17"
+          x="0"
+          y="0"
           rx="0"
           ry="0"
-          width={360}
+          width={370}
           height={200}
           fill={fill}
           className=" animate-pulse"
         />
-        <circle cx={35} cy={248} r={20} fill={fill} className="animate-pulse" />
+        <circle cx={23} cy={278} r={20} fill={fill} className="animate-pulse" />
         {/* Top rectangle */}
-        {/* <rect
-          x="16"
-          y={209}
+        <rect
+          x="7"
+          y={229}
           rx="2"
           ry="2"
-          width={300}
+          width={330}
           height="15"
           fill={fill}
           className="animate-pulse"
-        /> */}
+        />
         <rect
-          x="69"
-          y="229"
+          x="50"
+          y="259"
           rx="2"
           ry="2"
           width="275"
@@ -44,8 +44,8 @@ const VideoLoader = () => {
           className="animate-pulse"
         />
         <rect
-          x="69"
-          y="253"
+          x="50"
+          y="283"
           rx="2"
           ry="2"
           width="140"
