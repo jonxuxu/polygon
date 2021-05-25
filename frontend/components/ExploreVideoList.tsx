@@ -24,7 +24,7 @@ export function ExploreVideoList() {
         />
       </div>
       <div className="grid grid-cols-12 gap-6">
-        {feed
+        {feed // && false
           ? feed
               .filter(
                 (v) =>
@@ -75,14 +75,7 @@ export function ExploreVideoList() {
               ))
           : Array(10)
               .fill(0)
-              .map((l, i) => (
-                <div
-                  key={i}
-                  className="col-span-6 md:col-span-4 xl:col-span-3 p-2 relative rounded-lg bg-white flex "
-                >
-                  <VideoLoader />
-                </div>
-              ))}
+              .map((l, i) => <VideoLoader key={i} />)}
       </div>
     </div>
   );
