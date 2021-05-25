@@ -78,9 +78,10 @@ export default VideoControls;
 
 const ControlDiv = styled.div`
   width: 100%;
+  padding: 0px 2.5%;
   position: absolute;
   bottom: 0px;
-  padding: 0px 2.5%;
+  z-index: 3;
 `;
 
 const ProgressBar = styled.progress`

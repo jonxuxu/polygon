@@ -294,11 +294,9 @@ export default function VideoPlayer({
           width: "100%",
         }}
       >
-        {videoRef.current &&
-          videoRef.current.hasAttribute("controls") &&
-          !playing && (
-            <ToolTips videoRef={videoRef} drawTranslation={drawTranslation} />
-          )}
+        {videoRef.current && !playing && (
+          <ToolTips videoRef={videoRef} drawTranslation={drawTranslation} />
+        )}
 
         <video ref={videoRef} controls={false} />
         <VideoControls videoRef={videoRef} />
