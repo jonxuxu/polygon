@@ -41,7 +41,6 @@ const UploadsPage = () => {
 
 const Restricted = () => {
   const formRef = useRef(null);
-  const [enterCode, setEnterCode] = useState(false);
 
   return (
     <div style={{ position: "relative" }}>
@@ -85,8 +84,7 @@ const Restricted = () => {
           Apply to be an insider creator to upload your own videos. Be the first
           to enjoy our upcoming monetization and influencer features.
         </span>
-        <div style={{ marginTop: 80, display: "flex" }}>
-          <SecondaryButton>Enter Code</SecondaryButton>
+        <div style={{ marginTop: 80 }}>
           <PrimaryButton
             onClick={() => {
               formRef.current.typeform.open();

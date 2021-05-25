@@ -1,115 +1,103 @@
-import React, { useRef, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlay,
-  faPause,
-  faForward,
-  faBackward,
-  faExpand,
-  faCompress,
-} from "@fortawesome/free-solid-svg-icons";
+import { useRef, useState } from "react";
+import styled from "styled-components";
 
-const VideoControls = ({
-  videoRef,
-  setPlaying,
-  playing,
-  progress,
-  setFullScreen,
-  fullScreen,
-}) => {
-  const controlRef = useRef(null);
+const VideoControls = ({ videoRef }) => {
+  const [hidden, setHidden] = useState(false);
+  const video = videoRef.current;
 
-  useEffect(() => {
-    window.addEventListener("keydown", handleUserKeyPress);
-
-    return () => {
-      window.removeEventListener("keydown", handleUserKeyPress);
-    };
-  }, []);
-
-  const handleUserKeyPress = (e) => {
-    const { key, keyCode } = e;
-    console.log("user pressed ", keyCode);
-
-    if (keyCode === 32) {
-      //spacebar
-      setPlaying(!playing);
-    }
-  };
+  if (video === undefined || video === null) {
+    return <div />;
+  }
 
   return (
-    <div
-      ref={controlRef}
-      style={{
-        position: "absolute",
-        bottom: 0,
-        width: "100%",
-        zIndex: 3,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "flex-end",
-        backgroundImage:
-          "linear-gradient(rgba(0, 0, 0, 0) ,rgba(40, 40, 40, 0.7))",
-        height: 60,
-      }}
-    >
-      <progress
-        // min="0"
-        max="100"
-        style={{
-          width: "100%",
-          height: 5,
-          cursor: "pointer",
-        }}
-        value={progress}
-        onClick={(e) => {
-          const currentTargetRect = e.currentTarget.getBoundingClientRect();
-          const left = e.pageX - currentTargetRect.left;
-          const percentage = left / controlRef.current.offsetWidth;
-          const vidTime = videoRef.current.duration * percentage;
-          videoRef.current.currentTime = vidTime;
-          setPlaying(true);
-        }}
-      />
+    <ControlDiv id="video-controls" className="controls">
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "center",
-          color: "white",
-          padding: "5px 25px",
+          position: "relative",
+          top: 10,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <FontAwesomeIcon icon={faBackward} style={{ cursor: "pointer" }} />
-          <FontAwesomeIcon
-            icon={playing ? faPause : faPlay}
+        {video.muted ? (
+          <ControlBtn
+            src="/icons/volume-off.svg"
+            size={17}
             onClick={() => {
-              setPlaying(!playing);
+              video.muted = false;
             }}
-            style={{ cursor: "pointer", marginLeft: 20, marginRight: 15 }}
           />
-          <FontAwesomeIcon icon={faForward} style={{ cursor: "pointer" }} />
-          {videoRef.current && videoRef.current.duration && (
-            <span style={{ marginLeft: 20 }}>
-              {`${new Date(videoRef.current.currentTime * 1000)
-                .toISOString()
-                .substr(11, 8)} / ${new Date(videoRef.current.duration * 1000)
-                .toISOString()
-                .substr(11, 8)}`}
-            </span>
-          )}
-        </div>
-        <FontAwesomeIcon
-          icon={fullScreen ? faCompress : faExpand}
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            setFullScreen(!fullScreen);
-          }}
-        />
+        ) : (
+          <ControlBtn
+            src="/icons/volume-up.svg"
+            size={17}
+            onClick={() => {
+              video.muted = true;
+            }}
+          />
+        )}
+
+        {video.paused ? (
+          <ControlBtn
+            onClick={() => {
+              video.play();
+            }}
+            src="/icons/play.svg"
+            size={35}
+          />
+        ) : (
+          <ControlBtn
+            onClick={() => {
+              video.pause();
+            }}
+            src="/icons/pause.svg"
+            size={35}
+          />
+        )}
+        <ControlBtn src="/icons/message-alt.svg" size={17} />
       </div>
-    </div>
+      <ProgressBar
+        id="progress"
+        value={video.currentTime}
+        max={video.duration}
+        onClick={(e) => {
+          const currentTargetRect = e.currentTarget.getBoundingClientRect();
+          const left = e.pageX - currentTargetRect.left;
+          const percentage = left / currentTargetRect.width;
+          console.log(percentage);
+          const vidTime = video.duration * percentage;
+          video.currentTime = vidTime;
+          // setPlaying(true);
+        }}
+      />
+    </ControlDiv>
   );
 };
 
 export default VideoControls;
+
+const ControlDiv = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  padding: 0px 2.5%;
+`;
+
+const ProgressBar = styled.progress`
+  cursor: pointer;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(0, 0, 0, 0);
+
+  &::-webkit-progress-bar {
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  &::-webkit-progress-value {
+    background-color: rgba(246, 91, 175, 0.2);
+  }
+`;
+
+const ControlBtn = styled.img`
+  cursor: pointer;
+  width: ${(props) => props.size}px;
+`;

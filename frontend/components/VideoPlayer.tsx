@@ -9,6 +9,7 @@ import { Transcription } from "utils/types";
 import { fetcher, useMe } from "utils/fetcher";
 import { positionTranslation } from "utils/positions";
 import languages from "constants/languages.json";
+import VideoControls from "components/Controls";
 
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
@@ -140,7 +141,7 @@ export default function VideoPlayer({
     video.addEventListener(
       "timeupdate",
       () => {
-        if (transcriptions) {
+        if (transcriptions && videoRef.current) {
           const currentText =
             transcriptions[
               videoRef.current.currentTime - (videoRef.current.currentTime % 3)
@@ -299,7 +300,8 @@ export default function VideoPlayer({
             <ToolTips videoRef={videoRef} drawTranslation={drawTranslation} />
           )}
 
-        <video ref={videoRef} controls={true} />
+        <video ref={videoRef} controls={false} />
+        <VideoControls videoRef={videoRef} />
         <InfoBox
           x={translationPos[0]}
           y={translationPos[1]}
