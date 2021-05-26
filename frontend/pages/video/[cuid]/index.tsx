@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import dayjs from "dayjs";
 import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
+import dynamic from "next/dynamic";
 
 import Topbar, { UserAvatar } from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
@@ -12,6 +13,27 @@ import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
 import { TrashIcon } from "@heroicons/react/outline";
+
+const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
+
+const tourSteps = [
+  {
+    content: "Welcome to the magical Polygon video player.",
+  },
+  {
+    selector: "#tourPlayer",
+    content: "Click on the video to begin watching.",
+  },
+  {
+    selector: "#tourPlayer",
+    content: "When you see any text in the video, pause the video!",
+  },
+  {
+    selector: "#tourToolTip",
+    content: "Click on a bubble to read the sign.",
+    style: { marginLeft: 20, marginTop: 20 },
+  },
+];
 
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
@@ -27,6 +49,8 @@ const App = () => {
   const [comment, setComment] = useState("");
   const [mobile, setMobile] = useState(false);
   const [commentInputFocus, setCommentInputFocus] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
+  const [tourStep, setTourStep] = useState(0);
 
   useEffect(() => {
     // if (navigator.userAgent) setMobile(true);
@@ -35,6 +59,7 @@ const App = () => {
       return navigator.userAgent.match(toMatchItem);
     });
     if (isMobile) setMobile(true);
+    setTourOpen(router.query.tour === "true");
   }, []);
 
   return (
@@ -51,13 +76,23 @@ const App = () => {
         <div style={{ flex: 1 }}>
           {video && video.url ? (
             <div>
-              <VideoPlayer
-                videoRow={video}
-                snippets={snippets}
-                setSnippets={setSnippets}
-                videoRef={videoRef}
-                commentInputFocus={commentInputFocus}
-              />
+              <div
+                onClick={() => {
+                  if (tourStep === 1) {
+                    setTourStep(2);
+                  } else if (tourStep === 2) {
+                    setTourStep(3);
+                  }
+                }}
+              >
+                <VideoPlayer
+                  videoRow={video}
+                  snippets={snippets}
+                  setSnippets={setSnippets}
+                  videoRef={videoRef}
+                  commentInputFocus={commentInputFocus}
+                />
+              </div>
               <div className="mx-10">
                 <div className="my-2 text-xl text-gray-700">
                   {video.title}
@@ -186,6 +221,16 @@ const App = () => {
         </div>
         <SnippetPreview snippets={snippets} videoRef={videoRef} />
       </div>
+      <TourNoSSR
+        steps={tourSteps}
+        isOpen={tourOpen}
+        onRequestClose={() => setTourOpen(false)}
+        maskSpace={0}
+        getCurrentStep={(curr) => {
+          setTourStep(curr);
+        }}
+        goToStep={tourStep}
+      />
     </div>
   );
 };

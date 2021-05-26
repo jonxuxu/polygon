@@ -1,14 +1,36 @@
+import { useRouter } from "next/router";
 import { useFeed } from "utils/fetcher";
 import Link from "next/link";
 import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 
 import { ImagePreview } from "./ImagePreview";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import VideoLoader from "./VideoLoader";
 
+const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
+
+const tourSteps = [
+  {
+    content: "This is the main video explorer on Polygon.",
+  },
+  {
+    selector: "#tourVid",
+    content: "Click on this video to check it out!",
+  },
+];
+
 export function ExploreVideoList() {
+  const router = useRouter();
+
   const { feed } = useFeed();
   const [search, setSearch] = useState("");
+  const [tourOpen, setTourOpen] = useState(false);
+
+  useEffect(() => {
+    setTourOpen(router.query.tour === "true");
+  }, [router.query]);
+
   return (
     <div>
       <div className="mb-4 mx-2">
@@ -16,7 +38,7 @@ export function ExploreVideoList() {
           type="text"
           name="search"
           id="search"
-          className="text-input"
+          className="text-input "
           placeholder="Search Videos... "
           value={search}
           onChange={(e) => setSearch(e.target.value)}
@@ -37,15 +59,23 @@ export function ExploreVideoList() {
                     v.language.toLowerCase().includes(search.toLowerCase()) ||
                     v.user.name.toLowerCase().includes(search.toLowerCase()))
               )
-              .map((video) => (
+              .map((video, i) => (
                 <div
                   key={video.id}
                   className="col-span-6 md:col-span-4 xl:col-span-3 p-2 relative rounded-lg bg-white  flex space-x-3 hover:border-primary-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-300"
                 >
-                  <div className="flex-1 min-w-0">
-                    <Link href={`/video/${video.cuid}`}>
+                  <div
+                    className="flex-1 min-w-0"
+                    id={i === 0 ? "tourVid" : null}
+                  >
+                    <Link
+                      href={{
+                        pathname: `/video/${video.cuid}`,
+                        query: tourOpen && i === 0 && { tour: tourOpen },
+                      }}
+                    >
                       <a className="focus:outline-none">
-                        <ImagePreview video={video}></ImagePreview>
+                        <ImagePreview video={video} />
                         <span className="absolute inset-0" aria-hidden="true" />
                         <p className="text-lg md:text-xl font-medium text-gray-700 mt-2 line-clamp overflow-hidden">
                           {video.title}
@@ -76,6 +106,12 @@ export function ExploreVideoList() {
               .fill(0)
               .map((l, i) => <VideoLoader key={i} />)}
       </div>
+      <TourNoSSR
+        steps={tourSteps}
+        isOpen={tourOpen}
+        onRequestClose={() => setTourOpen(false)}
+      />
+      <button id="first-step">Click me</button>
     </div>
   );
 }

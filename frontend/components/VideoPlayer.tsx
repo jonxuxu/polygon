@@ -308,6 +308,7 @@ export default function VideoPlayer({
               ? videoRef.current.play()
               : videoRef.current.pause();
           }}
+          id="tourPlayer"
         />
         <VideoControls
           videoRef={videoRef}
@@ -406,6 +407,7 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
       return (
         <TipCircle
           key={i}
+          id={i === 0 ? "tourToolTip" : null}
           hex={hexColors[i]}
           style={{ position: "absolute", top: y1, left: x1 }}
           onClick={() => {
