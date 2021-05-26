@@ -50,7 +50,7 @@ export default function VideoPlayer({
   });
   const [captionChars, setCaptionChars] = useState([]);
   const [targetLang, setTargetLang] = useState("English");
-  const [showTooltips, setShowTooltips] = useState(false);
+  const [showControls, setShowControls] = useState(false);
 
   // Keyboard listeners
   const handlekeydownEvent = useCallback((event) => {
@@ -129,11 +129,8 @@ export default function VideoPlayer({
     video.addEventListener(
       "pause",
       () => {
-        // setShowTooltips(true);
         // clearTimeout(mouseTimeout);
-        // mouseTimeout = setTimeout(function () {
-        //   setShowTooltips(false);
-        // }, 500);
+
         setPlaying(false);
       },
       false
@@ -157,6 +154,11 @@ export default function VideoPlayer({
       false
     );
     video.addEventListener("mousemove", () => {
+      clearTimeout(mouseTimeout);
+      setShowControls(true);
+      mouseTimeout = setTimeout(function () {
+        setShowControls(false);
+      }, 2000);
       if (video.paused) {
         // setShowTooltips(true);
         // clearTimeout(mouseTimeout);
@@ -298,8 +300,19 @@ export default function VideoPlayer({
           <ToolTips videoRef={videoRef} drawTranslation={drawTranslation} />
         )}
 
-        <video ref={videoRef} controls={false} />
-        <VideoControls videoRef={videoRef} />
+        <video
+          ref={videoRef}
+          controls={false}
+          onClick={() => {
+            videoRef.current.paused
+              ? videoRef.current.play()
+              : videoRef.current.pause();
+          }}
+        />
+        <VideoControls
+          videoRef={videoRef}
+          show={showControls || !videoRef.current || videoRef.current.paused}
+        />
         <InfoBox
           x={translationPos[0]}
           y={translationPos[1]}
