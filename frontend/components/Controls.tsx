@@ -204,14 +204,13 @@ const VolumeSlider = styled.input`
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
-    border-radius: 50%;
+    border-radius: 5px;
     height: 10px;
     width: 10px;
     max-width: 80px;
     position: relative;
     bottom: 4px;
     background-color: white;
-    cursor: -webkit-grab;
 
     -webkit-transition: border 1000ms ease;
     transition: border 1000ms ease;
