@@ -287,7 +287,7 @@ export default function VideoPlayer({
   };
 
   return (
-    <div className="mt-10 ml-10 mr-5">
+    <div className="mt-3 sm:mt-10 sm:ml-5 md:ml-10 sm:mr-5">
       {/* Video controls */}
       <audio ref={voiceRef} />
       <div

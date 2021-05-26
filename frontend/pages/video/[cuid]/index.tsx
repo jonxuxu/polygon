@@ -7,7 +7,7 @@ import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
 import dynamic from "next/dynamic";
 
-import Topbar, { UserAvatar } from "components/Topbar";
+import { UserAvatar } from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
 import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
@@ -64,8 +64,6 @@ const App = () => {
 
   return (
     <div>
-      {/* {video && video.url && <VideoPlayer videoRow={video} />} */}
-      <Topbar />
       {mobile && (
         <div className="bg-yellow-50 text-yellow-700 flex items-center text-center rounded-md m-3 p-1">
           NOTE: Polygon's interactive video player does not yet support mobile
@@ -93,7 +91,7 @@ const App = () => {
                   commentInputFocus={commentInputFocus}
                 />
               </div>
-              <div className="mx-10">
+              <div className="mx-3 sm:mx-10">
                 <div className="my-2 text-xl text-gray-700">
                   {video.title}
                   {me && me.id === video.creator && (
@@ -230,6 +228,7 @@ const App = () => {
           setTourStep(curr);
         }}
         goToStep={tourStep}
+        rounded={5}
       />
     </div>
   );

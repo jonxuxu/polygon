@@ -110,7 +110,6 @@ const App = () => {
 
   return (
     <div>
-      <Topbar />
       {uploading && ProgressCard(uploadPercent)}
 
       <div className="">

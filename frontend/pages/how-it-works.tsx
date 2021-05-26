@@ -1,4 +1,3 @@
-import Topbar from "../components/Topbar";
 import Image from "next/image";
 import { useRef } from "react";
 import { SnippetPreview, Snippet } from "components/SnippetPreview";
@@ -60,15 +59,13 @@ const features = [
 function FeaturesGrid() {
   return (
     <div
-      className="relative bg-white py-16 sm:py-24 lg:py-32"
+      className="relative bg-white py-16 sm:py-24 lg:py-32 bg-center bg-no-repeat xl:bg-cover lg:bg-bottom-8"
       style={{
         backgroundImage: `url(/how-it-works/stripes.svg)`,
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
       }}
     >
       <div className="mx-auto max-w-md px-4 text-center sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-5xl">
-        <p className="mt-2 text-4xl font-extrabold text-gray-800 sm:text-5xl sm:tracking-tight lg:text-6xl">
+        <p className="mt-2 text-4xl font-extrabold text-gray-800 sm:text-5xl sm:tracking-tight lg:text-6xl ">
           Incoming Features
         </p>
 
@@ -136,13 +133,12 @@ const Page = () => {
 
   return (
     <div>
-      <Topbar />
       <HeroSection />
       <audio ref={voiceRef} />
       <div className="">
         <div className="relative my-16">
-          <h2 className="text-center text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-            Learn through immersion
+          <h2 className="text-center leading-8 title text-gray-900">
+            Learn through Immersion
           </h2>
           <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
             Learn a foreign language by being there. [Pause] the video to
@@ -152,15 +148,27 @@ const Page = () => {
         </div>
 
         <div className="flex gap-6">
-          <Image src="/how-it-works/player1.png" height={281} width={499} />
-          <Image src="/how-it-works/player2.png" height={281} width={499} />
-          <Image src="/how-it-works/player3.png" height={281} width={499} />
+          <Image
+            src="/how-it-works/player1.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+          <Image
+            src="/how-it-works/player2.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+          <Image
+            src="/how-it-works/player3.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
         </div>
       </div>
       {/* Build your collection  */}
       <div className="bg-white">
         <div className="max-w-7xl mx-auto pt-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-          <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-8 md:mb-16">
+          <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8  md:mb-8">
             {snippets.map((snippet, i) => (
               <div
                 key={i}
@@ -179,13 +187,11 @@ const Page = () => {
             <h2 className="text-base font-semibold text-primary-600 tracking-wide uppercase">
               Then
             </h2>
-            <p className="mt-1 text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-              Build your collection
-            </p>
+            <p className="mt-1 title text-gray-900">Build your collection</p>
             <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
               Add snippets to your card deck, and review them at your own time.
             </p>
-            <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-16">
+            <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-20 md:pb-16">
               {snippets.map((snippet, i) => (
                 <div
                   key={i}
@@ -215,7 +221,7 @@ const Page = () => {
           >
             <div className="text-left">
               <div className="flex flex-col items-center justify-center">
-                <p className="mt-1 text-4xl font-extrabold text-white mb-2">
+                <p className="mt-1  title text-white mb-2">
                   Interactive Captions
                 </p>
                 <p className="mt-1 text-lg text-white mb-2">
@@ -332,7 +338,7 @@ function HeroSection() {
             </div> */}
             <div className="mt-20">
               <div className="mt-6 sm:max-w-xl">
-                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">
+                <h1 className="title text-gray-900">
                   Be Part of the Experience
                 </h1>
                 <p className="mt-6 text-xl text-gray-500">

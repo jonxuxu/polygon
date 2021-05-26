@@ -92,3 +92,7 @@ a.link {
     left: 100%;
   }
 }
+
+.title {
+  @apply text-4xl font-extrabold sm:text-5xl sm:tracking-tight lg:text-6xl;
+}

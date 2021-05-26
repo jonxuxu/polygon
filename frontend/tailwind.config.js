@@ -5,6 +5,11 @@ module.exports = {
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    backgroundPosition: {
+      bottom: "bottom",
+      "bottom-8": "center bottom -8rem",
+      center: "center",
+    },
     extend: {
       colors: {
         teal: colors.teal,
