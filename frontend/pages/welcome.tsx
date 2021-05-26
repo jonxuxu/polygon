@@ -82,7 +82,7 @@ const Index = () => {
                 {/* <a className="text-base font-medium text-white hover:text-gray-300">
                   log in 
                 </a> */}
-                <Link href={session ? "/explore" : "/api/auth/signin/google"}>
+                <Link href={session ? "/" : "/api/auth/signin/google"}>
                   <a className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
                     {session ? "Go to App" : "Log In"}
                   </a>

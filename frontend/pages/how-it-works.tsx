@@ -342,7 +342,7 @@ function HeroSection() {
               </div>
               <form action="#" className="mt-12 sm:max-w-lg sm:w-full sm:flex">
                 <div className="mt-4 sm:mt-0 sm:ml-3">
-                  <Link href="/explore">
+                  <Link href="/">
                     <button
                       type="submit"
                       className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient text-base font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"

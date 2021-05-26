@@ -4,7 +4,7 @@ import Topbar from "../components/Topbar";
 
 const App = () => {
   useEffect(() => {
-    Router.push("/explore");
+    Router.push("/");
   }, []);
   return (
     <div>

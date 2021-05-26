@@ -12,6 +12,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <Provider session={pageProps.session}>
         <Component {...pageProps} />
+        {/* <div className="fixed bottom-4 right-4 text-gray-400 ">Feedback</div> */}
       </Provider>
     </>
   );

@@ -43,7 +43,7 @@ const App = () => {
       <Topbar />
       {mobile && (
         <div className="bg-yellow-50 text-yellow-700 flex items-center text-center rounded-md m-3 p-1">
-          NOTE: Frame's interactive video player does not yet support mobile
+          NOTE: Polygon's interactive video player does not yet support mobile
           devices.
         </div>
       )}

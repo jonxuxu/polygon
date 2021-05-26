@@ -7,7 +7,7 @@ const options = {
   site:
     process.env.NODE_ENV === "production"
       ? "https://polygon.video"
-      : "http://localhost:3000/explore",
+      : "http://localhost:3000/",
 
   // Configure one or more authentication providers
   providers: [
