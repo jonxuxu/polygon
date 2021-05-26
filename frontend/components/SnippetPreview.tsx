@@ -21,14 +21,14 @@ export function SnippetPreview({
           style={{
             borderRight: "3px solid #EE3699",
             top: 0,
-            left: 35,
+            // left: 35,
             width: 30,
           }}
         />
         <div style={{ flexGrow: 1 }} ref={sidebarRef}>
-          <h2 style={{ paddingLeft: 70 }}>Your Snippets</h2>
+          <h2 className="pl-2 sm:pl-12">Your Snippets</h2>
           {snippets.length === 0 && (
-            <div style={{ paddingLeft: 70 }}>
+            <div className="text-sm pl-2 sm:pl-12">
               You have no snippets. Click on any bubbles to add to your
               collection.
             </div>

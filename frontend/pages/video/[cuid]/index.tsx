@@ -58,7 +58,7 @@ const App = () => {
                 videoRef={videoRef}
                 commentInputFocus={commentInputFocus}
               />
-              <div className="mx-10">
+              <div className="mx-3 sm:mx-10">
                 <div className="my-2 text-xl text-gray-700">
                   {video.title}
                   {me && me.id === video.creator && (

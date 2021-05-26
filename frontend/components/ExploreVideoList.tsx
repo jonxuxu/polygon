@@ -11,7 +11,7 @@ export function ExploreVideoList() {
   const [search, setSearch] = useState("");
   return (
     <div>
-      <div className="mb-4 mx-2">
+      <div className="mb-4 sm:mx-2">
         <input
           type="text"
           name="search"
@@ -22,7 +22,7 @@ export function ExploreVideoList() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      <div className="grid grid-cols-12 gap-6">
+      <div className="grid grid-cols-12 sm:gap-6">
         {feed // && false
           ? feed
               .filter(
@@ -47,7 +47,7 @@ export function ExploreVideoList() {
                       <a className="focus:outline-none">
                         <ImagePreview video={video}></ImagePreview>
                         <span className="absolute inset-0" aria-hidden="true" />
-                        <p className="text-lg md:text-xl font-medium text-gray-700 mt-2 line-clamp overflow-hidden">
+                        <p className="text-md sm:text-lg md:text-xl font-medium text-gray-700 mt-2 line-clamp overflow-hidden">
                           {video.title}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
