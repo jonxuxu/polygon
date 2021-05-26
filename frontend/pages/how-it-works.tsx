@@ -140,7 +140,7 @@ const Page = () => {
       <div className="">
         <div className="relative my-16">
           <h2 className="text-center leading-8 title text-gray-900">
-            Learn through immersion
+            Learn through Immersion
           </h2>
           <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
             Learn a foreign language by being there. [Pause] the video to
@@ -150,9 +150,21 @@ const Page = () => {
         </div>
 
         <div className="flex gap-6">
-          <Image src="/how-it-works/player1.png" height={281} width={499} />
-          <Image src="/how-it-works/player2.png" height={281} width={499} />
-          <Image src="/how-it-works/player3.png" height={281} width={499} />
+          <Image
+            src="/how-it-works/player1.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+          <Image
+            src="/how-it-works/player2.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+          <Image
+            src="/how-it-works/player3.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
         </div>
       </div>
       {/* Build your collection  */}
