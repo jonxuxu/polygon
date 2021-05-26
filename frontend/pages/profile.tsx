@@ -1,4 +1,3 @@
-import Topbar from "components/Topbar";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Skeleton from "react-loading-skeleton";
 import languages from "constants/languages.json";
@@ -17,86 +16,83 @@ const App = () => {
   }, [me]);
   // console.log(session);
   return (
-    <div>
-      <Topbar />
+    <div className="">
       <div className="">
-        <div className="">
-          {loading ? (
-            <div className="p-3">
-              <Skeleton count={5} />
-            </div>
-          ) : !!session ? (
-            <div>
-              <div className="flex flex-col w-full m-10 items-center justify-center">
-                <img
-                  className="h-20 w-20 rounded-full mb-5"
-                  src={session.user.image}
-                  alt=""
-                />
-                <h1 className="text-xl text-gray-700">{session.user.name}</h1>
-                <div>{session.user.email}</div>
+        {loading ? (
+          <div className="p-3">
+            <Skeleton count={5} />
+          </div>
+        ) : !!session ? (
+          <div>
+            <div className="flex flex-col w-full m-10 items-center justify-center">
+              <img
+                className="h-20 w-20 rounded-full mb-5"
+                src={session.user.image}
+                alt=""
+              />
+              <h1 className="text-xl text-gray-700">{session.user.name}</h1>
+              <div>{session.user.email}</div>
 
-                <ProfileTabs tab={tab} setTab={setTab} />
-                {tab === "Snippets" ? (
-                  <div className="mt-5">
-                    {me &&
-                      me.snippets.map((t) => (
-                        <div className="border-2 border-primary-400 rounded-md my-3 p-2">
-                          {t.original} - {t.translation}
-                        </div>
+              <ProfileTabs tab={tab} setTab={setTab} />
+              {tab === "Snippets" ? (
+                <div className="mt-5">
+                  {me &&
+                    me.snippets.map((t) => (
+                      <div className="border-2 border-primary-400 rounded-md my-3 p-2">
+                        {t.original} - {t.translation}
+                      </div>
+                    ))}
+                </div>
+              ) : tab === "Settings" ? (
+                <div className=" p-5">
+                  <div className="mt-1 col-span-2 col-start-2">
+                    <label
+                      htmlFor="language"
+                      className="block text-sm font-medium text-gray-700 mb-3"
+                    >
+                      User Language
+                    </label>
+                    <select
+                      value={language}
+                      onChange={(e) => {
+                        setLanguage(e.target.value);
+                        fetcher("/api/user/update", {
+                          language: e.target.value,
+                        });
+                      }}
+                      // autoComplete="title"
+                      className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+                    >
+                      {Object.keys(languages).map((lang) => (
+                        <option key={lang} value={lang}>
+                          {lang}
+                        </option>
                       ))}
+                    </select>
                   </div>
-                ) : tab === "Settings" ? (
-                  <div className=" p-5">
-                    <div className="mt-1 col-span-2 col-start-2">
-                      <label
-                        htmlFor="language"
-                        className="block text-sm font-medium text-gray-700 mb-3"
-                      >
-                        User Language
-                      </label>
-                      <select
-                        value={language}
-                        onChange={(e) => {
-                          setLanguage(e.target.value);
-                          fetcher("/api/user/update", {
-                            language: e.target.value,
-                          });
-                        }}
-                        // autoComplete="title"
-                        className="max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-                      >
-                        {Object.keys(languages).map((lang) => (
-                          <option key={lang} value={lang}>
-                            {lang}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-5 ">
-                    {me &&
-                      me.savedVideos.map((video) => (
-                        <Link key={video.id} href={`/video/${video.cuid}`}>
-                          <a className="link">
-                            <div className="grid grid-cols-12 gap-4">
-                              <div className="col-span-6">
-                                <ImagePreview video={video} />
-                              </div>
-                              <div className="col-span-6 text-xl link">
-                                {video.title}
-                              </div>
+                </div>
+              ) : (
+                <div className="mt-5 ">
+                  {me &&
+                    me.savedVideos.map((video) => (
+                      <Link key={video.id} href={`/video/${video.cuid}`}>
+                        <a className="link">
+                          <div className="grid grid-cols-12 gap-4">
+                            <div className="col-span-6">
+                              <ImagePreview video={video} />
                             </div>
-                          </a>
-                        </Link>
-                      ))}
-                  </div>
-                )}
-              </div>
+                            <div className="col-span-6 text-xl link">
+                              {video.title}
+                            </div>
+                          </div>
+                        </a>
+                      </Link>
+                    ))}
+                </div>
+              )}
             </div>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

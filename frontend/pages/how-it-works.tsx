@@ -1,4 +1,3 @@
-import Topbar from "../components/Topbar";
 import Image from "next/image";
 import { useRef } from "react";
 import { SnippetPreview, Snippet } from "components/SnippetPreview";
@@ -134,7 +133,6 @@ const Page = () => {
 
   return (
     <div>
-      <Topbar />
       <HeroSection />
       <audio ref={voiceRef} />
       <div className="">

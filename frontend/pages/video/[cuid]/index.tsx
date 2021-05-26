@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
 
-import Topbar, { UserAvatar } from "components/Topbar";
+import { UserAvatar } from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
 import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
@@ -39,8 +39,6 @@ const App = () => {
 
   return (
     <div>
-      {/* {video && video.url && <VideoPlayer videoRow={video} />} */}
-      <Topbar />
       {mobile && (
         <div className="bg-yellow-50 text-yellow-700 flex items-center text-center rounded-md m-3 p-1">
           NOTE: Polygon's interactive video player does not yet support mobile

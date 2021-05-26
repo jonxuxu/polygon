@@ -3,7 +3,6 @@ import React from "react";
 
 const Manifesto = () => (
   <div>
-    <Topbar />
     <div className="bg-gradient h-60 flex items-center justify-center">
       <h1 className="text-white text-3xl">Manifesto</h1>
 

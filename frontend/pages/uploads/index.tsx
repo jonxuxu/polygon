@@ -16,21 +16,14 @@ const UploadsPage = () => {
   });
 
   if (loading || me === undefined) {
-    return (
-      <div>
-        <Topbar />
-      </div>
-    );
+    return <div></div>;
   }
 
   return (
     <div>
       {me.approved ? (
-        <div>
-          <Topbar />
-          <div className="m-10">
-            <UploadList />
-          </div>
+        <div className="m-10">
+          <UploadList />
         </div>
       ) : (
         <Restricted />
@@ -44,17 +37,6 @@ const Restricted = () => {
 
   return (
     <div style={{ position: "relative" }}>
-      <Topbar
-        background="rgba(0,0,0,0)"
-        theme="dark"
-        style={{
-          position: "absolute",
-          top: 0,
-          width: "100%",
-          left: 0,
-          zIndex: 2,
-        }}
-      />
       <div
         style={{
           backgroundImage: "url('restricted.svg')",

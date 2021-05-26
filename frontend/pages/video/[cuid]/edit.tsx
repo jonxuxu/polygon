@@ -1,5 +1,4 @@
 import { fetcher, useFeed, useVideo } from "utils/fetcher";
-import Topbar from "components/Topbar";
 
 import { useState } from "react";
 import { useRouter } from "next/router";
@@ -8,7 +7,7 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/client";
 import Router from "next/router";
 import { mutate } from "swr";
-import Skeleton from "react-loading-skeleton";
+
 const App = () => {
   const router = useRouter();
 
@@ -32,7 +31,6 @@ const App = () => {
   }, [video]);
   return (
     <div>
-      <Topbar />
       <div className="m-10">
         {video ? (
           <div>

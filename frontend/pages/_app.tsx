@@ -2,6 +2,7 @@ import "../globals.css";
 import { Provider } from "next-auth/client";
 import { useAnalytics } from "components/Analytics";
 import Head from "next/head";
+import Topbar from "../components/Topbar";
 function MyApp({ Component, pageProps }) {
   useAnalytics();
   return (
@@ -11,8 +12,8 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <Provider session={pageProps.session}>
+        <Topbar />
         <Component {...pageProps} />
-        {/* <div className="fixed bottom-4 right-4 text-gray-400 ">Feedback</div> */}
       </Provider>
     </>
   );

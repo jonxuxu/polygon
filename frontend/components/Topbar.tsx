@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import styled from "styled-components";
+import { useMe } from "utils/fetcher";
 
-const Topbar = ({ background = "white", theme = "light", style = {} }) => {
+const Topbar = () => {
   const [profileMenu, setProfileMenu] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [session, loading] = useSession();
+  const { me } = useMe();
   const routes = [
     { route: "/", label: "Explore" },
     session
@@ -16,9 +19,33 @@ const Topbar = ({ background = "white", theme = "light", style = {} }) => {
     { route: "/how-it-works", label: "How It Works" },
   ];
   const router = useRouter();
+
+  useEffect(() => {
+    if (router.route === "/uploads" && me && !me.approved) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, [router.route]);
   // const { session } = useSession();
   return (
-    <nav className="shadow" style={{ backgroundColor: background, ...style }}>
+    <nav
+      className="shadow"
+      style={
+        theme === "light"
+          ? {
+              backgroundColor: "white",
+            }
+          : {
+              backgroundColor: "rgba(0,0,0,0)",
+              position: "absolute",
+              top: 0,
+              width: "100%",
+              left: 0,
+              zIndex: 2,
+            }
+      }
+    >
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
