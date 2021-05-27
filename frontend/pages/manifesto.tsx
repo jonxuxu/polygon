@@ -1,5 +1,29 @@
 import Topbar from "components/Topbar";
 import React from "react";
+import Footer from "components/Footer";
+
+const paragraphs = [
+  {
+    title: "Full Interaction",
+    content:
+      "We believe that all the content in a video should be interactive. There’s so much data and information that sits idle, never to be touched or used. There’s really nothing that should prevent you from clicking on the text, the speech, the objects and the people in a video. Frame aims to make that happen with smart design, computer vision and speech to text algorithms.",
+  },
+  {
+    title: "Adaptive and Fun",
+    content:
+      "We want to bring control and flexibility back in to the hands of our users. Instead of rigid playlists and algorithm-fed videos, we want to encourage genuine exploration and curiosity. Specificaly to the player, this includes being able to zoom, tilt, enhance, and translate important sections of the video frame, when and where it’s needed.",
+  },
+  {
+    title: "Social and Collaborative",
+    content:
+      "Why has video watching now become the lonely experience of bingeing on content? We have plans to change this through indie content creation, first person footage, timeline sharing and live shows. Frame will aim to use the discovery experience that comes with greater interactivity to bring some life back into the internet.",
+  },
+  {
+    title: "Linking Things Together",
+    content:
+      "We see a huge potential to bring videos to the 2020’s with next-level integrations. Translate foreign text, listen to them and add them to your collection. Search up a character in a show, or buy a piece of clothing you like. Save a lecture whiteboard for later, or jump to the video mentioned as a prerequisite. All within the Frame player.",
+  },
+];
 
 const Manifesto = () => (
   <div>
@@ -29,28 +53,7 @@ const Manifesto = () => (
         experience as much as we do.
       </Section>
       <Section>&mdash;Kunal and Jonathan</Section>
-      {[
-        {
-          title: "Full Interaction",
-          content:
-            "We believe that all the content in a video should be interactive. There’s so much data and information that sits idle, never to be touched or used. There’s really nothing that should prevent you from clicking on the text, the speech, the objects and the people in a video. Frame aims to make that happen with smart design, computer vision and speech to text algorithms.",
-        },
-        {
-          title: "Adaptive and Fun",
-          content:
-            "We want to bring control and flexibility back in to the hands of our users. Instead of rigid playlists and algorithm-fed videos, we want to encourage genuine exploration and curiosity. Specificaly to the player, this includes being able to zoom, tilt, enhance, and translate important sections of the video frame, when and where it’s needed.",
-        },
-        {
-          title: "Social and Collaborative",
-          content:
-            "Why has video watching now become the lonely experience of bingeing on content? We have plans to change this through indie content creation, first person footage, timeline sharing and live shows. Frame will aim to use the discovery experience that comes with greater interactivity to bring some life back into the internet.",
-        },
-        {
-          title: "Linking Things Together",
-          content:
-            "We see a huge potential to bring videos to the 2020’s with next-level integrations. Translate foreign text, listen to them and add them to your collection. Search up a character in a show, or buy a piece of clothing you like. Save a lecture whiteboard for later, or jump to the video mentioned as a prerequisite. All within the Frame player.",
-        },
-      ].map(({ title, content }) => (
+      {paragraphs.map(({ title, content }) => (
         <div key={title}>
           <Title>{title}</Title>
           <Section>{content}</Section>

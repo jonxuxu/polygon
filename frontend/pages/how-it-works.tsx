@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { SnippetPreview, Snippet } from "components/sidebar/SnippetView";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
+import Footer from "components/Footer";
 
 import Link from "next/link";
 import { useMe, useVideo } from "utils/fetcher";
@@ -304,17 +305,6 @@ function Conclusion() {
               </div>
             </div>
           </div>
-        </div>
-        {/* More main page content here... */}
-        <div className="bg-[#EE3699] text-white h-40 flex items-center justify-between p-20 text-xl">
-          <div className="flex flex-row items-center">
-            <img src="/logo/favicon-light.svg" className="h-10 z-10" />
-            <img src="/logo-light.svg" className="h-10 -ml-8" />
-          </div>
-
-          <Link href="/manifesto">
-            <a className=" text-white text-md">Manifesto</a>
-          </Link>
         </div>
       </div>
     </div>

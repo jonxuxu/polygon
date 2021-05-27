@@ -32,7 +32,7 @@ export function ExploreVideoList() {
   }, [router.query]);
 
   return (
-    <div>
+    <div className="m-2 sm:m-10 mt-8">
       <div className="mb-4 sm:mx-2">
         <input
           type="text"
@@ -107,12 +107,12 @@ export function ExploreVideoList() {
               .map((l, i) => <VideoLoader key={i} />)}
       </div>
       <TourNoSSR
+        // @ts-ignore
         steps={tourSteps}
         isOpen={tourOpen}
         onRequestClose={() => setTourOpen(false)}
         rounded={5}
       />
-      <button id="first-step">Click me</button>
     </div>
   );
 }

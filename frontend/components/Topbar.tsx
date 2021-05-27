@@ -117,12 +117,20 @@ const Topbar = () => {
               <div className="flex-shrink-0 flex items-center cursor-pointer">
                 <img
                   className="block lg:hidden h-8 w-auto"
-                  src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
+                  src={
+                    theme === "light"
+                      ? "/logo/logo-dark.svg"
+                      : "/logo/logo-light.svg"
+                  }
                   alt="Frame"
                 />
                 <img
                   className="hidden lg:block h-8 w-auto"
-                  src={theme === "light" ? "/logo-dark.svg" : "/logo-light.svg"}
+                  src={
+                    theme === "light"
+                      ? "/logo/logo-dark.svg"
+                      : "/logo/logo-light.svg"
+                  }
                   alt="Frame"
                 />
               </div>
