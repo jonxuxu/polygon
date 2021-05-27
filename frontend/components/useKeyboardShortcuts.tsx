@@ -1,7 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, useContext, useEffect } from "react";
+import { ShortcutContext } from "./ShortcutContext";
 
 export default function useKeyboardShortcuts({ videoRef }) {
   // Keyboard listeners
+  const { shortcutsEnabled, toggleShortcuts } = useContext(ShortcutContext);
+
   const handlekeydownEvent = useCallback((event) => {
     const { keyCode } = event;
 
@@ -41,12 +44,24 @@ export default function useKeyboardShortcuts({ videoRef }) {
 
   function enableShortcuts() {
     document.addEventListener("keydown", handlekeydownEvent);
+    toggleShortcuts(true);
     console.log("enabled");
   }
   function disableShortcuts() {
     document.removeEventListener("keydown", handlekeydownEvent);
+    toggleShortcuts(false);
     console.log("disabled");
   }
+
+  // // disable shortcuts when user is typing comments
+  useEffect(() => {
+    if (shortcutsEnabled) {
+      enableShortcuts();
+    } else {
+      disableShortcuts();
+    }
+    return () => disableShortcuts();
+  }, [shortcutsEnabled]);
 
   return { enableShortcuts, disableShortcuts };
 }

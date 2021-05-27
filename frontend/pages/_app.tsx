@@ -3,10 +3,20 @@ import { Provider } from "next-auth/client";
 import { useAnalytics } from "components/Analytics";
 import Head from "next/head";
 import Topbar from "../components/Topbar";
+import { ShortcutContext } from "components/ShortcutContext";
+import { useState } from "react";
+
 function MyApp({ Component, pageProps }) {
   useAnalytics();
+  const [shortcutsEnabled, setShortcutsEnabled] = useState(true);
+
   return (
-    <>
+    <ShortcutContext.Provider
+      value={{
+        shortcutsEnabled,
+        toggleShortcuts: (val: boolean) => setShortcutsEnabled(val),
+      }}
+    >
       <Head>
         <title>Polygon Video</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
@@ -15,7 +25,7 @@ function MyApp({ Component, pageProps }) {
         <Topbar />
         <Component {...pageProps} />
       </Provider>
-    </>
+    </ShortcutContext.Provider>
   );
 }
 

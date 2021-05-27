@@ -25,13 +25,11 @@ export default function VideoPlayer({
   snippets,
   setSnippets,
   videoRef,
-  commentInputFocus,
 }: {
   videoRow: videos;
   snippets: Transcription[];
   setSnippets: any;
   videoRef: React.MutableRefObject<any>;
-  commentInputFocus: boolean;
 }) {
   const { me } = useMe();
 
@@ -159,16 +157,6 @@ export default function VideoPlayer({
       disableShortcuts();
     };
   }, []);
-
-  // // disable shortcuts when user is typing comments
-  useEffect(() => {
-    if (commentInputFocus) {
-      disableShortcuts();
-    } else {
-      enableShortcuts();
-    }
-    return () => disableShortcuts();
-  }, [commentInputFocus]);
 
   useEffect(() => {
     if (me) setTargetLang(me.language);

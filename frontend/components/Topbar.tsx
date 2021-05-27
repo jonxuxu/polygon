@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import styled from "styled-components";
 
 import OutsideClicker from "components/OutsideClicker";
 import { fetcher, useMe } from "utils/fetcher";
 import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
+import { ShortcutContext } from "./ShortcutContext";
 
 const Topbar = () => {
   const [profileMenu, setProfileMenu] = useState(false);
@@ -283,6 +284,7 @@ export const UserAvatar = ({ user }: { user?: { image?: string } }) => {
 const FeedbackForm = ({ setFeedbackMenu }) => {
   const [feedback, setFeedback] = useState("");
   const [success, setSuccess] = useState(false);
+  const { toggleShortcuts } = useContext(ShortcutContext);
 
   return (
     <div
@@ -321,6 +323,8 @@ const FeedbackForm = ({ setFeedbackMenu }) => {
             rows={2}
             autoFocus
             // ref={input => inputRef = input}
+            onFocus={() => toggleShortcuts(false)}
+            onBlur={() => toggleShortcuts(true)}
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
           />
