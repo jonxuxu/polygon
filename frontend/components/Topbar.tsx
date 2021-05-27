@@ -9,6 +9,7 @@ import OutsideClicker from "components/OutsideClicker";
 const Topbar = () => {
   const [profileMenu, setProfileMenu] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const [feedbackMenu, setFeedbackMenu] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [session, loading] = useSession();
   const { me } = useMe();
@@ -125,11 +126,35 @@ const Topbar = () => {
             </Link>
 
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              {/* <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" --> */}
+              {/* Feedback link */}
+              <div className="relative">
+                <NavLink
+                  selected={false}
+                  theme={theme}
+                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium`}
+                  onClick={() => setFeedbackMenu(!feedbackMenu)}
+                >
+                  Feedback
+                </NavLink>
+                {feedbackMenu && (
+                  <div
+                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu"
+                  >
+                    <input
+                      placeholder="Feedback.. "
+                      className="text-input "
+                      type="text"
+                    />
+                  </div>
+                )}
+              </div>
+              {/* Desktop routes */}
               {routes.map((route) => (
                 <Link href={route.route} key={route.route}>
                   <NavLink
-                    href="#"
                     selected={router.pathname === route.route}
                     theme={theme}
                     className={`inline-flex items-center px-1 pt-1 text-sm font-medium`}
@@ -208,7 +233,6 @@ const Topbar = () => {
       </div>
 
       {/* <!-- Mobile menu, show/hide based on menu state. --> */}
-
       {openMobileMenu && (
         <div className={`sm:hidden`} id="mobile-menu">
           <div className="pt-2 pb-4 space-y-1">
@@ -234,6 +258,7 @@ const Topbar = () => {
 export default Topbar;
 
 const NavLink = styled.a`
+  cursor: pointer;
   color: ${(params) => {
     if (params.theme === "light") {
       return params.selected ? "rgb(17,24,39)" : "rgb(107,114,128)";
