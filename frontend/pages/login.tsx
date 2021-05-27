@@ -3,10 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Router from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getCsrfToken } from "next-auth/client";
+import { fetcher } from "utils/fetcher";
 
-const LoginPage = () => {
+const LoginPage = ({ csrfToken }) => {
   const [session, loading] = useSession();
+  const [login, setLogin] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     if (loading) return;
@@ -19,13 +25,9 @@ const LoginPage = () => {
       <div className="flex-1 flex flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div>
-            <img
-              className="h-12 w-auto"
-              src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-              alt="Workflow"
-            />
+            <img className="h-12 w-auto" src="/logo-light.svg" alt="Polygon" />
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-              Sign in to your account
+              {login ? "Sign in to your account" : "Create an account."}
             </h2>
             {session && <span>Signed in as {session.user.email}</span>}
           </div>
@@ -59,7 +61,38 @@ const LoginPage = () => {
             </div>
 
             <div className="mt-6">
-              <form onSubmit={() => signIn()} className="space-y-6">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  signIn("credentials", { email, password, name });
+                  // fetcher("/api/auth/callback/credentials", {
+                  //   email,
+                  //   name,
+                  //   password,
+                  //   csrfToken,
+                  // });
+                }}
+                className="space-y-6"
+              >
+                {!login && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Full Name
+                    </label>
+                    <div className="mt-1">
+                      <input
+                        id="name"
+                        name="name"
+                        type="name"
+                        autoComplete="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                      />
+                    </div>
+                  </div>
+                )}
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
                     Email address
@@ -70,8 +103,10 @@ const LoginPage = () => {
                       name="email"
                       type="email"
                       autoComplete="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
                   </div>
                 </div>
@@ -87,7 +122,9 @@ const LoginPage = () => {
                       type="password"
                       autoComplete="current-password"
                       required
-                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                     />
                   </div>
                 </div>
@@ -98,34 +135,42 @@ const LoginPage = () => {
                       id="remember_me"
                       name="remember_me"
                       type="checkbox"
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                     />
                     <label className="ml-2 block text-sm text-gray-900">
                       Remember me
                     </label>
                   </div>
 
-                  <div className="text-sm">
+                  {/* <div className="text-sm">
                     <a
                       href="#"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
+                      className="font-medium text-primary-600 hover:text-primary-500"
                     >
                       Forgot your password?
                     </a>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div>
-                  <Link href="/app">
-                    <button
-                      type="submit"
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                      Sign in
-                    </button>
-                  </Link>
+                  <button
+                    type="submit"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  >
+                    {login ? "Log In" : "Sign Up"}
+                  </button>
                 </div>
               </form>
+              <div className="text-sm  mt-5">
+                <a
+                  onClick={() => setLogin(!login)}
+                  className="font-medium text-primary-600 hover:text-primary-500 "
+                >
+                  {login
+                    ? "First time here? Create an account. "
+                    : "Already a user? Sign in."}
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -142,3 +187,11 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+export async function getServerSideProps(context) {
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+    },
+  };
+}
