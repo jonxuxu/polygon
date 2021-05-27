@@ -107,6 +107,7 @@ export function ExploreVideoList() {
               .map((l, i) => <VideoLoader key={i} />)}
       </div>
       <TourNoSSR
+        // @ts-ignore
         steps={tourSteps}
         isOpen={tourOpen}
         onRequestClose={() => setTourOpen(false)}
