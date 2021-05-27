@@ -177,7 +177,7 @@ const Page = () => {
                 style={{ animation: `mover 2.${i * 3}s infinite alternate` }}
               >
                 <Image
-                  src={`/how-it-works/snippet${i + 1}.svg`}
+                  src={`/how-it-works/snippets/snippet${i + 1}.svg`}
                   height={109}
                   width={269}
                 />
