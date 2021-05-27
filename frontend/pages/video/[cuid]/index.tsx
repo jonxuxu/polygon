@@ -8,7 +8,7 @@ import { Transcription } from "utils/types";
 import dynamic from "next/dynamic";
 
 import VideoPlayer from "components/VideoPlayer";
-import Sidebar from "components/Sidebar";
+import Sidebar from "components/sidebar";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
 import useKeyboardShortcuts from "components/useKeyboardShortcuts";

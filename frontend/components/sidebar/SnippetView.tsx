@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import tinycolor from "tinycolor2";
-import { TranslationActionIcons } from "./TranslationActionIcons";
+import { TranslationActionIcons } from "../TranslationActionIcons";
 import styled from "styled-components";
 
-import { Transcription } from "../utils/types";
+import { Transcription } from "../../utils/types";
 
 export function SnippetPreview({
   snippets,
