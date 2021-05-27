@@ -23,33 +23,14 @@ export function CommentView() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ padding: "15px 15px", flexGrow: 1 }}>
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            fetcher("/api/video/comment/create", {
-              text: comment,
-              video_id: video.id,
-            });
-            mutate(
-              {
-                ...video,
-                comments: [...video.comments, { text: comment, user: me }],
-              },
-              false
-            );
-            setComment("");
-          }}
-        >
-          {!me && (
-            <div className="mt-1 text-sm">
-              <Link href="/login">
-                <a className="link">Log in</a>
-              </Link>{" "}
-              to leave a comment
-            </div>
-          )}
-        </form>
+        {!me && (
+          <div className="mt-1 text-sm">
+            <Link href="/login">
+              <a className="link">Log in</a>
+            </Link>{" "}
+            to leave a comment
+          </div>
+        )}
 
         {video.comments.map((comment, i) => (
           <div key={i} className="flex flex-col mb-5 mt-3 group">
@@ -81,40 +62,61 @@ export function CommentView() {
           </div>
         ))}
       </div>
-      <CommentInput
-        placeholder="Leave a comment..."
-        className="focus:border-transparent focus:ring-0"
-        value={comment}
-        type="text"
-        ref={inputRef}
-        style={{
-          cursor: !!me ? "text" : "not-allowed",
-          borderTop: "1px solid #E5E5E5",
-        }}
-        inputHeight={inputHeight}
-        disabled={!me}
-        onChange={(e) => {
-          setComment(e.target.value);
-          if (inputRef.current) {
-            setInputHeight(inputRef.current.scrollHeight);
-          }
-        }}
-        onFocus={() => toggleShortcuts(false)}
-        onBlur={() => toggleShortcuts(true)}
-      />
-      <div
-        style={{
-          borderTop: "1px solid #E5E5E5",
-          padding: 10,
+      <form
+        className="w-full"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          fetcher("/api/video/comment/create", {
+            text: comment,
+            video_id: video.id,
+          });
+          mutate(
+            {
+              ...video,
+              comments: [...video.comments, { text: comment, user: me }],
+            },
+            false
+          );
+          setComment("");
         }}
       >
-        <CommentButton
-          disabled={!me || comment.length === 0}
-          onClick={sendComment}
+        <CommentInput
+          placeholder="Leave a comment..."
+          className="focus:border-transparent focus:ring-0 w-full"
+          value={comment}
+          type="text"
+          ref={inputRef}
+          style={{
+            cursor: !!me ? "text" : "not-allowed",
+            borderTop: "1px solid #E5E5E5",
+          }}
+          inputHeight={inputHeight}
+          disabled={!me}
+          onChange={(e) => {
+            setComment(e.target.value);
+            if (inputRef.current) {
+              setInputHeight(inputRef.current.scrollHeight);
+            }
+          }}
+          onFocus={() => toggleShortcuts(false)}
+          onBlur={() => toggleShortcuts(true)}
+        />
+        <div
+          style={{
+            borderTop: "1px solid #E5E5E5",
+            padding: 10,
+          }}
         >
-          Comment
-        </CommentButton>
-      </div>
+          <CommentButton
+            disabled={!me || comment.length === 0}
+            onClick={sendComment}
+            type="submit"
+          >
+            Comment
+          </CommentButton>
+        </div>
+      </form>
     </div>
   );
 }
