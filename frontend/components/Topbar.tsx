@@ -184,11 +184,7 @@ const Topbar = () => {
               To: "transform opacity-0 scale-95"
           --> */}
               {profileMenu && (
-                <OutsideClicker
-                  onOutside={() => {
-                    setProfileMenu(false);
-                  }}
-                >
+                <OutsideClicker onOutside={() => setProfileMenu(false)}>
                   <div
                     className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                     role="menu"
@@ -287,51 +283,52 @@ const FeedbackForm = ({ setFeedbackMenu }) => {
   const [success, setSuccess] = useState(false);
 
   return (
-    <div
-      className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
-      role="menu"
-      aria-orientation="vertical"
-      aria-labelledby="user-menu"
-
-      // onBlur={() => setFeedbackMenu(false)}
-    >
-      {success ? (
-        <div className="flex flex-col items-center justify-center text-center ">
-          <div className="">
-            <CheckCircleIcon
-              className="h-5 w-5 text-green-400"
-              aria-hidden="true"
+    <OutsideClicker onOutside={() => setFeedbackMenu(false)}>
+      <div
+        className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="user-menu"
+        // onBlur={() => setFeedbackMenu(false)}
+      >
+        {success ? (
+          <div className="flex flex-col items-center justify-center text-center ">
+            <div className="">
+              <CheckCircleIcon
+                className="h-5 w-5 text-green-400"
+                aria-hidden="true"
+              />
+            </div>
+            <div>
+              <p className="text-sm text-gray-600">
+                Feedback sent! We're grateful for your input.
+              </p>
+            </div>
+          </div>
+        ) : (
+          <form
+            onSubmit={() => {
+              if (feedback.length === 0) return;
+              fetcher(`/api/user/feedback`, { feedback });
+              setFeedback("");
+              setSuccess(true);
+            }}
+          >
+            <textarea
+              placeholder="Your Feedback... "
+              className=" block w-full sm:text-sm border-transparent focus:border-transparent focus:ring-0 rounded-md resize-none"
+              rows={2}
+              autoFocus
+              // ref={input => inputRef = input}
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
             />
-          </div>
-          <div>
-            <p className="text-sm text-gray-600">
-              Feedback sent! We're grateful for your input.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <form
-          onSubmit={() => {
-            if (feedback.length === 0) return;
-            fetcher(`/api/user/feedback`, { feedback });
-            setFeedback("");
-            setSuccess(true);
-          }}
-        >
-          <textarea
-            placeholder="Your Feedback... "
-            className=" block w-full sm:text-sm border-transparent focus:border-transparent focus:ring-0 rounded-md resize-none"
-            rows={2}
-            autoFocus
-            // ref={input => inputRef = input}
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-          />
-          <button className="bg-white text-black text-sm rounded-lg float-right p-1 px-1.5">
-            Send
-          </button>
-        </form>
-      )}
-    </div>
+            <button className="bg-white text-black text-sm rounded-lg float-right p-1 px-1.5">
+              Send
+            </button>
+          </form>
+        )}
+      </div>
+    </OutsideClicker>
   );
 };

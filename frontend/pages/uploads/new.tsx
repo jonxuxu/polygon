@@ -323,7 +323,7 @@ const App = () => {
             <button
               type="button"
               onClick={upload}
-              className="secondary mt-10 mb-10 float-right md:mr-28"
+              className="secondary my-10 md:mr-28"
             >
               Upload
             </button>
