@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import Link from "next/link";
 import { UserAvatar } from "components/Topbar";
 import { TrashIcon } from "@heroicons/react/outline";
@@ -13,6 +13,8 @@ export function CommentView() {
   const router = useRouter();
   const { video, mutate } = useVideo({ cuid: router.query?.cuid });
   const [comment, setComment] = useState("");
+  const [inputHeight, setInputHeight] = useState(20);
+  const inputRef = useRef(null);
 
   const { toggleShortcuts } = useContext(ShortcutContext);
 
@@ -80,12 +82,19 @@ export function CommentView() {
         className="focus:border-transparent"
         value={comment}
         type="text"
+        ref={inputRef}
         style={{
           cursor: !!me ? "text" : "not-allowed",
           borderTop: "1px solid #E5E5E5",
         }}
+        inputHeight={inputHeight}
         disabled={!me}
-        onChange={(e) => setComment(e.target.value)}
+        onChange={(e) => {
+          setComment(e.target.value);
+          if (inputRef.current) {
+            setInputHeight(inputRef.current.scrollHeight);
+          }
+        }}
         onFocus={() => toggleShortcuts(false)}
         onBlur={() => toggleShortcuts(true)}
       />
@@ -95,25 +104,27 @@ export function CommentView() {
           padding: 10,
         }}
       >
-        <button
+        <CommentButton
           disabled={!me || comment.length === 0}
-          type="submit"
-          style={{
-            backgroundColor: "black",
-            color: "white",
-            padding: "2px 10px",
-            borderRadius: 5,
-            fontSize: 14,
-          }}
           onClick={sendComment}
         >
           Comment
-        </button>
+        </CommentButton>
       </div>
     </div>
   );
 }
 
-const CommentInput = styled.input`
+const CommentInput = styled.textarea`
   border: none;
+  height: ${(props) => props.inputHeight}px;
+`;
+
+const CommentButton = styled.button`
+  background-color: ${(props) => (props.disabled ? "#C4C4C4" : "black")};
+  color: white;
+  padding: 2px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: ${(props) => (props.disabled ? "auto" : "pointer")};
 `;

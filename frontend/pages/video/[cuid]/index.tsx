@@ -94,7 +94,7 @@ const App = () => {
                 />
               </div>
               <div className="mx-3 sm:mx-10">
-                <div className="my-2 text-xl text-gray-700">
+                <div className="mt-6 mb-2 text-xl text-gray-700">
                   {video.title}
                   {me && me.id === video.creator && (
                     <Link href={`/video/${video.cuid}/edit`}>
