@@ -1,6 +1,5 @@
-import Topbar from "components/Topbar";
 import React from "react";
-import Footer from "components/Footer";
+import styled from "styled-components";
 
 const paragraphs = [
   {
@@ -27,12 +26,15 @@ const paragraphs = [
 
 const Manifesto = () => (
   <div>
-    <div className="bg-gradient h-60 flex items-center justify-center">
-      <h1 className="text-white text-3xl">Manifesto</h1>
-
+    <div
+      className="h-60 flex flex-col items-center justify-center text-white"
+      style={{ background: "linear-gradient(10deg, #8036df, #ee3699)" }}
+    >
+      <h1 className="text-6xl mt-7">Manifesto</h1>
+      <h1 className="mt-5">Bringing real interaction to video</h1>
       {/* <p className="text-white text-md">Bringing real interaction to video</p> */}
     </div>
-    <div className="max-w-lg mx-auto mt-12 mb-24 flex flex-col text-left">
+    <div className="max-w-xl mx-auto mt-12 mb-24 flex flex-col text-left">
       <Title>The Paralyzing Player</Title>
       <Section>
         YouTube, Vimeo, IGTV, Youku all do the same thing. You go on the site,
@@ -44,7 +46,7 @@ const Manifesto = () => (
         We can only watch and passively take the content in. Nothing about this
         interaction has changed since the 90’s.
       </Section>
-      <div className="border-t-2 border-primary-400 mt-5" />
+      <GradientDivider />
       <Section>
         We made Frame in response to the uncapitalized potential we see in the
         current video ecosystem, and with enthusiasm towards what it can become
@@ -52,7 +54,8 @@ const Manifesto = () => (
         construction of Frame. We have a lot planned, and hope you’ll enjoy the
         experience as much as we do.
       </Section>
-      <Section>&mdash;Kunal and Jonathan</Section>
+      <Section>&mdash;Kunal and Jonathan, co-founders</Section>
+      <div style={{ height: 20 }} />
       {paragraphs.map(({ title, content }) => (
         <div key={title}>
           <Title>{title}</Title>
@@ -65,5 +68,14 @@ const Manifesto = () => (
 
 export default Manifesto;
 
-const Title = ({ children }) => <p className="text-xl mt-10">{children}</p>;
+const Title = ({ children }) => (
+  <p style={{ fontSize: 25, marginTop: 35, fontWeight: "bold" }}>{children}</p>
+);
 const Section = ({ children }) => <p className="mt-5">{children}</p>;
+
+const GradientDivider = styled.div`
+  background: linear-gradient(45deg, #d819f8, #ee3699);
+  height: 1px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+`;

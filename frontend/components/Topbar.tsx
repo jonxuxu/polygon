@@ -28,6 +28,8 @@ const Topbar = () => {
   useEffect(() => {
     if (router.route === "/uploads" && me && !me.approved) {
       setTheme("dark");
+    } else if (router.route === "/manifesto") {
+      setTheme("dark");
     } else {
       setTheme("light");
     }
@@ -35,11 +37,12 @@ const Topbar = () => {
   // const { session } = useSession();
   return (
     <nav
-      className="shadow"
       style={
         theme === "light"
           ? {
               backgroundColor: "white",
+              boxShadow:
+                "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
             }
           : {
               backgroundColor: "rgba(0,0,0,0)",
