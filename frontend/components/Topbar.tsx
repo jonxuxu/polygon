@@ -26,6 +26,7 @@ const Topbar = () => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log("theme");
     if (router.route === "/uploads" && me && !me.approved) {
       setTheme("dark");
     } else if (router.route === "/manifesto") {
@@ -33,7 +34,7 @@ const Topbar = () => {
     } else {
       setTheme("light");
     }
-  }, [router.route]);
+  }, [me, router.route]);
   // const { session } = useSession();
   return (
     <nav
@@ -63,10 +64,7 @@ const Topbar = () => {
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500  focus:outline-none focus:ring-2 focus:ring-inset focus:text-black"
               aria-controls="mobile-menu"
               aria-expanded="false"
-              onClick={() => {
-                setOpenMobileMenu(!openMobileMenu);
-                console.log(openMobileMenu);
-              }}
+              onClick={() => setOpenMobileMenu(!openMobileMenu)}
             >
               <span className="sr-only">Open main menu</span>
               {/* <!--

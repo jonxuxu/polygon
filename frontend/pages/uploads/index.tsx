@@ -15,7 +15,6 @@ const UploadsPage = () => {
     if (!loading && !session) Router.push("/");
   });
 
-  console.log(me);
   if (loading || me === undefined) {
     return <div></div>;
   }
