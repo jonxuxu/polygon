@@ -83,7 +83,7 @@ export function CommentView() {
       </div>
       <CommentInput
         placeholder="Leave a comment..."
-        className="focus:border-transparent"
+        className="focus:border-transparent focus:ring-0"
         value={comment}
         type="text"
         ref={inputRef}
