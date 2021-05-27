@@ -37,7 +37,7 @@ const features = [
   },
   {
     name: "Live Streaming",
-    sub: "All the features of Frame applied to live video.",
+    sub: "All the features of Polygon applied to live video.",
     icon: "live_tv.svg",
   },
   {
@@ -215,7 +215,10 @@ const Page = () => {
       </div>
       {/* Interactive Captions  */}
       <div className="bg-white  flex items-center justify-center">
-        <div className="bg-gradient  w-full md:rounded-lg md:w-3/5 p-8">
+        <div
+          className="bg-gradient w-full md:rounded-lg md:w-3/5 p-8"
+          style={{ width: "90vw" }}
+        >
           <div
             className="max-w-4xl mx-auto py-16 px-4 "
             style={{ paddingBottom: -10 }}
@@ -331,8 +334,9 @@ function HeroSection() {
                   Be Part of the Experience
                 </h1>
                 <p className="mt-6 text-xl text-gray-500">
-                  We made Frame to explore new ways we can interact with videos.
-                  Augment your viewing experience and play with the content.
+                  We made Polygon to explore new ways we can interact with
+                  videos. Augment your viewing experience and play with the
+                  content.
                 </p>
               </div>
               <form action="#" className="mt-12 sm:max-w-lg sm:w-full sm:flex">

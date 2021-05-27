@@ -211,6 +211,7 @@ const VolumeSlider = styled.input`
     position: relative;
     bottom: 4px;
     background-color: white;
+    cursor: pointer;
 
     -webkit-transition: border 1000ms ease;
     transition: border 1000ms ease;

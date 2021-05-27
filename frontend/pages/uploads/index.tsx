@@ -60,7 +60,7 @@ const Restricted = () => {
           </span>
         </h1>
         <span style={{ maxWidth: 600, marginTop: 80, fontSize: "1.2em" }}>
-          Uploading videos is currently only open to Frame insiders.
+          Uploading videos is currently only open to Polygon insiders.
         </span>
         <span style={{ maxWidth: 600, marginTop: 30, fontSize: "1.2em" }}>
           Apply to be an insider creator to upload your own videos. Be the first
