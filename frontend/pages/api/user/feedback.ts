@@ -6,7 +6,9 @@ import prisma from "../../../prisma/client";
 export default async (req, res) => {
   sendLog(`❗️ Feedback received: \`${req.body.feedback}\``);
 
-  // const feedback = await prisma.videos
+  const feedback = await prisma.feedback.create({
+    data: { text: req.body.feedback },
+  });
 
-  return res.json({});
+  return res.json(feedback);
 };
