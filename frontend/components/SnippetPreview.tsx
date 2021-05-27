@@ -25,7 +25,6 @@ export function SnippetPreview({
         }}
       />
       <div style={{ flexGrow: 1 }} ref={sidebarRef}>
-        <h2 className="pl-2 sm:pl-12">Your Snippets</h2>
         {snippets.length === 0 && (
           <div className="text-sm pl-2 sm:pl-12">
             You have no snippets. Click on any bubbles to add to your
@@ -105,12 +104,12 @@ export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
 
 const SidebarDiv = styled.div`
   overflow-y: scroll;
-  background-color: #f9f9f9;
-  width: 400px;
+  width: 100%;
   position: relative;
   padding-top: 1.25rem;
   height: 100%;
   display: flex;
+  padding-left: 0.25rem;
 `;
 
 const TimeBubble = styled.div`
@@ -127,7 +126,7 @@ const TimeBubble = styled.div`
   cursor: pointer;
   transition-duration: 0.25s;
   position: absolute;
-  left: -10px;
+  left: 0px;
 
   &:hover {
     background-color: #ee3699;

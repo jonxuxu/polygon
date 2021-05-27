@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 
 import { UserAvatar } from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
-import { SnippetPreview } from "components/SnippetPreview";
+import Sidebar from "components/Sidebar";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
 import { TrashIcon } from "@heroicons/react/outline";
@@ -220,7 +220,7 @@ const App = () => {
             </div>
           )}
         </div>
-        <SnippetPreview snippets={snippets} videoRef={videoRef} />
+        <Sidebar snippets={snippets} videoRef={videoRef} />
       </div>
       <TourNoSSR
         steps={tourSteps}
