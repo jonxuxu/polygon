@@ -19,9 +19,7 @@ export function SnippetPreview({
       <div
         style={{
           borderRight: "3px solid #EE3699",
-          top: 0,
-          // left: 35,
-          width: 30,
+          width: 35,
         }}
       />
       <div style={{ flexGrow: 1 }} ref={sidebarRef}>
@@ -103,7 +101,6 @@ export const Snippet = ({ t, isFirst, videoRef, isPreview }) => {
 };
 
 const SidebarDiv = styled.div`
-  overflow-y: scroll;
   width: 100%;
   position: relative;
   padding-top: 1.25rem;

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
@@ -7,14 +7,11 @@ import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
 import dynamic from "next/dynamic";
 
-import { UserAvatar } from "components/Topbar";
 import VideoPlayer from "components/VideoPlayer";
 import Sidebar from "components/Sidebar";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
-import { TrashIcon } from "@heroicons/react/outline";
 import useKeyboardShortcuts from "components/useKeyboardShortcuts";
-import { ShortcutContext } from "components/ShortcutContext";
 
 const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 
@@ -48,11 +45,9 @@ const App = () => {
   const { me } = useMe();
 
   const [snippets, setSnippets] = useState<Transcription[]>([]);
-  const [comment, setComment] = useState("");
   const [mobile, setMobile] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
   const [tourStep, setTourStep] = useState(0);
-  const { toggleShortcuts } = useContext(ShortcutContext);
 
   useEffect(() => {
     // if (navigator.userAgent) setMobile(true);
@@ -130,87 +125,6 @@ const App = () => {
                 {/* Save button */}
                 <br />
                 {/* <CommentsSection video={video} /> */}
-                <div>
-                  <h4 className="mt-8 mb-3 text-xl">Comments </h4>
-
-                  <form
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      fetcher("/api/video/comment/create", {
-                        text: comment,
-                        video_id: video.id,
-                      });
-                      mutate(
-                        {
-                          ...video,
-                          comments: [
-                            ...video.comments,
-                            { text: comment, user: me },
-                          ],
-                        },
-                        false
-                      );
-                      setComment("");
-                    }}
-                  >
-                    <div className="flex flex-row mt-5">
-                      <input
-                        placeholder="Leave a comment"
-                        className={`text-input `}
-                        value={comment}
-                        type="text"
-                        style={{ cursor: !!me ? "text" : "not-allowed" }}
-                        disabled={!me}
-                        onChange={(e) => setComment(e.target.value)}
-                        onFocus={() => toggleShortcuts(false)}
-                        onBlur={() => toggleShortcuts(true)}
-                      />
-
-                      <button
-                        disabled={!me}
-                        type="submit"
-                        className="primary ml-1"
-                      >
-                        Comment
-                      </button>
-                    </div>
-                    {!me && (
-                      <div className="mt-1 text-sm">
-                        <Link href="/login">
-                          <a className="link">Log in</a>
-                        </Link>{" "}
-                        to leave a comment
-                      </div>
-                    )}
-                  </form>
-
-                  {video.comments.map((comment, i) => (
-                    <div key={i} className="flex flex-col mb-5 mt-3 group">
-                      <div className="flex flex-row items-center gap-3 text-sm">
-                        <UserAvatar user={comment.user} />
-                        {comment.user.name}{" "}
-                        <p className="text-sm float-right">
-                          {/* @ts-ignore */}
-                          {dayjs(comment.created).from(dayjs())}
-                        </p>
-                        {me && me.id === comment.user_id && (
-                          <TrashIcon
-                            className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
-                            onClick={async () => {
-                              await fetcher("/api/video/comment/delete", {
-                                id: comment.id,
-                              });
-                              mutate();
-                            }}
-                          />
-                        )}
-                      </div>
-
-                      <p className="text-lg mt-2 ml-11">{comment.text}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           ) : (
