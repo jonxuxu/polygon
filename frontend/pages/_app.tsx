@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }) {
     >
       <Head>
         <title>Polygon Video</title>
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="icon" type="image/svg" href="/logo/shape.svg" />
       </Head>
       <Provider session={pageProps.session}>
         <Topbar />

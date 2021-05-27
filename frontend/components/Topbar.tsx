@@ -55,7 +55,7 @@ const Topbar = () => {
             }
       }
     >
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+      <div className="mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* <!-- Mobile menu button --> */}
@@ -113,7 +113,7 @@ const Topbar = () => {
               </svg>
             </button>
           </div>
-          <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-between sm:mr-10">
+          <div className="flex-1 flex items-center justify-between sm:items-stretch sm:mr-10">
             <Link href="/">
               <div className="flex-shrink-0 flex items-center cursor-pointer">
                 <img
@@ -123,7 +123,7 @@ const Topbar = () => {
                       ? "/logo/logo-dark.svg"
                       : "/logo/logo-light.svg"
                   }
-                  alt="Frame"
+                  alt="Polygon"
                 />
                 <img
                   className="hidden lg:block h-8 w-auto"
@@ -132,7 +132,7 @@ const Topbar = () => {
                       ? "/logo/logo-dark.svg"
                       : "/logo/logo-light.svg"
                   }
-                  alt="Frame"
+                  alt="Polygon"
                 />
               </div>
             </Link>

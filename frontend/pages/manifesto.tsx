@@ -62,6 +62,10 @@ const Manifesto = () => (
           <Section>{content}</Section>
         </div>
       ))}
+      <div style={{ height: 80 }} />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <img src="/logo/shape.svg" width={50} />
+      </div>
     </div>
   </div>
 );
