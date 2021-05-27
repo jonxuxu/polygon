@@ -130,17 +130,19 @@ const Topbar = () => {
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {/* Feedback link */}
               <div className="relative inline-flex items-center">
-                <NavLink
-                  selected={false}
-                  theme={theme}
-                  className={`inline-flex items-center px-1 pt-1 text-sm font-medium`}
-                  onClick={() => setFeedbackMenu(!feedbackMenu)}
-                >
-                  Feedback
-                </NavLink>
-                {feedbackMenu && (
-                  <FeedbackForm setFeedbackMenu={setFeedbackMenu} />
-                )}
+                <OutsideClicker onOutside={() => setFeedbackMenu(false)}>
+                  <NavLink
+                    selected={false}
+                    theme={theme}
+                    className={`inline-flex items-center px-1 pt-1 text-sm font-medium`}
+                    onClick={() => setFeedbackMenu(!feedbackMenu)}
+                  >
+                    Feedback
+                  </NavLink>
+                  {feedbackMenu && (
+                    <FeedbackForm setFeedbackMenu={setFeedbackMenu} />
+                  )}
+                </OutsideClicker>
               </div>
               {/* Desktop routes */}
               {routes.map((route) => (
@@ -159,21 +161,22 @@ const Topbar = () => {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             {/* <!-- Profile dropdown --> */}
             <div className="ml-3 relative">
-              <div>
-                <button
-                  type="button"
-                  className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
-                  id="user-menu"
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  onClick={() => setProfileMenu(!profileMenu)}
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <UserAvatar user={session ? session.user : undefined} />
-                </button>
-              </div>
+              <OutsideClicker onOutside={() => setProfileMenu(false)}>
+                <div>
+                  <button
+                    type="button"
+                    className="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                    id="user-menu"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    onClick={() => setProfileMenu(!profileMenu)}
+                  >
+                    <span className="sr-only">Open user menu</span>
+                    <UserAvatar user={session ? session.user : undefined} />
+                  </button>
+                </div>
 
-              {/* <!--
+                {/* <!--
             Dropdown menu, show/hide based on menu state.
 
             Entering: "transition ease-out duration-200"
@@ -183,8 +186,7 @@ const Topbar = () => {
               From: "transform opacity-100 scale-100"
               To: "transform opacity-0 scale-95"
           --> */}
-              {profileMenu && (
-                <OutsideClicker onOutside={() => setProfileMenu(false)}>
+                {profileMenu && (
                   <div
                     className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
                     role="menu"
@@ -212,8 +214,8 @@ const Topbar = () => {
                       </a>
                     )}
                   </div>
-                </OutsideClicker>
-              )}
+                )}
+              </OutsideClicker>
             </div>
           </div>
         </div>
@@ -283,52 +285,50 @@ const FeedbackForm = ({ setFeedbackMenu }) => {
   const [success, setSuccess] = useState(false);
 
   return (
-    <OutsideClicker onOutside={() => setFeedbackMenu(false)}>
-      <div
-        className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="user-menu"
-        // onBlur={() => setFeedbackMenu(false)}
-      >
-        {success ? (
-          <div className="flex flex-col items-center justify-center text-center ">
-            <div className="">
-              <CheckCircleIcon
-                className="h-5 w-5 text-green-400"
-                aria-hidden="true"
-              />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">
-                Feedback sent! We're grateful for your input.
-              </p>
-            </div>
-          </div>
-        ) : (
-          <form
-            onSubmit={() => {
-              if (feedback.length === 0) return;
-              fetcher(`/api/user/feedback`, { feedback });
-              setFeedback("");
-              setSuccess(true);
-            }}
-          >
-            <textarea
-              placeholder="Your Feedback... "
-              className=" block w-full sm:text-sm border-transparent focus:border-transparent focus:ring-0 rounded-md resize-none"
-              rows={2}
-              autoFocus
-              // ref={input => inputRef = input}
-              value={feedback}
-              onChange={(e) => setFeedback(e.target.value)}
+    <div
+      className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="user-menu"
+      // onBlur={() => setFeedbackMenu(false)}
+    >
+      {success ? (
+        <div className="flex flex-col items-center justify-center text-center ">
+          <div className="">
+            <CheckCircleIcon
+              className="h-5 w-5 text-green-400"
+              aria-hidden="true"
             />
-            <button className="bg-white text-black text-sm rounded-lg float-right p-1 px-1.5">
-              Send
-            </button>
-          </form>
-        )}
-      </div>
-    </OutsideClicker>
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">
+              Feedback sent! We're grateful for your input.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <form
+          onSubmit={() => {
+            if (feedback.length === 0) return;
+            fetcher(`/api/user/feedback`, { feedback });
+            setFeedback("");
+            setSuccess(true);
+          }}
+        >
+          <textarea
+            placeholder="Your Feedback... "
+            className=" block w-full sm:text-sm border-transparent focus:border-transparent focus:ring-0 rounded-md resize-none"
+            rows={2}
+            autoFocus
+            // ref={input => inputRef = input}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+          />
+          <button className="bg-white text-black text-sm rounded-lg float-right p-1 px-1.5">
+            Send
+          </button>
+        </form>
+      )}
+    </div>
   );
 };
