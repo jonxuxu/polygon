@@ -16,38 +16,35 @@ export function SnippetPreview({
 
   return (
     <SidebarDiv>
-      <div style={{ display: "flex" }}>
-        <div
-          style={{
-            borderRight: "3px solid #EE3699",
-            top: 0,
-            // left: 35,
-            width: 30,
-          }}
-        />
-        <div style={{ flexGrow: 1 }} ref={sidebarRef}>
-          <h2 className="pl-2 sm:pl-12">Your Snippets</h2>
-          {snippets.length === 0 && (
-            <div className="text-sm pl-2 sm:pl-12">
-              You have no snippets. Click on any bubbles to add to your
-              collection.
-            </div>
-          )}
+      <div
+        style={{
+          borderRight: "3px solid #EE3699",
+          top: 0,
+          // left: 35,
+          width: 30,
+        }}
+      />
+      <div style={{ flexGrow: 1 }} ref={sidebarRef}>
+        <h2 className="pl-2 sm:pl-12">Your Snippets</h2>
+        {snippets.length === 0 && (
+          <div className="text-sm pl-2 sm:pl-12">
+            You have no snippets. Click on any bubbles to add to your
+            collection.
+          </div>
+        )}
 
-          {snippets.map((t, i) => {
-            const isFirst =
-              i === 0 || snippets[i - 1].time !== snippets[i].time;
-            return (
-              <Snippet
-                t={t}
-                isFirst={isFirst}
-                key={i}
-                videoRef={videoRef}
-                isPreview={false}
-              />
-            );
-          })}
-        </div>
+        {snippets.map((t, i) => {
+          const isFirst = i === 0 || snippets[i - 1].time !== snippets[i].time;
+          return (
+            <Snippet
+              t={t}
+              isFirst={isFirst}
+              key={i}
+              videoRef={videoRef}
+              isPreview={false}
+            />
+          );
+        })}
       </div>
     </SidebarDiv>
   );
@@ -111,12 +108,9 @@ const SidebarDiv = styled.div`
   background-color: #f9f9f9;
   width: 400px;
   position: relative;
-  margin-top: 40px;
-  margin-bottom: 30px;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
   padding-top: 1.25rem;
-  height: 80vh;
+  height: 100%;
+  display: flex;
 `;
 
 const TimeBubble = styled.div`
@@ -143,17 +137,14 @@ const TimeBubble = styled.div`
 
 const SnippetCard = styled.div`
   border: 2px solid ${(props) => props.color};
-  border-right: ${(props) =>
-    props.isPreview ? `2px solid ${props.color}` : "none"};
-  border-radius: ${(props) => (props.isPreview ? `10px` : "0px")};
+  border-radius: 20px;
   flex-grow: 1;
   background-color: white;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
   padding: 0.75rem 1rem;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   display: flex;
   justify-content: space-between;
   margin-left: ${(props) => (props.isPreview ? `0px` : "50px")};
+  margin-right: ${(props) => (props.isPreview ? `0px` : "20px")};
 `;

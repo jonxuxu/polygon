@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import styled from "styled-components";
 import { useMe } from "utils/fetcher";
+import OutsideClicker from "components/OutsideClicker";
 
 const Topbar = () => {
   const [profileMenu, setProfileMenu] = useState(false);
@@ -167,31 +168,39 @@ const Topbar = () => {
               To: "transform opacity-0 scale-95"
           --> */}
               {profileMenu && (
-                <div
-                  className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="user-menu"
+                <OutsideClicker
+                  onOutside={() => {
+                    setProfileMenu(false);
+                  }}
                 >
-                  <Link href={session ? "/profile" : "/api/auth/signin/google"}>
-                    <a
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
+                  <div
+                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="user-menu"
+                  >
+                    <Link
+                      href={session ? "/profile" : "/api/auth/signin/google"}
                     >
-                      {session ? "Your Profile" : "Log In"}
-                    </a>
-                  </Link>
+                      <a
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        {session ? "Your Profile" : "Log In"}
+                      </a>
+                    </Link>
 
-                  {session && (
-                    <a
-                      onClick={() => signOut()}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                    >
-                      Sign out
-                    </a>
-                  )}
-                </div>
+                    {session && (
+                      <a
+                        onClick={() => signOut()}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        Sign out
+                      </a>
+                    )}
+                  </div>
+                </OutsideClicker>
               )}
             </div>
           </div>

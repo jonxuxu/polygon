@@ -70,8 +70,11 @@ const App = () => {
           devices.
         </div>
       )}
-      <div className="flex" style={{ width: "100%" }}>
-        <div style={{ flex: 1 }}>
+      <div
+        className="flex"
+        style={{ width: "100%", height: "calc(100vh - 64px)" }}
+      >
+        <div style={{ flex: 1, overflowY: "scroll" }}>
           {video && video.url ? (
             <div>
               <div
