@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Skeleton from "react-loading-skeleton";
@@ -13,6 +13,8 @@ import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
 import { TrashIcon } from "@heroicons/react/outline";
+import useKeyboardShortcuts from "components/useKeyboardShortcuts";
+import { ShortcutContext } from "components/ShortcutContext";
 
 const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 
@@ -48,9 +50,9 @@ const App = () => {
   const [snippets, setSnippets] = useState<Transcription[]>([]);
   const [comment, setComment] = useState("");
   const [mobile, setMobile] = useState(false);
-  const [commentInputFocus, setCommentInputFocus] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const { toggleShortcuts } = useContext(ShortcutContext);
 
   useEffect(() => {
     // if (navigator.userAgent) setMobile(true);
@@ -91,7 +93,6 @@ const App = () => {
                   snippets={snippets}
                   setSnippets={setSnippets}
                   videoRef={videoRef}
-                  commentInputFocus={commentInputFocus}
                 />
               </div>
               <div className="mx-3 sm:mx-10">
@@ -162,8 +163,8 @@ const App = () => {
                         style={{ cursor: !!me ? "text" : "not-allowed" }}
                         disabled={!me}
                         onChange={(e) => setComment(e.target.value)}
-                        onFocus={() => setCommentInputFocus(true)}
-                        onBlur={() => setCommentInputFocus(false)}
+                        onFocus={() => toggleShortcuts(false)}
+                        onBlur={() => toggleShortcuts(true)}
                       />
 
                       <button
@@ -184,11 +185,8 @@ const App = () => {
                     )}
                   </form>
 
-                  {video.comments.map((comment) => (
-                    <div
-                      key={comment.id}
-                      className="flex flex-col mb-5 mt-3 group"
-                    >
+                  {video.comments.map((comment, i) => (
+                    <div key={i} className="flex flex-col mb-5 mt-3 group">
                       <div className="flex flex-row items-center gap-3 text-sm">
                         <UserAvatar user={comment.user} />
                         {comment.user.name}{" "}
@@ -199,11 +197,12 @@ const App = () => {
                         {me && me.id === comment.user_id && (
                           <TrashIcon
                             className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
-                            onClick={() =>
-                              fetcher("/api/video/comment/delete", {
+                            onClick={async () => {
+                              await fetcher("/api/video/comment/delete", {
                                 id: comment.id,
-                              })
-                            }
+                              });
+                              mutate();
+                            }}
                           />
                         )}
                       </div>
@@ -223,6 +222,7 @@ const App = () => {
         <SnippetPreview snippets={snippets} videoRef={videoRef} />
       </div>
       <TourNoSSR
+        // @ts-ignore
         steps={tourSteps}
         isOpen={tourOpen}
         onRequestClose={() => setTourOpen(false)}
