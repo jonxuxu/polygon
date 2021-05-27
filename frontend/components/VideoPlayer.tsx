@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
@@ -13,6 +13,7 @@ import VideoControls from "components/Controls";
 
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
+import useKeyboardShortcuts from "./useKeyboardShortcuts";
 
 // Content variables
 var annotations = [];
@@ -51,44 +52,9 @@ export default function VideoPlayer({
   const [captionChars, setCaptionChars] = useState([]);
   const [targetLang, setTargetLang] = useState("English");
   const [showControls, setShowControls] = useState(false);
-
-  // Keyboard listeners
-  const handlekeydownEvent = useCallback((event) => {
-    const { keyCode } = event;
-
-    if (event.target.tagName === "VIDEO") {
-      return;
-    }
-    // Space
-    if (keyCode === 32) {
-      event.preventDefault();
-      if (videoRef.current.paused) {
-        videoRef.current.play();
-      } else {
-        videoRef.current.pause();
-      }
-    } else if (keyCode === 39) {
-      // Right button
-      videoRef.current.currentTime += 30;
-    } else if (keyCode === 37) {
-      // Left button
-      videoRef.current.currentTime -= 30;
-    } else if (keyCode === 38) {
-      // Up arrow
-      if (videoRef.current.volume <= 0.9) {
-        videoRef.current.volume += 0.1;
-      } else {
-        videoRef.current.volume = 1;
-      }
-    } else if (keyCode === 40) {
-      // Down arrow
-      if (videoRef.current.volume >= 0.1) {
-        videoRef.current.volume -= 0.1;
-      } else {
-        videoRef.current.volume = 0;
-      }
-    }
-  }, []);
+  const { enableShortcuts, disableShortcuts } = useKeyboardShortcuts({
+    videoRef,
+  });
 
   useEffect(() => {
     // increment views
@@ -188,19 +154,20 @@ export default function VideoPlayer({
       }
     })();
 
-    document.addEventListener("keydown", handlekeydownEvent);
+    enableShortcuts();
     return () => {
-      document.removeEventListener("keydown", handlekeydownEvent);
+      disableShortcuts();
     };
   }, []);
 
-  // disable shortcuts when user is typing comments
+  // // disable shortcuts when user is typing comments
   useEffect(() => {
     if (commentInputFocus) {
-      document.removeEventListener("keydown", handlekeydownEvent);
+      disableShortcuts();
     } else {
-      document.addEventListener("keydown", handlekeydownEvent);
+      enableShortcuts();
     }
+    return () => disableShortcuts();
   }, [commentInputFocus]);
 
   useEffect(() => {

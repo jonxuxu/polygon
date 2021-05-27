@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import styled from "styled-components";
-import { useMe } from "utils/fetcher";
+
 import OutsideClicker from "components/OutsideClicker";
+import { fetcher, useMe } from "utils/fetcher";
+import { CheckCircleIcon, XIcon } from "@heroicons/react/solid";
 
 const Topbar = () => {
   const [profileMenu, setProfileMenu] = useState(false);
@@ -127,7 +129,7 @@ const Topbar = () => {
 
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {/* Feedback link */}
-              <div className="relative">
+              <div className="relative inline-flex items-center">
                 <NavLink
                   selected={false}
                   theme={theme}
@@ -137,18 +139,7 @@ const Topbar = () => {
                   Feedback
                 </NavLink>
                 {feedbackMenu && (
-                  <div
-                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="user-menu"
-                  >
-                    <input
-                      placeholder="Feedback.. "
-                      className="text-input "
-                      type="text"
-                    />
-                  </div>
+                  <FeedbackForm setFeedbackMenu={setFeedbackMenu} />
                 )}
               </div>
               {/* Desktop routes */}
@@ -288,5 +279,59 @@ export const UserAvatar = ({ user }: { user?: { image?: string } }) => {
         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
       </svg>
     </span>
+  );
+};
+
+const FeedbackForm = ({ setFeedbackMenu }) => {
+  const [feedback, setFeedback] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  return (
+    <div
+      className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="user-menu"
+
+      // onBlur={() => setFeedbackMenu(false)}
+    >
+      {success ? (
+        <div className="flex flex-col items-center justify-center text-center ">
+          <div className="">
+            <CheckCircleIcon
+              className="h-5 w-5 text-green-400"
+              aria-hidden="true"
+            />
+          </div>
+          <div>
+            <p className="text-sm text-gray-600">
+              Feedback sent! We're grateful for your input.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <form
+          onSubmit={() => {
+            if (feedback.length === 0) return;
+            fetcher(`/api/user/feedback`, { feedback });
+            setFeedback("");
+            setSuccess(true);
+          }}
+        >
+          <textarea
+            placeholder="Your Feedback... "
+            className=" block w-full sm:text-sm border-transparent focus:border-transparent focus:ring-0 rounded-md resize-none"
+            rows={2}
+            autoFocus
+            // ref={input => inputRef = input}
+            value={feedback}
+            onChange={(e) => setFeedback(e.target.value)}
+          />
+          <button className="bg-white text-black text-sm rounded-lg float-right p-1 px-1.5">
+            Send
+          </button>
+        </form>
+      )}
+    </div>
   );
 };

@@ -13,6 +13,7 @@ import { SnippetPreview } from "components/SnippetPreview";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
 import { TrashIcon } from "@heroicons/react/outline";
+import useKeyboardShortcuts from "components/useKeyboardShortcuts";
 
 const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 
@@ -51,6 +52,9 @@ const App = () => {
   const [commentInputFocus, setCommentInputFocus] = useState(false);
   const [tourOpen, setTourOpen] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const { enableShortcuts, disableShortcuts } = useKeyboardShortcuts({
+    videoRef,
+  });
 
   useEffect(() => {
     // if (navigator.userAgent) setMobile(true);
@@ -184,11 +188,8 @@ const App = () => {
                     )}
                   </form>
 
-                  {video.comments.map((comment) => (
-                    <div
-                      key={comment.id}
-                      className="flex flex-col mb-5 mt-3 group"
-                    >
+                  {video.comments.map((comment, i) => (
+                    <div key={i} className="flex flex-col mb-5 mt-3 group">
                       <div className="flex flex-row items-center gap-3 text-sm">
                         <UserAvatar user={comment.user} />
                         {comment.user.name}{" "}
@@ -199,11 +200,12 @@ const App = () => {
                         {me && me.id === comment.user_id && (
                           <TrashIcon
                             className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
-                            onClick={() =>
-                              fetcher("/api/video/comment/delete", {
+                            onClick={async () => {
+                              await fetcher("/api/video/comment/delete", {
                                 id: comment.id,
-                              })
-                            }
+                              });
+                              mutate();
+                            }}
                           />
                         )}
                       </div>
@@ -223,6 +225,7 @@ const App = () => {
         <SnippetPreview snippets={snippets} videoRef={videoRef} />
       </div>
       <TourNoSSR
+        // @ts-ignore
         steps={tourSteps}
         isOpen={tourOpen}
         onRequestClose={() => setTourOpen(false)}

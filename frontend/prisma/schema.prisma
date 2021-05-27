@@ -55,6 +55,7 @@ model users {
   approved       Boolean    @default(false)
   comments       comments[]
   snippets       snippets[]
+  feedback       feedback[]
   videos         videos[]   @relation("VideoCreator")
   savedVideos    videos[]   @relation("SavedVideo")
 }
@@ -121,4 +122,14 @@ model waitlist {
   id         Int      @id @default(autoincrement())
   email      String   @unique
   created_at DateTime @default(now()) @db.Timestamptz(6)
+}
+
+
+model feedback {
+  id       Int      @id @default(autoincrement())
+  created  DateTime @default(now()) @db.Timestamptz(6)
+  text     String
+  user_id  Int?
+  user     users?    @relation(fields: [user_id], references: [id])
+
 }
