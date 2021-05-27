@@ -15,6 +15,7 @@ const UploadsPage = () => {
     if (!loading && !session) Router.push("/");
   });
 
+  console.log(me);
   if (loading || me === undefined) {
     return <div></div>;
   }
@@ -110,14 +111,4 @@ const PrimaryButton = styled.div`
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
   }
-`;
-
-const SecondaryButton = styled.div`
-  margin-right: 20px;
-  font-size: 1.3em;
-  border: 2px solid rgba(255, 255, 255, 0.7);
-  border-radius: 10px;
-  padding: 6px 30px;
-  cursor: pointer;
-  font-weight: bold;
 `;

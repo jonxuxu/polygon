@@ -234,7 +234,6 @@ const Page = () => {
                       snippets={snippets}
                       setSnippets={() => {}}
                       videoRef={videoRef}
-                      commentInputFocus={false}
                     />
                   )}
                   {/* <Image

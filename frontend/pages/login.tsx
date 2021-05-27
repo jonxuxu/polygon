@@ -11,7 +11,7 @@ const LoginPage = () => {
   useEffect(() => {
     if (loading) return;
     if (session) Router.push("/");
-    if (!loading && !session) Router.push("/api/auth/signin/google");
+    // if (!loading && !session) Router.push("/api/auth/signin/google");
   }, [session, loading]);
 
   return (
