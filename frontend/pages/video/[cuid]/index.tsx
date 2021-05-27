@@ -71,7 +71,10 @@ const App = () => {
         className="flex"
         style={{ width: "100%", height: "calc(100vh - 64px)" }}
       >
-        <div style={{ flex: 1, overflowY: "scroll" }}>
+        <div
+          style={{ flex: 1, overflowY: "scroll" }}
+          className="hide-scrollbar"
+        >
           {video && video.url ? (
             <div>
               <div
