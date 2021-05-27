@@ -13,7 +13,7 @@ export function CommentView() {
   const router = useRouter();
   const { video, mutate } = useVideo({ cuid: router.query?.cuid });
   const [comment, setComment] = useState("");
-  const [inputHeight, setInputHeight] = useState(20);
+  const [inputHeight, setInputHeight] = useState(40);
   const inputRef = useRef(null);
 
   const { toggleShortcuts } = useContext(ShortcutContext);
@@ -22,7 +22,7 @@ export function CommentView() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div style={{ padding: "15px 30px", flexGrow: 1 }}>
+      <div style={{ padding: "15px 15px", flexGrow: 1 }}>
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -53,27 +53,31 @@ export function CommentView() {
 
         {video.comments.map((comment, i) => (
           <div key={i} className="flex flex-col mb-5 mt-3 group">
-            <div className="flex flex-row items-center gap-3 text-sm">
+            <div className="flex flex-row gap-3 text-sm">
               <UserAvatar user={comment.user} />
-              {comment.user.name}{" "}
-              <p className="text-sm float-right">
-                {/* @ts-ignore */}
+              <div>
+                <span>
+                  <span style={{ fontWeight: "bold" }}>
+                    {comment.user.name}
+                  </span>{" "}
+                  <span style={{ wordBreak: "break-all" }}>{comment.text}</span>
+                </span>
+                {/* <p className="text-sm float-right">
                 {dayjs(comment.created).from(dayjs())}
-              </p>
-              {me && me.id === comment.user_id && (
-                <TrashIcon
-                  className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
-                  onClick={async () => {
-                    await fetcher("/api/video/comment/delete", {
-                      id: comment.id,
-                    });
-                    mutate();
-                  }}
-                />
-              )}
+              </p>  */}
+              </div>
             </div>
-
-            <p className="text-lg mt-2 ml-11">{comment.text}</p>
+            {me && me.id === comment.user_id && (
+              <TrashIcon
+                className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
+                onClick={async () => {
+                  await fetcher("/api/video/comment/delete", {
+                    id: comment.id,
+                  });
+                  mutate();
+                }}
+              />
+            )}
           </div>
         ))}
       </div>
@@ -118,6 +122,7 @@ export function CommentView() {
 const CommentInput = styled.textarea`
   border: none;
   height: ${(props) => props.inputHeight}px;
+  resize: none;
 `;
 
 const CommentButton = styled.button`
