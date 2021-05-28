@@ -322,12 +322,12 @@ function HeroSection() {
           style={{
             position: "relative",
             zIndex: 1,
-            width: "70%",
+            width: "80%",
           }}
         >
           <img
             className="w-full rounded-md shadow-xl ring-1 ring-black ring-opacity-5"
-            src="/how-it-works/hero-screenshot.png"
+            src="/how-it-works/hero-demo.gif"
             alt=""
             style={{ marginLeft: 50 }}
           />
