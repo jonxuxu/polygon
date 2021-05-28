@@ -20,7 +20,7 @@ const Topbar = () => {
     { route: "/", label: "Explore" },
     session
       ? { route: "/uploads", label: "Upload" }
-      : { route: "/api/auth/signin/google", label: "Login" },
+      : { route: "/api/auth/signin", label: "Login" },
     { route: "/how-it-works", label: "How It Works" },
   ];
   const router = useRouter();
@@ -202,9 +202,7 @@ const Topbar = () => {
                     aria-orientation="vertical"
                     aria-labelledby="user-menu"
                   >
-                    <Link
-                      href={session ? "/profile" : "/api/auth/signin/google"}
-                    >
+                    <Link href={session ? "/profile" : "/api/auth/signin"}>
                       <a
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         role="menuitem"
