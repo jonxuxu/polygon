@@ -412,7 +412,7 @@ const CollectionSection = ({ snippets }) => (
               }}
             >
               <Image
-                src={`/how-it-works/snippet${i + 4}.svg`}
+                src={`/how-it-works/snippets/snippet${i + 4}.svg`}
                 height={109}
                 width={269}
               />
