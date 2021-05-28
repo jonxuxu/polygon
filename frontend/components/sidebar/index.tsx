@@ -2,7 +2,6 @@ import { SnippetPreview } from "./SnippetView";
 import { CommentView } from "./CommentView";
 import { useState } from "react";
 import styled from "styled-components";
-import { PlayerLoader } from "components/VideoLoader";
 
 const Sidebar = ({ snippets, videoRef }) => {
   const [tab, setTab] = useState("snippets");

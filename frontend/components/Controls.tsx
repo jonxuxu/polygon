@@ -41,7 +41,7 @@ const VideoControls = ({ videoRef, show }) => {
             setVolumeSelect(false);
           }}
         >
-          {video.muted ? (
+          {video.muted || video.volume === 0 ? (
             <ControlBtn
               src="/icons/volume-off.svg"
               size={17}
@@ -49,9 +49,17 @@ const VideoControls = ({ videoRef, show }) => {
                 video.muted = false;
               }}
             />
-          ) : (
+          ) : video.volume > 0.5 ? (
             <ControlBtn
               src="/icons/volume-up.svg"
+              size={17}
+              onClick={() => {
+                video.muted = true;
+              }}
+            />
+          ) : (
+            <ControlBtn
+              src="/icons/volume-medium.svg"
               size={17}
               onClick={() => {
                 video.muted = true;
