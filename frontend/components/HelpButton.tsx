@@ -41,7 +41,7 @@ const HelpButton = () => {
           <div
             style={{
               position: "absolute",
-              top: -120,
+              top: -100,
               left: -120,
               backgroundColor: "white",
               boxShadow:
@@ -55,7 +55,7 @@ const HelpButton = () => {
                 Send us a message
               </OptionLink>
             </OptionDiv>
-            <OptionDiv>Give feedback</OptionDiv>
+            {/* <OptionDiv>Give feedback</OptionDiv> */}
             <OptionDiv>
               <OptionLink
                 target="_blank"
