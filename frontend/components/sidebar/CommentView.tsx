@@ -5,7 +5,7 @@ import { TrashIcon } from "@heroicons/react/outline";
 import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { useRouter } from "next/router";
 import { ShortcutContext } from "components/ShortcutContext";
-import dayjs from "dayjs";
+import HelpButton from "components/HelpButton";
 import styled from "styled-components";
 
 export function CommentView() {
@@ -20,6 +20,10 @@ export function CommentView() {
 
   const sendComment = () => {};
 
+  if (!video || !video.comments) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div style={{ padding: "15px 15px", flexGrow: 1 }}>
@@ -32,35 +36,42 @@ export function CommentView() {
           </div>
         )}
 
-        {video.comments.map((comment, i) => (
-          <div key={i} className="flex flex-col mb-5 mt-3 group">
-            <div className="flex flex-row gap-3 text-sm">
-              <UserAvatar user={comment.user} />
-              <div>
-                <span>
-                  <span style={{ fontWeight: "bold" }}>
-                    {comment.user.name}
-                  </span>{" "}
-                  <span style={{ wordBreak: "break-all" }}>{comment.text}</span>
-                </span>
-                {/* <p className="text-sm float-right">
+        {video.comments.map((comment, i) => {
+          if (!comment.user) {
+            return;
+          }
+          return (
+            <div key={i} className="flex flex-col mb-5 mt-3 group">
+              <div className="flex flex-row gap-3 text-sm">
+                <UserAvatar user={comment.user} />
+                <div>
+                  <span>
+                    <span style={{ fontWeight: "bold" }}>
+                      {comment.user.name}
+                    </span>{" "}
+                    <span style={{ wordBreak: "break-all" }}>
+                      {comment.text}
+                    </span>
+                  </span>
+                  {/* <p className="text-sm float-right">
                 {dayjs(comment.created).from(dayjs())}
               </p>  */}
+                </div>
               </div>
+              {me && me.id === comment.user_id && (
+                <TrashIcon
+                  className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
+                  onClick={async () => {
+                    await fetcher("/api/video/comment/delete", {
+                      id: comment.id,
+                    });
+                    mutate();
+                  }}
+                />
+              )}
             </div>
-            {me && me.id === comment.user_id && (
-              <TrashIcon
-                className="text-red-400 h-5 opacity-0 group-hover:opacity-100 transition ease-in-out duration-150"
-                onClick={async () => {
-                  await fetcher("/api/video/comment/delete", {
-                    id: comment.id,
-                  });
-                  mutate();
-                }}
-              />
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
       <form
         className="w-full"
@@ -117,7 +128,7 @@ export function CommentView() {
           >
             Comment
           </CommentButton>
-          <HelpButton>?</HelpButton>
+          <HelpButton />
         </div>
       </form>
     </div>
@@ -137,12 +148,4 @@ const CommentButton = styled.button`
   border-radius: 5px;
   font-size: 14px;
   cursor: ${(props) => (props.disabled ? "auto" : "pointer")};
-`;
-
-const HelpButton = styled.button`
-  border-radius: 5px;
-  border: 2px solid #e5e5e5;
-  cursor: pointer;
-  padding: 2px 10px;
-  font-weight: bold;
 `;

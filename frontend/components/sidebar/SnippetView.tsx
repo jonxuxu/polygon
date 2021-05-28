@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import tinycolor from "tinycolor2";
 import { TranslationActionIcons } from "../TranslationActionIcons";
 import styled from "styled-components";
 
 import { Transcription } from "../../utils/types";
+import HelpButton from "components/HelpButton";
 
 export function SnippetView({
   snippets,
@@ -54,7 +55,7 @@ export function SnippetView({
           justifyContent: "flex-end",
         }}
       >
-        <HelpButton>?</HelpButton>
+        <HelpButton />
       </div>
     </div>
   );
@@ -156,12 +157,4 @@ const SnippetCard = styled.div`
   justify-content: space-between;
   margin-left: ${(props) => (props.isPreview ? `0px` : "50px")};
   margin-right: ${(props) => (props.isPreview ? `0px` : "20px")};
-`;
-
-const HelpButton = styled.button`
-  border-radius: 5px;
-  border: 2px solid #e5e5e5;
-  cursor: pointer;
-  padding: 2px 10px;
-  font-weight: bold;
 `;

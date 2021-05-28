@@ -5,13 +5,6 @@ const VideoControls = ({ videoRef, show, showCaptions, setShowCaptions }) => {
   const video = videoRef.current;
   const progressRef = useRef(null);
   const [volumeSelect, setVolumeSelect] = useState(false);
-  const [volume, setVolume] = useState(1);
-
-  useEffect(() => {
-    if (video) {
-      video.volume = volume;
-    }
-  }, [volume]);
 
   if (video === undefined || video === null || !show) {
     return <div />;
@@ -71,9 +64,9 @@ const VideoControls = ({ videoRef, show, showCaptions, setShowCaptions }) => {
             min="0"
             max="1"
             step="0.1"
-            value={volume}
+            value={video.volume}
             onChange={(e) => {
-              setVolume(e.target.value);
+              video.volume = e.target.value;
             }}
             hide={!volumeSelect}
           />

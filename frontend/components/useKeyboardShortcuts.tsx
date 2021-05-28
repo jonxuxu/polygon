@@ -26,6 +26,7 @@ export default function useKeyboardShortcuts({ videoRef }) {
       // Left button
       videoRef.current.currentTime -= 30;
     } else if (keyCode === 38) {
+      event.preventDefault();
       // Up arrow
       if (videoRef.current.volume <= 0.9) {
         videoRef.current.volume += 0.1;
@@ -33,12 +34,17 @@ export default function useKeyboardShortcuts({ videoRef }) {
         videoRef.current.volume = 1;
       }
     } else if (keyCode === 40) {
+      event.preventDefault();
       // Down arrow
       if (videoRef.current.volume >= 0.1) {
         videoRef.current.volume -= 0.1;
       } else {
         videoRef.current.volume = 0;
       }
+    } else if (keyCode === 77) {
+      event.preventDefault();
+      // M button
+      videoRef.current.muted = !videoRef.current.muted;
     }
   }, []);
 
