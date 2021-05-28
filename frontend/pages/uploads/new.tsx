@@ -166,7 +166,7 @@ const App = () => {
                   htmlFor="language"
                   className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
                 >
-                  Use Subtitles
+                  Generate Subtitles
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                   {languages && (

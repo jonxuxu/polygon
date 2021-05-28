@@ -6,7 +6,7 @@ import dynamic from "next/dynamic";
 
 import { ImagePreview } from "./ImagePreview";
 import { useEffect, useState } from "react";
-import VideoLoader from "./VideoLoader";
+import { VideoLoader } from "./VideoLoader";
 
 const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 

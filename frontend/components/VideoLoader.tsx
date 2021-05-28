@@ -1,4 +1,4 @@
-const VideoLoader = () => {
+export const VideoLoader = () => {
   const fill = "#ddd";
   return (
     <div className="col-span-6 md:col-span-4 xl:col-span-3 relative rounded-lg bg-white flex">
@@ -113,5 +113,3 @@ export const PlayerLoader = () => {
     </div>
   );
 };
-
-export default VideoLoader;

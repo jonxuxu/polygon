@@ -48,7 +48,7 @@ const FooterDiv = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  ${(props) => props.theme === "light" && "border-top: 1px solid #C4C4C4;"}
+  ${(props) => props.theme === "light" && "border-top: 0.5px solid #C4C4C4;"}
 `;
 
 const FooterLink = styled.a`

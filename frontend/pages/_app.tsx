@@ -21,6 +21,10 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Polygon Video</title>
         <link rel="icon" type="image/svg" href="/logo/shape.svg" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        ></meta>
       </Head>
       <Provider session={pageProps.session}>
         <Topbar />

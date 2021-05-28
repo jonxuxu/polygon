@@ -34,7 +34,7 @@ const Manifesto = () => (
       <h1 className="mt-5">Bringing real interaction to video</h1>
       {/* <p className="text-white text-md">Bringing real interaction to video</p> */}
     </div>
-    <div className="max-w-xl mx-auto mt-12 mb-24 flex flex-col text-left">
+    <div className="max-w-xl mx-auto mt-6 mb-24 flex flex-col text-left p-5">
       <Title>The Paralyzing Player</Title>
       <Section>
         YouTube, Vimeo, IGTV, Youku all do the same thing. You go on the site,
@@ -54,11 +54,21 @@ const Manifesto = () => (
         construction of Polygon. We have a lot planned, and hope you’ll enjoy
         the experience as much as we do.
       </Section>
-      <Section>&mdash;Kunal and Jonathan, co-founders</Section>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <img src="/" />
+      <Section>&mdash;Jonathan and Kunal, co-founders</Section>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          marginTop: 40,
+          marginBottom: 40,
+        }}
+      >
+        <img
+          src="/images/jonathan-sig.png"
+          style={{ width: "40%", marginTop: -10, marginLeft: "-5%" }}
+        />
+        <img src="/images/kunal-sig.png" style={{ width: "30%" }} />
       </div>
-      <div style={{ height: 20 }} />
 
       {paragraphs.map(({ title, content }) => (
         <div key={title}>
