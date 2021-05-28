@@ -4,6 +4,7 @@ import { SnippetPreview, Snippet } from "components/sidebar/SnippetView";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
 import Footer from "components/Footer";
+import styled from "styled-components";
 
 import Link from "next/link";
 import { useMe, useVideo } from "utils/fetcher";
@@ -136,8 +137,8 @@ const Page = () => {
     <div>
       <HeroSection />
       <audio ref={voiceRef} />
-      <div className="">
-        <div className="relative my-16">
+      <div style={{ backgroundColor: "white" }}>
+        <div className="relative py-16">
           <h2 className="text-center leading-8 title text-gray-900">
             Learn through Immersion
           </h2>
@@ -271,107 +272,68 @@ export default Page;
 
 function HeroSection() {
   return (
-    <div className="bg-white pb-8 sm:pb-12 lg:pb-12">
-      <div className="pt-8 overflow-hidden sm:pt-12 lg:relative lg:py-48">
-        <div className="mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl lg:grid lg:grid-cols-2 lg:gap-24">
-          <div>
-            {/* <div>
-              <img
-                className="h-11 w-auto"
-                src="/pink-logo.png"
-                alt="Workflow"
-              />
-            </div> */}
-            <div className="mt-20">
-              <div className="mt-6 sm:max-w-xl">
-                <h1 className="title text-gray-900">
-                  Be Part of the Experience
-                </h1>
-                <p className="mt-6 text-xl text-gray-500">
-                  We made Polygon to explore new ways we can interact with
-                  videos. Augment your viewing experience and play with the
-                  content.
-                </p>
-              </div>
-              <form action="#" className="mt-12 sm:max-w-lg sm:w-full sm:flex">
-                <div className="mt-4 sm:mt-0 sm:ml-3">
-                  <Link href="/">
-                    <button
-                      type="submit"
-                      className="block w-full rounded-md border border-transparent px-5 py-3  bg-gradient text-base font-medium text-white shadow hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"
-                    >
-                      Explore
-                    </button>
-                  </Link>
-                </div>
-                <div className="mt-4 sm:mt-0 sm:ml-3">
-                  <Link href="/manifesto">
-                    <button
-                      type="submit"
-                      className="block w-full rounded-md border-2 border-black px-5 py-3 bg-white text-base font-medium text-black shadow  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:px-10"
-                    >
-                      Manifesto
-                    </button>
-                  </Link>
-                </div>
-              </form>
-            </div>
-          </div>
+    <SplitDiv
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        height: "80vh",
+      }}
+    >
+      <LeftDiv style={{ paddingLeft: "10%", paddingTop: 50 }}>
+        <h1 className="title text-gray-900">Be Part of the Experience</h1>
+        <div className="mt-6 text-lg text-gray-500">
+          We made Polygon to explore new ways we can interact with videos.
+          Augment your viewing experience and play with the content.
         </div>
+        <div style={{ display: "flex", flexWrap: "wrap", marginTop: 40 }}>
+          <Link href="/">
+            <MainButton>Explore</MainButton>
+          </Link>
+          <Link href="/manifesto">
+            <SecondaryButton>Manifesto</SecondaryButton>
+          </Link>
+        </div>
+      </LeftDiv>
 
-        <div className="sm:mx-auto sm:max-w-3xl sm:px-6">
-          <div className="py-12 sm:relative sm:mt-12 sm:py-16 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            <div className="hidden sm:block">
-              <div className="absolute inset-y-0 left-1/2 w-screen bg-gradient opacity-50 rounded-l-3xl lg:left-80 lg:right-0 lg:w-full" />
-              <svg
-                className="absolute top-8 right-1/2 -mr-3 lg:m-0 lg:left-0"
-                width={404}
-                height={392}
-                fill="none"
-                viewBox="0 0 404 392"
-              >
-                <defs>
-                  <pattern
-                    id="837c3e70-6c3a-44e6-8854-cc48c737b659"
-                    x={0}
-                    y={0}
-                    width={20}
-                    height={20}
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <rect
-                      x={0}
-                      y={0}
-                      width={4}
-                      height={4}
-                      className="text-gray-200"
-                      fill="currentColor"
-                    />
-                  </pattern>
-                </defs>
-                <rect
-                  width={404}
-                  height={392}
-                  fill="url(#837c3e70-6c3a-44e6-8854-cc48c737b659)"
-                />
-              </svg>
-            </div>
-            <div className="relative pl-4 -mr-40 sm:mx-auto sm:max-w-3xl sm:px-0 lg:max-w-none lg:h-full lg:pl-12 ">
-              {/* <img
-                className="w-full rounded-md  lg:h-full lg:w-auto lg:max-w-none z-0"
-                src="/hero-pattern.png"
-                alt=""
-              /> */}
-              <img
-                className="w-full rounded-md shadow-xl ring-1 ring-black ring-opacity-5 lg:h-full lg:w-auto lg:max-w-none z-10"
-                src="/how-it-works/hero-screenshot.png"
-                alt=""
-              />
-            </div>
-          </div>
+      <RightDiv
+        style={{
+          position: "relative",
+          backgroundColor: "#EE3699",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          height: "100%",
+          overflowY: "hidden",
+          overflowX: "hidden",
+        }}
+      >
+        <img
+          src="/how-it-works/hero-pattern.png"
+          style={{
+            position: "absolute",
+            top: 30,
+            zIndex: 0,
+            left: -100,
+            height: "80",
+          }}
+        />
+        <div
+          style={{
+            position: "relative",
+            zIndex: 1,
+            width: "70%",
+          }}
+        >
+          <img
+            className="w-full rounded-md shadow-xl ring-1 ring-black ring-opacity-5"
+            src="/how-it-works/hero-screenshot.png"
+            alt=""
+            style={{ marginLeft: 50 }}
+          />
         </div>
-      </div>
-    </div>
+      </RightDiv>
+    </SplitDiv>
   );
 }
 
@@ -423,3 +385,47 @@ const CollectionSection = ({ snippets }) => (
     </div>
   </div>
 );
+
+const MainButton = styled.button`
+  color: white;
+  background: linear-gradient(45deg, #8036df, #ee3699);
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 5px 30px;
+  font-size: 22px;
+  margin-right: 30px;
+`;
+
+const SecondaryButton = styled.button`
+  background: white;
+  border: 2px solid black;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 5px 20px;
+  font-size: 22px;
+`;
+
+const SplitDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 975px) {
+    flex-direction: column;
+  }
+`;
+
+const LeftDiv = styled.div`
+  width: 50%;
+  @media (max-width: 975px) {
+    width: 100%;
+    padding-bottom: 35px;
+  }
+`;
+
+const RightDiv = styled.div`
+  width: 50%;
+  @media (max-width: 975px) {
+    width: 100%;
+  }
+`;
