@@ -57,6 +57,7 @@ export default function VideoPlayer({
   const { enableShortcuts, disableShortcuts } = useKeyboardShortcuts({
     videoRef,
   });
+  const [showCaptions, setShowCaptions] = useState(true);
 
   const { isSafari } = useSafari();
 
@@ -284,6 +285,8 @@ export default function VideoPlayer({
         <VideoControls
           videoRef={videoRef}
           show={showControls || !videoRef.current || videoRef.current.paused}
+          showCaptions={showCaptions}
+          setShowCaptions={setShowCaptions}
         />
         <InfoBox
           x={translationPos[0]}
@@ -314,29 +317,31 @@ export default function VideoPlayer({
           </div>
         </InfoBox>
 
-        <div
-          style={{
-            position: "absolute",
-            display: "flex",
-            justifyContent: "center",
-            bottom: 40,
-            left: 0,
-            width: "100%",
-            zIndex: 4,
-            pointerEvents: "none", // passthrough of hover and click
-          }}
-        >
-          {captionChars.map((c, i) => (
-            <Caption
-              key={i}
-              onClick={() => {
-                speak(voiceRef, c, languages[videoRow.language].speak, false);
-              }}
-            >
-              {c}
-            </Caption>
-          ))}
-        </div>
+        {showCaptions && (
+          <div
+            style={{
+              position: "absolute",
+              display: "flex",
+              justifyContent: "center",
+              bottom: 40,
+              left: 0,
+              width: "100%",
+              zIndex: 4,
+              pointerEvents: "none", // passthrough of hover and click
+            }}
+          >
+            {captionChars.map((c, i) => (
+              <Caption
+                key={i}
+                onClick={() => {
+                  speak(voiceRef, c, languages[videoRow.language].speak, false);
+                }}
+              >
+                {c}
+              </Caption>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -358,7 +363,7 @@ const BufferingDiv = () => {
       }}
     >
       <div style={{ position: "relative" }}>
-        <SpinImage src="/icons/small-star.svg" width={80} />
+        <SpinImage src="/icons/player/small-star.svg" width={80} />
         <SpinImage
           src="/icons/big-star.svg"
           style={{

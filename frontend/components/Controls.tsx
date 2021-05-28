@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-const VideoControls = ({ videoRef, show }) => {
+const VideoControls = ({ videoRef, show, showCaptions, setShowCaptions }) => {
   const video = videoRef.current;
   const progressRef = useRef(null);
   const [volumeSelect, setVolumeSelect] = useState(false);
@@ -43,7 +43,7 @@ const VideoControls = ({ videoRef, show }) => {
         >
           {video.muted || video.volume === 0 ? (
             <ControlBtn
-              src="/icons/volume-off.svg"
+              src="/icons/player/volume-off.svg"
               size={17}
               onClick={() => {
                 video.muted = false;
@@ -51,7 +51,7 @@ const VideoControls = ({ videoRef, show }) => {
             />
           ) : video.volume > 0.5 ? (
             <ControlBtn
-              src="/icons/volume-up.svg"
+              src="/icons/player/volume-up.svg"
               size={17}
               onClick={() => {
                 video.muted = true;
@@ -59,7 +59,7 @@ const VideoControls = ({ videoRef, show }) => {
             />
           ) : (
             <ControlBtn
-              src="/icons/volume-medium.svg"
+              src="/icons/player/volume-medium.svg"
               size={17}
               onClick={() => {
                 video.muted = true;
@@ -85,7 +85,7 @@ const VideoControls = ({ videoRef, show }) => {
               onClick={() => {
                 video.play();
               }}
-              src="/icons/play.svg"
+              src="/icons/player/play.svg"
               size={35}
             />
           ) : (
@@ -93,14 +93,32 @@ const VideoControls = ({ videoRef, show }) => {
               onClick={() => {
                 video.pause();
               }}
-              src="/icons/pause.svg"
+              src="/icons/player/pause.svg"
               size={35}
             />
           )}
         </div>
 
         <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
-          <ControlBtn src="/icons/message-alt.svg" size={17} />
+          {showCaptions ? (
+            <ControlBtn
+              src="/icons/player/captions-on.svg"
+              size={17}
+              onClick={() => {
+                setShowCaptions(false);
+                console.log("false");
+              }}
+            />
+          ) : (
+            <ControlBtn
+              src="/icons/player/captions-off.svg"
+              size={17}
+              onClick={() => {
+                setShowCaptions(true);
+                console.log("true");
+              }}
+            />
+          )}
         </div>
       </div>
       <div style={{ position: "relative" }}>
