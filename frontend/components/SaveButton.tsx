@@ -38,7 +38,7 @@ export function SaveButton() {
         }}
       />
       <span className="text-[#8a8a8a]">
-        {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
+        {me && video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
       </span>
     </button>
   );
