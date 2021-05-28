@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SnippetView, Snippet } from "components/sidebar/SnippetView";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
@@ -214,6 +214,7 @@ function HeroSection() {
       </LeftDiv>
 
       <RightDiv
+        className="mt-5 lg:mt-0"
         style={{
           position: "relative",
           backgroundColor: "#EE3699",
@@ -366,6 +367,7 @@ const CollectionSection = ({ snippets }) => (
 
 const Conclusion = () => {
   const formRef = useRef(null);
+  const [typeform, setTypeform] = useState(false);
 
   return (
     <div className="">
@@ -401,6 +403,7 @@ const Conclusion = () => {
                           <button
                             className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
                             onClick={() => {
+                              setTypeform(true);
                               formRef.current.typeform.open();
                             }}
                           >
@@ -416,7 +419,9 @@ const Conclusion = () => {
           </div>
         </div>
       </div>
+
       <ReactTypeformEmbed
+        style={{ height: typeform ? "100%" : "0%" }}
         url="https://form.typeform.com/to/HOmG00SI"
         popup
         ref={formRef}
