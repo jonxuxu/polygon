@@ -200,7 +200,7 @@ function HeroSection() {
       <LeftDiv style={{ paddingLeft: "10%", paddingTop: 50 }}>
         <h1 className="title text-gray-900">Be Part of the Experience</h1>
         <div className="mt-6 text-lg text-gray-500">
-          We made Polygon to explore new ways we can interact with videos.
+          Polygon was made to explore new ways humans can interact with videos.
           Augment your viewing experience and play with the content.
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", marginTop: 40 }}>
@@ -256,34 +256,57 @@ function HeroSection() {
 
 const LearnSection = () => {
   return (
-    <div style={{ backgroundColor: "white" }}>
-      <div className="relative py-16">
-        <h2 className="text-center leading-8 title text-gray-900">
-          Learn through Immersion
-        </h2>
-        <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-          Learn a foreign language by being there. [Pause] the video to interact
-          with signs and speech. Translate, copy, and listen, all within the
-          player.
-        </p>
+    <div
+      style={{ backgroundColor: "white", marginTop: 100, position: "relative" }}
+    >
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "50px 10%",
+          }}
+        >
+          <OverflowText style={{ fontSize: 40, fontWeight: "bold" }}>
+            Learn through Immersion
+          </OverflowText>
+          <OverflowText className="mt-6 text-lg text-gray-500">
+            Learn a foreign language by feeling like you're there. Pause the
+            video to interact with signs and speech. Translate, copy, and
+            listen, all within the player.
+          </OverflowText>
+        </div>
+        <div className="flex gap-6" style={{ paddingBottom: 80 }}>
+          <Image
+            src="/how-it-works/player1.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+          <Image
+            src="/how-it-works/player2.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+          <Image
+            src="/how-it-works/player3.png"
+            height={281 * 1.5}
+            width={499 * 1.5}
+          />
+        </div>
       </div>
-
-      <div className="flex gap-6">
-        <Image
-          src="/how-it-works/player1.png"
-          height={281 * 1.5}
-          width={499 * 1.5}
-        />
-        <Image
-          src="/how-it-works/player2.png"
-          height={281 * 1.5}
-          width={499 * 1.5}
-        />
-        <Image
-          src="/how-it-works/player3.png"
-          height={281 * 1.5}
-          width={499 * 1.5}
-        />
+      <div
+        style={{
+          position: "absolute",
+          zIndex: 0,
+          top: 0,
+          width: "100%",
+          height: "100%",
+          padding: "0 5%",
+        }}
+      >
+        <GradientBox />
       </div>
     </div>
   );
@@ -441,4 +464,23 @@ const RightDiv = styled.div`
   @media (max-width: 975px) {
     width: 100%;
   }
+`;
+
+const OverflowText = styled.div`
+  width: 40%;
+  @media (max-width: 820px) {
+    width: 100%;
+  }
+`;
+
+const GradientBox = styled.div`
+  height: 100%;
+  width: 100%;
+  border-radius: 20px; /*1*/
+  border: 3px solid transparent; /*2*/
+  background: linear-gradient(45deg, #ee3699, #8036df) border-box; /*3*/
+  -webkit-mask: /*4*/ linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out; /*5'*/
+  mask-composite: exclude; /*5*/
 `;
