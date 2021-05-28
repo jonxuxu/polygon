@@ -3,8 +3,8 @@ import { useRef } from "react";
 import { SnippetPreview, Snippet } from "components/sidebar/SnippetView";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
-import Footer from "components/Footer";
 import styled from "styled-components";
+import { ReactTypeformEmbed } from "react-typeform-embed";
 
 import Link from "next/link";
 import { useMe, useVideo } from "utils/fetcher";
@@ -135,38 +135,9 @@ const Page = () => {
 
   return (
     <div>
-      <HeroSection />
       <audio ref={voiceRef} />
-      <div style={{ backgroundColor: "white" }}>
-        <div className="relative py-16">
-          <h2 className="text-center leading-8 title text-gray-900">
-            Learn through Immersion
-          </h2>
-          <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
-            Learn a foreign language by being there. [Pause] the video to
-            interact with signs and speech. Translate, copy, and listen, all
-            within the player.
-          </p>
-        </div>
-
-        <div className="flex gap-6">
-          <Image
-            src="/how-it-works/player1.png"
-            height={281 * 1.5}
-            width={499 * 1.5}
-          />
-          <Image
-            src="/how-it-works/player2.png"
-            height={281 * 1.5}
-            width={499 * 1.5}
-          />
-          <Image
-            src="/how-it-works/player3.png"
-            height={281 * 1.5}
-            width={499 * 1.5}
-          />
-        </div>
-      </div>
+      <HeroSection />
+      <LearnSection />
       <CollectionSection snippets={snippets} />
       {/* Interactive Captions  */}
       <div className="bg-white  flex items-center justify-center">
@@ -214,60 +185,6 @@ const Page = () => {
   );
 };
 
-function Conclusion() {
-  const { me } = useMe();
-  return (
-    <div className="">
-      <div className="relative overflow-hidden ">
-        <div className="pt-10 bg-black sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
-          <div className="mx-auto max-w-7xl lg:px-8">
-            <div className="lg:grid lg:grid-cols-2 lg:gap-8">
-              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
-                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
-                  <img
-                    className="w-full max-w-sm mx-auto"
-                    src="/how-it-works/hero-pattern.png"
-                  />
-                </div>
-              </div>
-              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 text-center lg:px-0 lg:text-left lg:flex lg:items-center">
-                <div className="lg:py-24 pb-20">
-                  <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
-                    <span className="block">Join the video</span>
-                    <span className="block bg-gradient text-transparent bg-clip-text">
-                      <h1>revolution</h1>
-                    </span>
-                  </h1>
-                  <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
-                    Apply to be an insider creator to upload your own videos. Be
-                    the first to enjoy our upcoming monetization and influencer
-                    features.
-                  </p>
-                  <div className="mt-10 sm:mt-12">
-                    <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
-                      <div className="flex items-center justify-center lg:justify-start">
-                        <div className="p-1 bg-gradient rounded-md">
-                          <Link href={me ? "/uploads" : "/login"}>
-                            <button
-                              type="submit"
-                              className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
-                            >
-                              Apply
-                            </button>
-                          </Link>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 export default Page;
 
 function HeroSection() {
@@ -337,6 +254,41 @@ function HeroSection() {
   );
 }
 
+const LearnSection = () => {
+  return (
+    <div style={{ backgroundColor: "white" }}>
+      <div className="relative py-16">
+        <h2 className="text-center leading-8 title text-gray-900">
+          Learn through Immersion
+        </h2>
+        <p className="mt-4 max-w-3xl mx-auto text-center text-xl text-gray-500">
+          Learn a foreign language by being there. [Pause] the video to interact
+          with signs and speech. Translate, copy, and listen, all within the
+          player.
+        </p>
+      </div>
+
+      <div className="flex gap-6">
+        <Image
+          src="/how-it-works/player1.png"
+          height={281 * 1.5}
+          width={499 * 1.5}
+        />
+        <Image
+          src="/how-it-works/player2.png"
+          height={281 * 1.5}
+          width={499 * 1.5}
+        />
+        <Image
+          src="/how-it-works/player3.png"
+          height={281 * 1.5}
+          width={499 * 1.5}
+        />
+      </div>
+    </div>
+  );
+};
+
 const CollectionSection = ({ snippets }) => (
   <div className="bg-white">
     <div className="max-w-7xl mx-auto pt-16 px-4 sm:py-24 sm:px-6 lg:px-8">
@@ -385,6 +337,67 @@ const CollectionSection = ({ snippets }) => (
     </div>
   </div>
 );
+
+const Conclusion = () => {
+  const formRef = useRef(null);
+
+  return (
+    <div className="">
+      <div className="relative overflow-hidden ">
+        <div className="pt-10 bg-black sm:pt-16 lg:pt-8 lg:pb-14 lg:overflow-hidden">
+          <div className="mx-auto max-w-7xl lg:px-8">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-8">
+              <div className="mt-12 -mb-16 sm:-mb-48 hidden lg:block lg:m-0 lg:relative">
+                <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 lg:max-w-none lg:px-0">
+                  <img
+                    className="w-full max-w-sm mx-auto"
+                    src="/how-it-works/hero-pattern.png"
+                  />
+                </div>
+              </div>
+              <div className="mx-auto max-w-md px-4 sm:max-w-2xl sm:px-6 text-center lg:px-0 lg:text-left lg:flex lg:items-center">
+                <div className="lg:py-24 pb-20">
+                  <h1 className="mt-4 text-4xl tracking-tight font-extrabold text-white sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl">
+                    <span className="block">Join the video</span>
+                    <span className="block bg-gradient text-transparent bg-clip-text">
+                      <h1>revolution</h1>
+                    </span>
+                  </h1>
+                  <p className="mt-3 text-base text-gray-300 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+                    Apply to be an insider creator to upload your own videos. Be
+                    the first to enjoy our upcoming monetization and influencer
+                    features.
+                  </p>
+                  <div className="mt-10 sm:mt-12">
+                    <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
+                      <div className="flex items-center justify-center lg:justify-start">
+                        <div className="p-1 bg-gradient rounded-md">
+                          <button
+                            className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
+                            onClick={() => {
+                              formRef.current.typeform.open();
+                            }}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ReactTypeformEmbed
+        url="https://form.typeform.com/to/HOmG00SI"
+        popup
+        ref={formRef}
+      />
+    </div>
+  );
+};
 
 const MainButton = styled.button`
   color: white;
