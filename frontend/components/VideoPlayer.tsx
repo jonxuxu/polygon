@@ -3,8 +3,6 @@ import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
 import tinycolor from "tinycolor2";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 import { speak } from "utils/sounds";
 import { Transcription } from "utils/types";

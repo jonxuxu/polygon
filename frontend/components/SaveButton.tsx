@@ -7,11 +7,16 @@ export function SaveButton() {
   const router = useRouter();
   const { video } = useVideo({ cuid: router.query?.cuid });
   const { me } = useMe();
-  if (!me || !video) return null;
+  // if (!me || !video) return null;
   return (
     <button
       className="save"
       onClick={async () => {
+        if (!me) {
+          alert("Please log in to save videos to your profile.");
+          return;
+        }
+
         const savedBy = video.savedBy.find((u) => u.id === me.id)
           ? { disconnect: { email: me.email } }
           : { connect: { email: me.email } };
@@ -33,7 +38,7 @@ export function SaveButton() {
         }}
       />
       <span className="text-[#8a8a8a]">
-        {video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
+        {me && video.savedBy.find((u) => u.id === me.id) ? "Unsave" : "Save"}
       </span>
     </button>
   );

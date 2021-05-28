@@ -5,7 +5,7 @@ import { faCheck, faCopy, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { copyToClipboard } from "../utils/text";
 import { speak } from "../utils/sounds";
 import { Transcription } from "../utils/types";
-import { fetcher } from "utils/fetcher";
+import { fetcher, useMe } from "utils/fetcher";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 
@@ -19,6 +19,7 @@ export const TranslationActionIcons = ({
   hide?: boolean;
 }) => {
   const [added, setAdded] = React.useState(false);
+  const { me } = useMe();
   const voiceRef = useRef(null);
   const router = useRouter();
   return (
@@ -70,6 +71,10 @@ export const TranslationActionIcons = ({
             icon={added ? faCheck : faPlus}
             onClick={async () => {
               if (added) return;
+              if (!me) {
+                alert("Please log in to save snippets to your profile.");
+                return;
+              }
               setAdded(true);
               await fetcher("/api/user/update", {
                 snippets: {
