@@ -166,53 +166,7 @@ const Page = () => {
           />
         </div>
       </div>
-      {/* Build your collection  */}
-      <div className="bg-white">
-        <div className="max-w-7xl mx-auto pt-16 px-4 sm:py-24 sm:px-6 lg:px-8">
-          <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8  md:mb-8">
-            {snippets.map((snippet, i) => (
-              <div
-                key={i}
-                className={`md:w-80 ${i === 1 && "mb-24"}`}
-                style={{ animation: `mover 2.${i * 3}s infinite alternate` }}
-              >
-                <Image
-                  src={`/how-it-works/snippets/snippet${i + 1}.svg`}
-                  height={109}
-                  width={269}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="text-center">
-            <h2 className="text-base font-semibold text-primary-600 tracking-wide uppercase">
-              Then
-            </h2>
-            <p className="mt-1 title text-gray-900">Build your collection</p>
-            <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
-              Add snippets to your card deck, and review them at your own time.
-            </p>
-            <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-20 md:pb-16">
-              {snippets.map((snippet, i) => (
-                <div
-                  key={i}
-                  className={`md:w-80 ${i === 1 && "-mb-24"}`}
-                  style={{
-                    animation: `mover 2.${i * 3}s infinite alternate`,
-                    // marginBottom: "-20px",
-                  }}
-                >
-                  <Image
-                    src={`/how-it-works/snippet${i + 4}.svg`}
-                    height={109}
-                    width={269}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <CollectionSection snippets={snippets} />
       {/* Interactive Captions  */}
       <div className="bg-white  flex items-center justify-center">
         <div
@@ -420,3 +374,52 @@ function HeroSection() {
     </div>
   );
 }
+
+const CollectionSection = ({ snippets }) => (
+  <div className="bg-white">
+    <div className="max-w-7xl mx-auto pt-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+      <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8  md:mb-8">
+        {snippets.map((snippet, i) => (
+          <div
+            key={i}
+            className={`md:w-80 ${i === 1 && "mb-24"}`}
+            style={{ animation: `mover 2.${i * 3}s infinite alternate` }}
+          >
+            <Image
+              src={`/how-it-works/snippets/snippet${i + 1}.svg`}
+              height={109}
+              width={269}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="text-center">
+        <h2 className="text-base font-semibold text-primary-600 tracking-wide uppercase">
+          Then
+        </h2>
+        <p className="mt-1 title text-gray-900">Build your collection</p>
+        <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
+          Add snippets to your card deck, and review them at your own time.
+        </p>
+        <div className="flex flex-row mt-12 items-center justify-center gap-4 md:gap-8 pb-20 md:pb-16">
+          {snippets.map((snippet, i) => (
+            <div
+              key={i}
+              className={`md:w-80 ${i === 1 && "-mb-24"}`}
+              style={{
+                animation: `mover 2.${i * 3}s infinite alternate`,
+                // marginBottom: "-20px",
+              }}
+            >
+              <Image
+                src={`/how-it-works/snippet${i + 4}.svg`}
+                height={109}
+                width={269}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+);
