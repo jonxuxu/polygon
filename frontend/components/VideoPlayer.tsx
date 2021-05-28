@@ -363,7 +363,7 @@ const BufferingDiv = () => {
       <div style={{ position: "relative" }}>
         <SpinImage src="/icons/player/small-star.svg" width={80} />
         <SpinImage
-          src="/icons/big-star.svg"
+          src="/icons/player/big-star.svg"
           style={{
             position: "absolute",
             animationDirection: "reverse",
