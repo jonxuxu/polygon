@@ -83,7 +83,7 @@ export function CommentView() {
       >
         <CommentInput
           placeholder="Leave a comment..."
-          className="focus:border-transparent focus:ring-0 w-full"
+          className="focus:border-transparent focus:ring-0 w-full hide-scrollbar"
           value={comment}
           type="text"
           ref={inputRef}
@@ -106,6 +106,8 @@ export function CommentView() {
           style={{
             borderTop: "1px solid #E5E5E5",
             padding: 10,
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
           <CommentButton
@@ -115,6 +117,7 @@ export function CommentView() {
           >
             Comment
           </CommentButton>
+          <HelpButton>?</HelpButton>
         </div>
       </form>
     </div>
@@ -134,4 +137,12 @@ const CommentButton = styled.button`
   border-radius: 5px;
   font-size: 14px;
   cursor: ${(props) => (props.disabled ? "auto" : "pointer")};
+`;
+
+const HelpButton = styled.button`
+  border-radius: 5px;
+  border: 2px solid #e5e5e5;
+  cursor: pointer;
+  padding: 2px 10px;
+  font-weight: bold;
 `;

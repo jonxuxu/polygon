@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { Transcription } from "../../utils/types";
 
-export function SnippetPreview({
+export function SnippetView({
   snippets,
   videoRef,
 }: {
@@ -15,35 +15,48 @@ export function SnippetPreview({
   const sidebarRef = useRef(null);
 
   return (
-    <SidebarDiv>
+    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <SidebarDiv>
+        <div
+          style={{
+            borderRight: "3px solid #EE3699",
+            width: 35,
+          }}
+        />
+        <div style={{ flexGrow: 1 }} ref={sidebarRef}>
+          {snippets.length === 0 && (
+            <div className="text-sm pl-2 sm:pl-12">
+              You have no snippets. Click on any bubbles to add to your
+              collection.
+            </div>
+          )}
+
+          {snippets.map((t, i) => {
+            const isFirst =
+              i === 0 || snippets[i - 1].time !== snippets[i].time;
+            return (
+              <Snippet
+                t={t}
+                isFirst={isFirst}
+                key={i}
+                videoRef={videoRef}
+                isPreview={false}
+              />
+            );
+          })}
+        </div>
+      </SidebarDiv>
       <div
         style={{
-          borderRight: "3px solid #EE3699",
-          width: 35,
+          borderTop: "1px solid #E5E5E5",
+          padding: 10,
+          display: "flex",
+          justifyContent: "flex-end",
         }}
-      />
-      <div style={{ flexGrow: 1 }} ref={sidebarRef}>
-        {snippets.length === 0 && (
-          <div className="text-sm pl-2 sm:pl-12">
-            You have no snippets. Click on any bubbles to add to your
-            collection.
-          </div>
-        )}
-
-        {snippets.map((t, i) => {
-          const isFirst = i === 0 || snippets[i - 1].time !== snippets[i].time;
-          return (
-            <Snippet
-              t={t}
-              isFirst={isFirst}
-              key={i}
-              videoRef={videoRef}
-              isPreview={false}
-            />
-          );
-        })}
+      >
+        <HelpButton>?</HelpButton>
       </div>
-    </SidebarDiv>
+    </div>
   );
 }
 
@@ -104,7 +117,7 @@ const SidebarDiv = styled.div`
   width: 100%;
   position: relative;
   padding-top: 1.25rem;
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   padding-left: 0.25rem;
 `;
@@ -143,4 +156,12 @@ const SnippetCard = styled.div`
   justify-content: space-between;
   margin-left: ${(props) => (props.isPreview ? `0px` : "50px")};
   margin-right: ${(props) => (props.isPreview ? `0px` : "20px")};
+`;
+
+const HelpButton = styled.button`
+  border-radius: 5px;
+  border: 2px solid #e5e5e5;
+  cursor: pointer;
+  padding: 2px 10px;
+  font-weight: bold;
 `;

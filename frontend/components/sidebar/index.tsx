@@ -1,4 +1,4 @@
-import { SnippetPreview } from "./SnippetView";
+import { SnippetView } from "./SnippetView";
 import { CommentView } from "./CommentView";
 import { useState } from "react";
 import styled from "styled-components";
@@ -40,9 +40,12 @@ const Sidebar = ({ snippets, videoRef }) => {
           Comments
         </TabButton>
       </div>
-      <div style={{ flexGrow: 1, overflowY: "scroll" }}>
+      <div
+        style={{ flexGrow: 1, overflowY: "scroll" }}
+        className="hide-scrollbar"
+      >
         {tab === "snippets" && (
-          <SnippetPreview snippets={snippets} videoRef={videoRef} />
+          <SnippetView snippets={snippets} videoRef={videoRef} />
         )}
         {tab === "comments" && <CommentView />}
       </div>
