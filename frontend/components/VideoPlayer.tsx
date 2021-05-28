@@ -14,6 +14,7 @@ import VideoControls from "components/Controls";
 import { videos } from ".prisma/client";
 import { TranslationActionIcons } from "./TranslationActionIcons";
 import useKeyboardShortcuts from "./useKeyboardShortcuts";
+import { useSafari } from "../utils/useSafari";
 
 // Content variables
 var annotations = [];
@@ -53,6 +54,8 @@ export default function VideoPlayer({
   const { enableShortcuts, disableShortcuts } = useKeyboardShortcuts({
     videoRef,
   });
+
+  const { isSafari } = useSafari();
 
   useEffect(() => {
     // increment views
@@ -213,8 +216,10 @@ export default function VideoPlayer({
     console.log(-centerx, -centery);
     canvasContext.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
 
-    const image = canvas.toDataURL("image/png");
-
+    let image = null;
+    if (!isSafari) {
+      image = canvas.toDataURL("image/png");
+    }
     // text stuff
     const text = word.text;
 
@@ -330,6 +335,7 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
   if (videoRef.current === undefined) {
     return <div></div>;
   }
+  const { isSafari } = useSafari();
 
   const millis = Math.floor(videoRef.current.currentTime * 10) * 100;
 
@@ -349,10 +355,16 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
       const x = word.boundingBox[0].x * videoWidth;
       const y = word.boundingBox[0].y * videoHeight;
 
+      if (isSafari) return "#ee369888";
       // Calculate tooltip color
-      const p = canvasContext.getImageData(x, y, 1, 1).data;
-      const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
-      return hex;
+      try {
+        const p = canvasContext.getImageData(x, y, 1, 1).data;
+        const hex = tinycolor({ r: p[0], g: p[1], b: p[2] }).toHexString();
+        return hex;
+      } catch (error) {
+        // Safari hack: choose a default color
+        return "#c9c9c947";
+      }
     });
 
     tooltips = annotations[millis].map((word, i) => {
