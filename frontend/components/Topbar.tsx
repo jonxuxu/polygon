@@ -297,7 +297,7 @@ const FeedbackForm = ({ setFeedbackMenu }) => {
 
   return (
     <div
-      className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
+      className="origin-top-left absolute right-2 top-10 mt-2 w-48 rounded-md shadow-lg pt-1 pb-0 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 py-3"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="user-menu"
@@ -337,7 +337,17 @@ const FeedbackForm = ({ setFeedbackMenu }) => {
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
           />
-          <button className="bg-white text-black text-sm rounded-lg float-right p-1 px-1.5">
+          <button
+            disabled={feedback.length === 0}
+            style={{
+              borderTopRightRadius: 5,
+              borderBottomLeftRadius: 5,
+              backgroundColor: feedback.length ? "black" : "#C4C4C4",
+              color: "white",
+              padding: "0px 10px",
+              cursor: feedback.length ? "pointer" : "default",
+            }}
+          >
             Send
           </button>
         </form>
