@@ -16,13 +16,16 @@ const Topbar = () => {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [session, loading] = useSession();
   const { me } = useMe();
-  const routes = [
-    { route: "/", label: "Explore" },
-    session
-      ? { route: "/uploads", label: "Upload" }
-      : { route: "/api/auth/signin", label: "Login" },
-    { route: "/how-it-works", label: "How It Works" },
-  ];
+  const routes = session
+    ? [
+        { route: "/", label: "Explore" },
+        { route: "/uploads", label: "Upload" },
+        { route: "/how-it-works", label: "How It Works" },
+      ]
+    : [
+        { route: "/", label: "Explore" },
+        { route: "/how-it-works", label: "How It Works" },
+      ];
   const router = useRouter();
 
   useEffect(() => {

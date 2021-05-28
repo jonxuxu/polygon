@@ -8,7 +8,7 @@ export function ShareButton() {
   const { video } = useVideo({ cuid: router.query?.cuid });
   const [copied, setCopied] = useState(false);
   const { me } = useMe();
-  if (!me || !video) return null;
+
   return (
     <button
       className="save"
