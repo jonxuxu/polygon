@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import Skeleton from "react-loading-skeleton";
 import dayjs from "dayjs";
 import { fetcher, useMe, useVideo } from "utils/fetcher";
 import { Transcription } from "utils/types";
@@ -11,7 +10,7 @@ import VideoPlayer from "components/VideoPlayer";
 import Sidebar from "components/sidebar";
 import { ShareButton } from "../../../components/ShareButton";
 import { SaveButton } from "../../../components/SaveButton";
-import useKeyboardShortcuts from "components/useKeyboardShortcuts";
+import { VideoLoading } from "components/Loading";
 
 const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 
@@ -131,9 +130,7 @@ const App = () => {
               </div>
             </div>
           ) : (
-            <div className="p-3 m-10">
-              <Skeleton count={5} />
-            </div>
+            <VideoLoading />
           )}
         </div>
         <Sidebar snippets={snippets} videoRef={videoRef} />

@@ -147,7 +147,7 @@ const ProgressBar = styled.progress`
   background-color: rgba(0, 0, 0, 0);
   transition-duration: 0.2s;
   position: relative;
-  z-index: 2;
+  z-index: 3;
 
   &::-webkit-progress-bar {
     background-color: rgba(255, 255, 255, 0.5);

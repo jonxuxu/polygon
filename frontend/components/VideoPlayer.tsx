@@ -3,6 +3,8 @@ import Hls from "hls.js";
 import axios from "axios";
 import styled from "styled-components";
 import tinycolor from "tinycolor2";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleNotch } from "@fortawesome/free-solid-svg-icons";
 
 import { speak } from "utils/sounds";
 import { Transcription } from "utils/types";
@@ -36,6 +38,7 @@ export default function VideoPlayer({
   const voiceRef = useRef(null);
   const translationRef = useRef(null);
 
+  const [buffering, setBuffering] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [translationBox, setTranslationBox] = useState(false);
   const [translationPos, setTranslationPos] = useState([0, 0]);
@@ -130,6 +133,13 @@ export default function VideoPlayer({
         //   setShowTooltips(false);
         // }, 500);
       }
+    });
+    // Buffering spinner
+    video.addEventListener("waiting", () => {
+      setBuffering(true);
+    });
+    video.addEventListener("playing", () => {
+      setBuffering(false);
     });
 
     // Fetch annotations
@@ -265,6 +275,7 @@ export default function VideoPlayer({
           }}
           id="tourPlayer"
         />
+        {buffering && <BufferingDiv />}
         <VideoControls
           videoRef={videoRef}
           show={showControls || !videoRef.current || videoRef.current.paused}
@@ -325,6 +336,38 @@ export default function VideoPlayer({
     </div>
   );
 }
+
+const BufferingDiv = () => {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        zIndex: 0,
+        height: "100%",
+        width: "100%",
+        pointerEvents: "none",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ position: "relative" }}>
+        <SpinImage src="/icons/small-star.svg" width={80} />
+        <SpinImage
+          src="/icons/big-star.svg"
+          style={{
+            position: "absolute",
+            animationDirection: "reverse",
+            top: 0,
+            left: 0,
+          }}
+          width={80}
+        />
+      </div>
+    </div>
+  );
+};
 
 const ToolTips = ({ videoRef, drawTranslation }) => {
   if (videoRef.current === undefined) {
@@ -414,4 +457,8 @@ const TipCircle = styled.div`
   &:hover {
     transform: scale(1.5, 1.5);
   }
+`;
+
+const SpinImage = styled.img`
+  animation: rotation 2s infinite ease-in-out;
 `;
