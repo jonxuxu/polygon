@@ -43,7 +43,7 @@ const App = () => {
 
   const upload = async (e) => {
     e.preventDefault();
-    if (!file) return;
+    if (!file || uploading) return;
     setUploading(true);
     const filename = encodeURIComponent(file.name);
     mutate(
@@ -319,14 +319,26 @@ const App = () => {
                   )}
                 </div>
               </div>
+              {/* upload button */}
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start  sm:pt-5">
+                <label
+                  htmlFor="language"
+                  className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+                ></label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <button
+                    type="button"
+                    onClick={upload}
+                    className="secondary my-10 md:mr-28 mb-16"
+                  >
+                    Upload
+                  </button>
+                </div>
+              </div>
+              {/* upload button */}
             </div>
-            <button
-              type="button"
-              onClick={upload}
-              className="secondary my-10 md:mr-28"
-            >
-              Upload
-            </button>
+
+            <div className="mb-24" />
           </div>
         </div>
       </div>
