@@ -197,7 +197,7 @@ function HeroSection() {
         height: "80vh",
       }}
     >
-      <LeftDiv style={{ paddingLeft: "10%", paddingTop: 50 }}>
+      <LeftDiv style={{ padding: "0 5%", paddingTop: 50, zIndex: 2 }}>
         <h1 className="title text-gray-900">Be Part of the Experience</h1>
         <div className="mt-6 text-lg text-gray-500">
           Polygon was made to explore new ways humans can interact with videos.
@@ -221,8 +221,6 @@ function HeroSection() {
           flexDirection: "column",
           justifyContent: "center",
           height: "100%",
-          overflowY: "hidden",
-          overflowX: "hidden",
         }}
       >
         <img
@@ -231,7 +229,7 @@ function HeroSection() {
             position: "absolute",
             top: 30,
             zIndex: 0,
-            left: -100,
+            left: -200,
             height: "80",
           }}
         />
@@ -257,7 +255,12 @@ function HeroSection() {
 const LearnSection = () => {
   return (
     <div
-      style={{ backgroundColor: "white", marginTop: 100, position: "relative" }}
+      style={{
+        backgroundColor: "white",
+        marginTop: 100,
+        position: "relative",
+        zIndex: 2,
+      }}
     >
       <div style={{ position: "relative", zIndex: 1 }}>
         <div
