@@ -5,7 +5,6 @@ export function useSafari() {
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    console.log(navigator.userAgent);
     const isSafari =
       /constructor/i.test(window.HTMLElement) ||
       (function (p) {
