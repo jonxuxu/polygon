@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRef } from "react";
-import { SnippetPreview, Snippet } from "components/sidebar/SnippetView";
+import { SnippetView, Snippet } from "components/sidebar/SnippetView";
 import { Transcription } from "../utils/types";
 import { ChevronRightIcon, StarIcon } from "@heroicons/react/solid";
 import styled from "styled-components";
