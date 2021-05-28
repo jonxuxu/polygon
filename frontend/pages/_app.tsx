@@ -21,10 +21,25 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>Polygon Video</title>
         <link rel="icon" type="image/svg" href="/logo/shape.svg" />
+        <meta property="og:title" content="Polygon Video" />
+        <meta
+          property="og:description"
+          content="Interactive Video for Language Learning."
+        />
+        <meta property="og:image" content="/promo/Promo1.png" />
+        <meta property="og:url" content="https://polygon.video"></meta>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1"
         ></meta>
+
+        <meta name="twitter:title" content="Polygon Video" />
+        <meta
+          name="twitter:description"
+          content="Interactive Video for Language Learning."
+        />
+        <meta name="twitter:image" content="/promo/Promo1.png" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Provider session={pageProps.session}>
         <Topbar />
