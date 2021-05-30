@@ -29,7 +29,6 @@ const Topbar = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("theme");
     if (router.route === "/uploads" && me && !me.approved) {
       setTheme("dark");
     } else if (router.route === "/manifesto") {

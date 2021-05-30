@@ -240,6 +240,14 @@ const App = () => {
                                 e.stopPropagation();
                                 e.preventDefault();
                                 const f = e.target.files[0];
+                                console.log("file", f);
+                                // limit size to 30GB
+                                if (f.size > 30000000000) {
+                                  alert(
+                                    "File is too large. Please select a video under 30GB."
+                                  );
+                                  return;
+                                }
                                 setFile(f);
                                 validateFile(f, setDuration);
                               }}
