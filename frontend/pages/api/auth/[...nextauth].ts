@@ -70,6 +70,7 @@ const options = {
   logger: {
     error(code, ...message) {
       logDna.error(code, { meta: message });
+      console.log("error: ", code, message);
     },
     warn(code, ...message) {
       logDna.warn(code, { meta: message });
