@@ -2,6 +2,14 @@
 
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
+import logdna from "@logdna/logger";
+
+const loggerOptions = {
+  app: "Polygon Auth",
+  level: "debug", // set a default for when level is not provided in function calls
+};
+
+const logDna = logdna.createLogger(process.env.LOGDNA_KEY, loggerOptions);
 
 const options = {
   site:
@@ -51,23 +59,23 @@ const options = {
     //     }
     //   },
     // }),
-
-    // Providers.Twitter({
-    //   clientId: process.env.TWITTER_ID,
-    //   clientSecret: process.env.TWITTER_SECRET,
-    // }),
-    // Providers.GitHub({
-    //   clientId: process.env.GITHUB_ID,
-    //   clientSecret: process.env.GITHUB_SECRET,
-    // }),
-    // Providers.Email({
-    //   server: process.env.EMAIL_SERVER,
-    //   from: process.env.EMAIL_FROM,
-    // }),
   ],
 
-  // A database is optional, but required to persist accounts in a database
+  // Database for account persistence
   database: process.env.DATABASE_URL,
+
+  // LogDNA integration
+  logger: {
+    error(code, ...message) {
+      logDna.error(code, { meta: message });
+    },
+    warn(code, ...message) {
+      logDna.warn(code, { meta: message });
+    },
+    debug(code, ...message) {
+      logDna.debug(code, { meta: message });
+    },
+  },
 };
 
 export default (req, res) => NextAuth(req, res, options);
