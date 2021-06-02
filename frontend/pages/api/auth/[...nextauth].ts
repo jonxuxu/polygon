@@ -4,12 +4,12 @@ import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import logdna from "@logdna/logger";
 
-const loggerOptions: { app: string; level: LogLevel } = {
+const loggerOptions = {
   app: "Polygon Auth",
-  // @ts-ignore
   level: "debug", // set a default for when level is not provided in function calls
 };
 
+// @ts-ignore
 const logDna = logdna.createLogger(process.env.LOGDNA_KEY, loggerOptions);
 
 logDna.error("test error");
