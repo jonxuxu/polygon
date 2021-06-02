@@ -3,6 +3,7 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 import logdna from "@logdna/logger";
+import { sendLog } from "utils/sendLog";
 
 const loggerOptions = {
   app: "Polygon Auth",
@@ -75,6 +76,32 @@ const options = {
     //   },
     // }),
   ],
+  events: {
+    async signIn(message) {
+      console.log(message);
+      sendLog(message.user.email + " logged in with " + message.account.type);
+    },
+    async signOut(message) {
+      sendLog(`User ${message.id} logged out`);
+    },
+    async createUser(message) {
+      console.log(message);
+      sendLog(`NEW USER: ${message.email} `);
+    },
+    async updateUser(message) {
+      /* user updated - e.g. their email was verified */
+    },
+    async linkAccount(message) {
+      /* account (e.g. Twitter) linked to a user */
+    },
+    async session(message) {
+      /* session is active */
+    },
+    async error(message) {
+      /* error in authentication flow */
+      console.log(message);
+    },
+  },
 
   // Database for account persistence
   database: process.env.DATABASE_URL,
