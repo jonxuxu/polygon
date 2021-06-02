@@ -16,7 +16,13 @@ const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 
 const tourSteps = [
   {
-    content: "Welcome to the magical Polygon video player.",
+    content:
+      "Here's the Polygon video player. This is where the magic happens!",
+  },
+  {
+    selector: "#tourSidebar",
+    content: "Here is where you can comment on the video and make snippets.",
+    style: { marginRight: 20 },
   },
   {
     selector: "#tourPlayer",
@@ -28,8 +34,16 @@ const tourSteps = [
   },
   {
     selector: "#tourToolTip",
-    content: "Click on a bubble to read the sign.",
+    content: "Click on a bubble to read the sign, and create a snippet.",
     style: { marginLeft: 20, marginTop: 20 },
+  },
+  {
+    selector: "#tourTranslation",
+    content:
+      "Here's the video text in a snippet! You can listen to the text, copy it, or add it to your collection using the buttons on the side.",
+  },
+  {
+    content: "This concludes the tutorial. Have fun exploring Polygon!",
   },
 ];
 
@@ -78,10 +92,16 @@ const App = () => {
             <div>
               <div
                 onClick={() => {
-                  if (tourStep === 1) {
-                    setTourStep(2);
-                  } else if (tourStep === 2) {
+                  if (tourStep === 2) {
                     setTourStep(3);
+                  } else if (tourStep === 3) {
+                    setTimeout(function () {
+                      setTourStep(4);
+                    }, 500);
+                  } else if (tourStep === 4) {
+                    setTimeout(function () {
+                      setTourStep(5);
+                    }, 500);
                   }
                 }}
               >
@@ -137,6 +157,7 @@ const App = () => {
       </div>
       <TourNoSSR
         // @ts-ignore
+        showCloseButton={false}
         steps={tourSteps}
         isOpen={tourOpen}
         onRequestClose={() => setTourOpen(false)}

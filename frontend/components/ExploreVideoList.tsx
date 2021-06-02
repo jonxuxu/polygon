@@ -12,7 +12,8 @@ const TourNoSSR = dynamic(() => import("reactour"), { ssr: false });
 
 const tourSteps = [
   {
-    content: "This is the main video explorer on Polygon.",
+    content:
+      "This is the explorer page. Search from our collection of videos here.",
   },
   {
     selector: "#tourVid",

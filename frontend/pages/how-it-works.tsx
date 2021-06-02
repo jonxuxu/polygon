@@ -204,7 +204,7 @@ function HeroSection() {
           Augment your viewing experience and play with the content.
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", marginTop: 40 }}>
-          <Link href="/">
+          <Link href="/?tour=true">
             <MainButton>Explore</MainButton>
           </Link>
           <Link href="/manifesto">

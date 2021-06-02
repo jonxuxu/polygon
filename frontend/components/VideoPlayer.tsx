@@ -292,6 +292,7 @@ export default function VideoPlayer({
           hide={!translationBox}
           borderColor={translationData.color}
           ref={translationRef}
+          id="tourTranslation"
         >
           <div style={{ display: "flex" }}>
             <div>

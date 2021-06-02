@@ -14,6 +14,7 @@ const Sidebar = ({ snippets, videoRef }) => {
         flexDirection: "column",
         borderLeft: "1px solid #E5E5E5",
       }}
+      id="tourSidebar"
     >
       <div
         style={{
