@@ -27,10 +27,10 @@ const options = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
 
-    // Providers.Facebook({
-    //   clientId: process.env.FACEBOOK_ID,
-    //   clientSecret: process.env.FACEBOOK_SECRET,
-    // }),
+    Providers.Facebook({
+      clientId: process.env.FACEBOOK_ID,
+      clientSecret: process.env.FACEBOOK_SECRET,
+    }),
 
     Providers.Email({
       server: process.env.EMAIL_SERVER,
