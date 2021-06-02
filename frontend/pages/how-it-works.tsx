@@ -397,21 +397,21 @@ const Conclusion = () => {
                     features.
                   </p>
                   <div className="mt-10 sm:mt-12">
-                    <form action="#" className="sm:max-w-xl sm:mx-auto lg:mx-0">
-                      <div className="flex items-center justify-center lg:justify-start">
-                        <div className="p-1 bg-gradient rounded-md">
-                          <button
-                            className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
-                            onClick={() => {
-                              setTypeform(true);
-                              formRef.current.typeform.open();
-                            }}
-                          >
-                            Apply
-                          </button>
-                        </div>
+                    <div className="flex items-center justify-center lg:justify-start">
+                      <div className="p-1 bg-gradient rounded-md">
+                        <button
+                          className="block border-0 border-primary-500 py-3 px-4 rounded-md shadow bg-black text-white font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 focus:ring-offset-gray-900 w-40"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setTypeform(true);
+                            formRef.current.typeform.open();
+                          }}
+                        >
+                          Apply
+                        </button>
                       </div>
-                    </form>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -420,12 +420,14 @@ const Conclusion = () => {
         </div>
       </div>
 
-      <ReactTypeformEmbed
-        style={{ height: typeform ? "100%" : "0%" }}
-        url="https://form.typeform.com/to/HOmG00SI"
-        popup
-        ref={formRef}
-      />
+      <div className="relative">
+        <ReactTypeformEmbed
+          // style={{ height: typeform ? "90%" : "0%" }}
+          url="https://form.typeform.com/to/HOmG00SI"
+          popup
+          ref={formRef}
+        />
+      </div>
     </div>
   );
 };
