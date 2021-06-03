@@ -151,25 +151,25 @@ const VideoPage = ({ initialData }) => {
   );
 };
 
-// export async function getStaticPaths() {
-//   // Get all video cuid's
-//   const ids = await fetcher("/api/video/ids");
-//   return {
-//     paths: ids.map((v) => `/video/${v.cuid}`),
-//     fallback: false,
-//   };
-// }
+export async function getStaticPaths() {
+  // Get all video cuid's
+  const ids = await fetcher("/api/video/ids");
+  return {
+    paths: ids.map((v) => `/video/${v.cuid}`),
+    fallback: false,
+  };
+}
 
-// export async function getStaticProps({ params }) {
-//   const data = await fetcher(`/api/video/${params.cuid}`);
+export async function getStaticProps({ params }) {
+  const data = await fetcher(`/api/video/${params.cuid}`);
 
-//   return {
-//     props: {
-//       initialData: data,
-//     },
-//     // re-generate page at most once every 10 seconds
-//     revalidate: 10,
-//   };
-// }
+  return {
+    props: {
+      initialData: data,
+    },
+    // re-generate page at most once every 10 seconds
+    revalidate: 10,
+  };
+}
 
 export default VideoPage;
