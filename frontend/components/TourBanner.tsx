@@ -14,7 +14,7 @@ export function TourBanner() {
     setTourComplete(true);
   };
 
-  if (tourComplete) return false;
+  if (tourComplete) return null;
 
   return (
     <div className="relative bg-primary-600">
