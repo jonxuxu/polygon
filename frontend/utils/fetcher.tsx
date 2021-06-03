@@ -4,9 +4,9 @@ import useSWR from "swr";
 const baseUrl =
   typeof window !== "undefined"
     ? window.location.origin
-    : process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://polygon.video";
+    : process.env.NODE_ENV === "production"
+    ? "https://polygon.video"
+    : "http://localhost:3000";
 
 export const fetcher = (url, data = undefined) =>
   fetch(baseUrl + url, {
