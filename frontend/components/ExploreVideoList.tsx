@@ -24,7 +24,7 @@ const tourSteps = [
 export function ExploreVideoList({ initialFeed }) {
   const router = useRouter();
 
-  const { feed } = useFeed(initialFeed);
+  const { feed } = useFeed();
   const [search, setSearch] = useState("");
   const [tourOpen, setTourOpen] = useState(false);
   const [language, setLanguage] = useState("All");
@@ -69,7 +69,7 @@ export function ExploreVideoList({ initialFeed }) {
           )}
         </div>
         <div className="grid grid-cols-12 sm:gap-6">
-          {feed // && false
+          {feed
             ? feed
                 .filter(
                   (v) =>
