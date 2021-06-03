@@ -54,7 +54,7 @@ const Manifesto = () => (
         construction of Polygon. We have a lot planned, and hope you’ll enjoy
         the experience as much as we do.
       </Section>
-      <Section>&mdash;Jonathan and Kunal, co-founders</Section>
+      <Section>&mdash;Jonathan and Kunal</Section>
       <div
         style={{
           display: "flex",
