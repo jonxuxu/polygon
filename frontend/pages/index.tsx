@@ -11,7 +11,7 @@ const App = ({ feed }) => {
   return <ExploreVideoList initialFeed={feed} />;
 };
 
-export async function getServerSideProps({ req }) {
+export async function getStaticProps({ req }) {
   // const session = await getSession({ req });
   // if (!session) return { props: { me: null } };
   // const data = await fetcher("/api/me", { email: session.user.email });
@@ -22,6 +22,8 @@ export async function getServerSideProps({ req }) {
     props: {
       feed: data,
     },
+    // re-generate page at most once every 10 seconds
+    revalidate: 10,
   };
 }
 
