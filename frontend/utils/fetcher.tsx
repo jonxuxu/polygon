@@ -1,8 +1,15 @@
 import { users, videos, Prisma, snippets, comments } from "@prisma/client";
 import useSWR from "swr";
 
+const baseUrl =
+  typeof window !== "undefined"
+    ? window.location.origin
+    : process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://polygon.video";
+
 export const fetcher = (url, data = undefined) =>
-  fetch(window.location.origin + url, {
+  fetch(baseUrl + url, {
     method: data ? "POST" : "GET",
     credentials: "include",
     headers: {
@@ -11,10 +18,11 @@ export const fetcher = (url, data = undefined) =>
     body: JSON.stringify(data),
   }).then((r) => r.json());
 
-export function useFeed() {
+export function useFeed(initialData = []) {
   const { data: feed }: { data?: (videos & { user: users })[] } = useSWR(
     "/api/video/feed",
-    fetcher
+    fetcher,
+    { initialData: initialData }
   );
   return { feed: feed };
 }

@@ -118,16 +118,7 @@ const Topbar = () => {
             <Link href="/">
               <div className="flex-shrink-0 flex items-center cursor-pointer">
                 <img
-                  className="block lg:hidden h-8 w-auto"
-                  src={
-                    theme === "light"
-                      ? "/logo/logo-dark.svg"
-                      : "/logo/logo-light.svg"
-                  }
-                  alt="Polygon"
-                />
-                <img
-                  className="hidden lg:block h-8 w-auto"
+                  className="hidden sm:block h-8 w-auto"
                   src={
                     theme === "light"
                       ? "/logo/logo-dark.svg"
