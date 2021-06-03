@@ -26,6 +26,7 @@ export function ExploreVideoList() {
   const { feed } = useFeed();
   const [search, setSearch] = useState("");
   const [tourOpen, setTourOpen] = useState(false);
+  const [language, setLanguage] = useState("All");
 
   useEffect(() => {
     setTourOpen(router.query.tour === "true");
@@ -33,7 +34,7 @@ export function ExploreVideoList() {
 
   return (
     <div className="m-2 sm:m-10 mt-8">
-      <div className="mb-4 sm:mx-2">
+      <div className="mb-4 sm:mx-2 flex flex-row">
         <input
           type="text"
           name="search"
@@ -43,6 +44,25 @@ export function ExploreVideoList() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        {feed && (
+          <select
+            value={language}
+            onChange={(e) => {
+              setLanguage(e.target.value);
+            }}
+            // autoComplete="title"
+            className="ml-2 max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+          >
+            <option key={"All"} value={"All"}>
+              All Languages
+            </option>
+            {Array.from(new Set(feed.map((v) => v.language))).map((lang) => (
+              <option key={lang} value={lang}>
+                {lang}
+              </option>
+            ))}
+          </select>
+        )}
       </div>
       <div className="grid grid-cols-12 sm:gap-6">
         {feed // && false
@@ -57,7 +77,8 @@ export function ExploreVideoList() {
                       .toLowerCase()
                       .includes(search.toLowerCase()) ||
                     v.language.toLowerCase().includes(search.toLowerCase()) ||
-                    v.user.name.toLowerCase().includes(search.toLowerCase()))
+                    v.user.name.toLowerCase().includes(search.toLowerCase())) &&
+                  (language === "All" || v.language === language)
               )
               .map((video, i) => (
                 <div
