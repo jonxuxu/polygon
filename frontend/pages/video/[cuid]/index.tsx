@@ -168,7 +168,7 @@ export async function getStaticProps({ params }) {
       initialData: data,
     },
     // re-generate page at most once every 10 seconds
-    revalidate: 10,
+    revalidate: 60,
   };
 }
 
