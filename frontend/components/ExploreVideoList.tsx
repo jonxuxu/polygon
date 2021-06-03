@@ -51,7 +51,7 @@ export function ExploreVideoList() {
               setLanguage(e.target.value);
             }}
             // autoComplete="title"
-            className="ml-2 max-w-lg block w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+            className="ml-1 md:ml-2 max-w-lg block w-2/3 md:w-full shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
           >
             <option key={"All"} value={"All"}>
               All Languages
