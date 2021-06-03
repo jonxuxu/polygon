@@ -24,7 +24,7 @@ const tourSteps = [
 export function ExploreVideoList({ initialFeed }) {
   const router = useRouter();
 
-  const { feed } = useFeed();
+  const { feed } = useFeed(initialFeed);
   const [search, setSearch] = useState("");
   const [tourOpen, setTourOpen] = useState(false);
   const [language, setLanguage] = useState("All");
