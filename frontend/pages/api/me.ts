@@ -3,9 +3,10 @@ import prisma from "prisma/client";
 
 export default async (req, res) => {
   const session = await getSession({ req });
-  if (!session) return res.json(null);
+  if (!session && !req.body.email) return res.json({});
+
   const user = await prisma.users.findUnique({
-    where: { email: session.user.email },
+    where: { email: session ? session.user.email : req.body.email },
     include: {
       savedVideos: true,
       snippets: true,

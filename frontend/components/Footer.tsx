@@ -41,6 +41,9 @@ const Footer = () => {
 export default Footer;
 
 const FooterDiv = styled.div`
+  /* position: fixed;
+  bottom: 0;
+  width: 100%; */
   background-color: ${(props) =>
     props.theme === "dark" ? "#EE3699" : "#FCFCFC"};
   color: ${(props) => (props.theme === "dark" ? "white" : "#55504B")};

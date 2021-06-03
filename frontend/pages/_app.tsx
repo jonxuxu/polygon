@@ -42,8 +42,10 @@ function MyApp({ Component, pageProps }) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Provider session={pageProps.session}>
-        <Topbar />
-        <Component {...pageProps} />
+        <div className="min-h-[800px]">
+          <Topbar />
+          <Component {...pageProps} />
+        </div>
         <Footer />
       </Provider>
     </ShortcutContext.Provider>

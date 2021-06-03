@@ -50,11 +50,11 @@ const tourSteps = [
 var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
 
-const App = () => {
+const VideoPage = ({ initialData }) => {
   const router = useRouter();
   const videoRef = useRef(null);
 
-  const { video, mutate } = useVideo({ cuid: router.query?.cuid });
+  const { video, mutate } = useVideo({ cuid: router.query?.cuid, initialData });
   const { me } = useMe();
 
   const [snippets, setSnippets] = useState<Transcription[]>([]);
@@ -172,6 +172,25 @@ const App = () => {
   );
 };
 
-// const CommentsSection({video}) =>
+export async function getStaticPaths() {
+  // Get all video cuid's
+  const ids = await fetcher("/api/video/ids");
+  return {
+    paths: ids.map((v) => `/video/${v.cuid}`),
+    fallback: false,
+  };
+}
 
-export default App;
+export async function getStaticProps({ params }) {
+  const data = await fetcher(`/api/video/${params.cuid}`);
+
+  return {
+    props: {
+      initialData: data,
+    },
+    // re-generate page at most once every 10 seconds
+    revalidate: 60,
+  };
+}
+
+export default VideoPage;
