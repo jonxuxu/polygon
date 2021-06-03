@@ -22,7 +22,7 @@ export function useFeed(initialData = []) {
   const { data: feed }: { data?: (videos & { user: users })[] } = useSWR(
     "/api/video/feed",
     fetcher,
-    { initialData: initialData }
+    { initialData }
   );
   return { feed: feed };
 }
@@ -38,7 +38,7 @@ export function useMe() {
   } = useSWR("/api/me", fetcher);
   return { me };
 }
-export function useVideo({ cuid }) {
+export function useVideo({ cuid, initialData = {} }) {
   const {
     data: video,
     mutate,
@@ -49,6 +49,6 @@ export function useVideo({ cuid }) {
       savedBy: users[];
       comments: (comments & { user: users })[];
     };
-  } = useSWR(`/api/video/${cuid}`, fetcher);
+  } = useSWR(`/api/video/${cuid}`, fetcher, { initialData });
   return { video, mutate };
 }
