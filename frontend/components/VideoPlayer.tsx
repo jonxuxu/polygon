@@ -171,7 +171,9 @@ export default function VideoPlayer({
   }, []);
 
   useEffect(() => {
-    if (me) setTargetLang(me.language);
+    if (me && me.language) {
+      setTargetLang(me.language)
+    }
   }, [me]);
 
   // Add to snippets if translation text has not been added
@@ -231,7 +233,6 @@ export default function VideoPlayer({
     }
     // text stuff
     const text = word.text;
-
     const res: {
       data: {
         translation: { translatedText: string; detectedSourceLanguage: string };
