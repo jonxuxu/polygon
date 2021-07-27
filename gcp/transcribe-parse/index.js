@@ -40,17 +40,18 @@ exports.parseTranscribe = async (event) => {
         transcriptions.forEach((result) => {
           if (result.alternatives[0].transcript) {
             result.alternatives[0].words.forEach((word) => {
-              var second =
-                word.start_offset.seconds - (word.start_offset.seconds % 3);
-              if (isNaN(second)) {
-                second = 0;
-              }
-              if (timedTranscriptions[second]) {
-                timedTranscriptions[second] = timedTranscriptions[
-                  second
-                ].concat(word.word);
+              var second = word.start_offset.seconds ?? 0;
+              var secondChunk = second - (second % 3);
+              second += (word.start_offset.nanos ?? 0) / 1000000000;
+
+              if (timedTranscriptions[secondChunk]) {
+                timedTranscriptions[secondChunk][second] = word.word;
               } else {
-                timedTranscriptions[second] = word.word;
+                // const newWords = new Map();
+                // newWords.set(second, word.word);
+                const newWords = {};
+                newWords[second] = word.word;
+                timedTranscriptions[secondChunk] = newWords;
               }
             });
           }
@@ -75,7 +76,7 @@ exports.parseTranscribe = async (event) => {
         "Deleting old files from video-world-transcription-raw bucket..."
       );
 
-      storage.bucket("video-world-transcription-raw").file(name).delete();
+      // storage.bucket("video-world-transcription-raw").file(name).delete();
       storage.bucket("video-world-audio").file(name).delete();
 
       console.log("Done parsing transcriptions");
