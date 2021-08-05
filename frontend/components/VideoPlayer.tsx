@@ -18,7 +18,8 @@ import { useSafari } from "../utils/useSafari";
 
 // Content variables
 var annotations = [];
-var transcriptions = [];
+var transcriptions = {};
+var prevChunk = -1;
 var mouseTimeout;
 
 export default function VideoPlayer({
@@ -49,7 +50,7 @@ export default function VideoPlayer({
     time: null,
     image: null,
   });
-  const [captionChars, setCaptionChars] = useState([]);
+  const [captionChars, setCaptionChars] = useState({});
   const [targetLang, setTargetLang] = useState("English");
   const [showControls, setShowControls] = useState(false);
   const { enableShortcuts, disableShortcuts } = useKeyboardShortcuts({
@@ -108,15 +109,25 @@ export default function VideoPlayer({
       "timeupdate",
       () => {
         if (transcriptions && videoRef.current) {
-          const currentText =
-            transcriptions[
-              videoRef.current.currentTime - (videoRef.current.currentTime % 3)
-            ];
-          // @ts-ignore
-          if (currentText) {
-            setCaptionChars(currentText.split(""));
+          const secondChunk =
+            videoRef.current.currentTime - (videoRef.current.currentTime % 3);
+          const secondBite =
+            videoRef.current.currentTime - (videoRef.current.currentTime % 0.1);
+          if (transcriptions[secondChunk]) {
+            if (secondChunk !== prevChunk) {
+              const currentText = Object.values(
+                transcriptions[secondChunk]
+              ).map((t) => {
+                return { text: t, on: false };
+              });
+              setCaptionChars(currentText);
+            } else {
+              const currentText = captionChars;
+              currentText[secondBite].on = true;
+              setCaptionChars(currentText);
+            }
           } else {
-            setCaptionChars([]);
+            setCaptionChars({});
           }
         }
       },
@@ -155,12 +166,12 @@ export default function VideoPlayer({
 
     // Fetch transcriptions
     const transcriptionUrl = videoRow ? videoRow.transcription_url : null;
+    console.log("trans url:", transcriptionUrl);
     (async () => {
       if (transcriptionUrl) {
         const res = await axios.get(transcriptionUrl);
         transcriptions = res.data;
-      } else {
-        transcriptions = [];
+        console.log("set transcriptions");
       }
     })();
 
@@ -172,7 +183,7 @@ export default function VideoPlayer({
 
   useEffect(() => {
     if (me && me.language) {
-      setTargetLang(me.language)
+      setTargetLang(me.language);
     }
   }, [me]);
 
@@ -245,7 +256,7 @@ export default function VideoPlayer({
       ...res.data.translation,
       original: word.text,
       color: color,
-      time: videoRef.current.currentTime,
+      time: videoRef.current.currentTime, // seconds
       image: image,
     });
 
@@ -330,14 +341,20 @@ export default function VideoPlayer({
               pointerEvents: "none", // passthrough of hover and click
             }}
           >
-            {captionChars.map((c, i) => (
+            {Object.values(captionChars).map((value, i) => (
               <Caption
                 key={i}
                 onClick={() => {
-                  speak(voiceRef, c, languages[videoRow.language].speak, false);
+                  speak(
+                    voiceRef,
+                    value["text"],
+                    languages[videoRow.language].speak,
+                    false
+                  );
                 }}
+                active={value["on"]}
               >
-                {c}
+                {value}
               </Caption>
             ))}
           </div>
@@ -436,7 +453,7 @@ const ToolTips = ({ videoRef, drawTranslation }) => {
 };
 
 const Caption = styled.span`
-  color: white;
+  color: ${(props) => (props.active ? "#ee3699" : "white")};
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
   font-size: 30px;
