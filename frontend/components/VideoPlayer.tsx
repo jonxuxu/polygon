@@ -51,6 +51,7 @@ export default function VideoPlayer({
     image: null,
   });
   const [captionChars, setCaptionChars] = useState({});
+  const [videoTime, setVideoTime] = useState(0);
   const [targetLang, setTargetLang] = useState("English");
   const [showControls, setShowControls] = useState(false);
   const { enableShortcuts, disableShortcuts } = useKeyboardShortcuts({
@@ -111,23 +112,18 @@ export default function VideoPlayer({
         if (transcriptions && videoRef.current) {
           const secondChunk =
             videoRef.current.currentTime - (videoRef.current.currentTime % 3);
-          const secondBite =
-            videoRef.current.currentTime - (videoRef.current.currentTime % 0.1);
-          if (transcriptions[secondChunk]) {
-            if (secondChunk !== prevChunk) {
-              const currentText = Object.values(
-                transcriptions[secondChunk]
-              ).map((t) => {
-                return { text: t, on: false };
-              });
-              setCaptionChars(currentText);
+          setVideoTime(videoRef.current.currentTime);
+
+          if (secondChunk !== prevChunk) {
+            if (
+              transcriptions[secondChunk] !== undefined
+              // if we have a chunk
+            ) {
+              setCaptionChars(transcriptions[secondChunk]);
+              prevChunk = secondChunk;
             } else {
-              const currentText = captionChars;
-              currentText[secondBite].on = true;
-              setCaptionChars(currentText);
+              setCaptionChars({});
             }
-          } else {
-            setCaptionChars({});
           }
         }
       },
@@ -341,18 +337,18 @@ export default function VideoPlayer({
               pointerEvents: "none", // passthrough of hover and click
             }}
           >
-            {Object.values(captionChars).map((value, i) => (
+            {Object.entries(captionChars).map(([key, value], i) => (
               <Caption
                 key={i}
                 onClick={() => {
                   speak(
                     voiceRef,
-                    value["text"],
+                    value,
                     languages[videoRow.language].speak,
                     false
                   );
                 }}
-                active={value["on"]}
+                active={videoTime >= Number.parseFloat(key)}
               >
                 {value}
               </Caption>
