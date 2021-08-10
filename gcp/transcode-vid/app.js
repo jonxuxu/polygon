@@ -88,7 +88,7 @@ const getRow = async (cuid) => {
 };
 
 // Runs speech to text to get the captions of video
-const transcribe = async (cuid, res) => {
+async function transcribe(cuid, res) {
   const videoRow = await getRow(cuid);
   const languageCode = languages[videoRow.language].listen;
   console.log("the language is " + languageCode);
@@ -253,6 +253,19 @@ app.post("/", async (req, res) => {
     return res.status(500).json({ error: err });
   }
 });
+
+app.post("/transcribe", async(req, res) => {
+  if (!req.body) {
+    return res.status(401).json({ error: "no body" });
+  }
+  try {
+    await transcribe(req.body.cuid, res)
+  } catch (err) {
+    console.error("error: ", err);
+    await setTranscodeState(cuid, "failed");
+    return res.status(500).json({ error: err });
+  }
+})
 
 // Start the server
 const PORT = process.env.PORT || 8080;

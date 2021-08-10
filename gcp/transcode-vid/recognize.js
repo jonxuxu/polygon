@@ -2,6 +2,7 @@ const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 const { SpeechClient } = require("@google-cloud/speech").v1p1beta1;
+const languages = require("./languages.json");
 
 const speechClient = new SpeechClient({
   credentials: {
@@ -10,10 +11,13 @@ const speechClient = new SpeechClient({
   },
 });
 
+const cuid = "ckny3wl4d00007ou9c2gqd73g"
+const languageCode = languages["Chinese Simplified"].listen;
+
 const request = {
   config: {
-    languageCode: "zh",
-    alternativeLanguageCodes: ["zh", "en-US"],
+    languageCode: languageCode,
+    alternativeLanguageCodes: [languageCode, "en-US"],
     enableWordTimeOffsets: true,
     enableAutomaticPunctuation: true,
     model: "default",
@@ -21,10 +25,10 @@ const request = {
     sampleRateHertz: 16000,
   },
   audio: {
-    uri: "gs://video-world-audio/pogchamp.wav",
+    uri: `gs://video-world-audio/${cuid}`,
   },
   outputConfig: {
-    gcsUri: "gs://video-world-transcription-raw/pogchamp",
+    gcsUri: `gs://video-world-transcription-raw/${cuid}`,
   },
 };
 
