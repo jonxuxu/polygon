@@ -4,7 +4,7 @@ const Privacy = () => (
     <p>
       Your privacy is important to us. It is Polygon's policy to respect your
       privacy regarding any information we may collect from you across our
-      website, <a href="http://polygon.video">http://polygon.video</a>, and
+      website, <a href="http://polygonvideo.vercel.app">http://polygonvideo.vercel.app</a>, and
       other sites we own and operate.
     </p>
     <p>

@@ -51,14 +51,14 @@ const Privacy = () => (
       Unless otherwise stated, Polygon and/or it's licensors own the
       intellectual property rights for all material on Polygon. All intellectual
       property rights are reserved. You may view and/or print pages from
-      http://polygon.video for your own personal use subject to restrictions set
+      http://polygonvideo.vercel.app for your own personal use subject to restrictions set
       in these terms and conditions.
     </p>
     <p>You must not:</p>
     <ol>
-      <li>Republish material from http://polygon.video</li>
-      <li>Sell, rent or sub-license material from http://polygon.video</li>
-      <li>Reproduce, duplicate or copy material from http://polygon.video</li>
+      <li>Republish material from http://polygonvideo.vercel.app</li>
+      <li>Sell, rent or sub-license material from http://polygonvideo.vercel.app</li>
+      <li>Reproduce, duplicate or copy material from http://polygonvideo.vercel.app</li>
     </ol>
     <p>
       Redistribute content from Polygon (unless content is specifically made for

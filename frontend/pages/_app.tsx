@@ -27,7 +27,7 @@ function MyApp({ Component, pageProps }) {
           content="Interactive Video for Language Learning."
         />
         <meta property="og:image" content="/promo/Promo1.png" />
-        <meta property="og:url" content="https://polygon.video"></meta>
+        <meta property="og:url" content="http://polygonvideo.vercel.app"></meta>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1"

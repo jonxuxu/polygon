@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   });
 
   sendLog(
-    `${email} uploaded video <https://polygon.video/video/${video.cuid}|${video.title}>`
+    `${email} uploaded video <http://polygonvideo.vercel.appvideo/${video.cuid}|${video.title}>`
   );
 
   const bucket = storage.bucket("video-world-source");

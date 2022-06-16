@@ -51,7 +51,7 @@ const HelpButton = () => {
             }}
           >
             <OptionDiv>
-              <OptionLink href="mailto: hello@polygon.video">
+              <OptionLink href="mailto: contact@jonathanxu.com">
                 Send us a message
               </OptionLink>
             </OptionDiv>
