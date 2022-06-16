@@ -16,8 +16,7 @@ export async function getStaticProps({ req }) {
   // if (!session) return { props: { me: null } };
   // const data = await fetcher("/api/me", { email: session.user.email });
 
-  // const data = await fetcher("/api/video/feed");
-  const data = []
+  const data = await fetcher("/api/video/feed");
 
   return {
     props: {

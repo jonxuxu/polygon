@@ -174,10 +174,10 @@ const VideoPage = ({ initialData }) => {
 
 export async function getStaticPaths() {
   // Get all video cuid's
-  // const ids = await fetcher("/api/video/ids");
+  const ids = await fetcher("/api/video/ids");
+  // const ids = []
   return {
-    // paths: ids.map((v) => `/video/${v.cuid}`),
-    paths: [],
+    paths: ids.map((v) => `/video/${v.cuid}`),
     fallback: false,
   };
 }
