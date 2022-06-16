@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["http://localhost:3000", "https://polygon.video"],
+    "origin": ["http://localhost:3000", "http://polygonvideo.vercel.app"],
     "responseHeader": ["Content-Type"],
     "method": ["POST", "GET"],
     "maxAgeSeconds": 3600

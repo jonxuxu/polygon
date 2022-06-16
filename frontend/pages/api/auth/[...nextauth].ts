@@ -18,7 +18,7 @@ logDna.error("test error");
 const options = {
   site:
     process.env.NODE_ENV === "production"
-      ? "https://polygon.video"
+      ? "http://polygonvideo.vercel.app"
       : "http://localhost:3000/",
 
   // Configure one or more authentication providers
