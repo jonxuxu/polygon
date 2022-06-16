@@ -1,11 +1,11 @@
-import { users, videos, Prisma, snippets, comments } from "@prisma/client";
+import { users, videos, snippets, comments } from "@prisma/client";
 import useSWR from "swr";
 
 const baseUrl =
   typeof window !== "undefined"
     ? window.location.origin
     : process.env.NODE_ENV === "production"
-    ? "https://polygon.video"
+    ? "http://polygonvideo.vercel.app"
     : "http://localhost:3000";
 
 export const fetcher = (url, data = undefined) =>
