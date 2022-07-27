@@ -35,7 +35,7 @@
     "google-auth-library": "^7.0.4",
     "hls.js": "^0.14.17",
     "next": "10.0.8",
-    "next-auth": "^3.14.8",
+    "next-auth": "^3.29.8",
     "pg": "^8.6.0",
     "postcss": "^8.2.10",
     "react": "17.0.1",
