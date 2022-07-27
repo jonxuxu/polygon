@@ -1,3 +1,6 @@
+# Lightsail instance
+Run `node app.js` in `/gcp/transcode-vid`
+
 # Setting Environment Variables
 
 If you want to store your configuration in a file (e.g. under source control), you can use a YAML file together with the --env-vars-file flag:
